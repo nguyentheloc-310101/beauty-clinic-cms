@@ -29,3 +29,13 @@ main {
   height: calc(100vh - 156px);
   overflow: auto;
 }
+
+h1 {
+  font-size: 40px;
+  line-height: 46px;
+}
+
+h2 {
+  font-size: 32px;
+  line-height: 38px;
+}

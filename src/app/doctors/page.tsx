@@ -1,5 +1,5 @@
 "use client";
-import { IDoctor } from "@/common/types";
+import { IDoctor, IServiceCategory } from "@/common/types";
 import { Button, Input, Popconfirm, Table, Tooltip } from "antd";
 import { ColumnsType } from "antd/es/table";
 import {
@@ -7,35 +7,32 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import queryString from "query-string";
 import { supabase } from "@/services";
 import { getIdFromSupabaseStorage } from "@/common/utils";
+import { useFetch } from "@/common/hooks";
 
 type Props = {};
 export default function Service({}: Props) {
-  const [doctors, setDoctors] = useState<IDoctor[]>([]);
-
-  useEffect(() => {
-    const asyncFunc = async () => {
-      const { data } = await supabase.from("doctors").select();
-      setDoctors(data as IDoctor[]);
-    };
-    asyncFunc();
-  }, []);
+  const { value: serviceCategories } = useFetch<IServiceCategory[]>(() =>
+    supabase.from("services").select()
+  );
+  const { value: doctors, setValue: setDoctors } = useFetch<IDoctor[]>(() =>
+    supabase.from("doctors").select()
+  );
 
   async function handleDelete(currDoctor: IDoctor): Promise<void> {
-    let { error: error1 } = await supabase
-      .from("doctors")
-      .delete()
-      .eq("id", currDoctor.id);
-    const { error: error2 } = await supabase.storage
-      .from("aura")
-      .remove([getIdFromSupabaseStorage(currDoctor.image)]);
-    if (error1) console.log(error1);
-    if (error2) console.log(error2);
-    else setDoctors(doctors.filter((doctor) => doctor.id != currDoctor.id));
+    try {
+      await supabase.from("doctors").delete().eq("id", currDoctor.id);
+      await supabase.storage
+        .from("aura")
+        .remove([getIdFromSupabaseStorage(currDoctor.image)]);
+      setDoctors(doctors?.filter((doctor) => doctor.id != currDoctor.id)!);
+    } catch (error) {
+      console.log(error);
+    }
   }
   const columns: ColumnsType<IDoctor> = [
     {
@@ -46,7 +43,7 @@ export default function Service({}: Props) {
           <Tooltip title="Sửa">
             <Link
               href={
-                "/services/create?" +
+                "/doctors/create?" +
                 queryString.stringify({
                   isEdited: true,
                   data: JSON.stringify(currDoctor),
@@ -76,6 +73,7 @@ export default function Service({}: Props) {
     },
     {
       title: "Avatar",
+      width: 50,
       dataIndex: "image",
       key: "image",
       render: (src) => (
@@ -97,11 +95,13 @@ export default function Service({}: Props) {
       dataIndex: "experience_year",
       key: "experience_year",
       render: (value) => <p className="text-center">{value}</p>,
+      width: 50,
     },
     {
       title: "Chuyên ngành",
       dataIndex: "major",
       key: "major",
+      width: 150,
     },
     {
       title: "Thông tin bác sĩ",
@@ -115,14 +115,26 @@ export default function Service({}: Props) {
       ),
       key: "desc_doctor",
     },
+    {
+      title: "Thuộc dịch vụ",
+      dataIndex: "service_id",
+      render: (service_id) => (
+        <p className="truncate overflow-hidden max-w-[200px]">
+          {serviceCategories
+            ?.filter((c) => c.id == service_id)
+            .map((c) => c.name)}
+        </p>
+      ),
+      key: "service_id",
+    },
   ];
 
   const [searchText, setSearchText] = useState<string>("");
   return (
     <>
       <header className="flex justify-between gap-4 pb-4 items-center">
-        <h2 className="min-w-fit">Dịch vụ</h2>
-        <Link href="/services/create">
+        <h2 className="min-w-fit">Bác sĩ</h2>
+        <Link href="/doctors/create">
           <Button type="primary">Thêm mới</Button>
         </Link>
         <Input
@@ -135,7 +147,7 @@ export default function Service({}: Props) {
       <Table
         pagination={false}
         columns={columns}
-        dataSource={doctors.filter((doctor) =>
+        dataSource={doctors?.filter((doctor) =>
           doctor.name?.toLowerCase().includes(searchText?.toLowerCase() ?? "")
         )}
         className="min-w-max"

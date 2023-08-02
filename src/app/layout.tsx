@@ -2,7 +2,6 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Layout from "./components/layout";
-import { ConfigProvider } from "antd";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ConfigProvider theme={{ token: { colorPrimary: "#BC2449" } }}>
-          <Layout>
-            <main className="p-4 ">{children}</main>
-          </Layout>
-        </ConfigProvider>
+        <Layout>
+          <main className="p-4 ">{children}</main>
+        </Layout>
       </body>
     </html>
   );

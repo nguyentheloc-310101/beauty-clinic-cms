@@ -6,8 +6,11 @@ import React from "react";
 type Props = {};
 
 const CATEGORIES: { name: string; path: string }[] = [
+  { name: "Quản lý danh mục", path: "/service-categories" },
   { name: "Dịch vụ", path: "/services" },
-  { name: "Dịch vụ", path: "/services" },
+
+  { name: "Lộ trình điều trị", path: "/service-steps" },
+  { name: "Bác sĩ", path: "/doctors" },
 ];
 
 export default function Aside({}: Props) {

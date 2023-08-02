@@ -1,27 +1,37 @@
-import { useReducer } from "react";
-import { useEffect } from "react";
+import { useReducer, useEffect } from "react";
 
 type State<T> = {
   loading: boolean;
-  error: any;
-  value: T;
+  error: Error | null;
+  value: T | null;
 };
-export function useFetch<T>(fn: () => T) {
+
+type Action<T> =
+  | { type: "setValue"; value: T; error: Error }
+  | { type: "start" }
+  | { type: "finish"; value: T }
+  | { type: "error"; error: Error };
+
+// WARN chưa handle phần push lỗi
+export function useFetch<T>(
+  fn: Function
+): State<T> & { setValue: (value: T) => void } {
   const initialState: State<T> = {
     loading: false,
     error: null,
-    value: {} as T,
+    value: null,
   };
-  const stateReducer = (_: any, action: any) => {
+
+  const stateReducer = (state: State<T>, action: Action<T>): State<T> => {
     switch (action.type) {
-      case "setData":
-        return { loading: true, error: null, value: action.value as T };
+      case "setValue":
+        return { ...state, loading: true, error: null, value: action.value };
       case "start":
-        return { loading: true, error: null, value: null };
+        return { ...state, loading: true, error: null };
       case "finish":
-        return { loading: false, error: null, value: action.value };
+        return { ...state, loading: false, error: null, value: action.value };
       case "error":
-        return { loading: false, error: action.error, value: null };
+        return { ...state, loading: false, error: action.error };
     }
   };
 
@@ -31,17 +41,29 @@ export function useFetch<T>(fn: () => T) {
     const asyncFunc = async () => {
       try {
         dispatch({ type: "start" });
-        const value = fn();
-        dispatch({ type: "finish", value });
+        const { data } = await fn();
+        dispatch({
+          type: "finish",
+          // NOTE map key value to this due to mapping in react
+          value: data.map((item: T, i: number) => ({ ...item, key: i })),
+        });
       } catch (error) {
-        dispatch({ type: "error", error });
+        if (error instanceof Error) {
+          dispatch({ type: "error", error });
+        } else {
+          dispatch({
+            type: "error",
+            error: new Error("An unknown error occurred."),
+          });
+        }
       }
     };
     asyncFunc();
   }, []);
-  const setData = (value: T) => {
-    dispatch({ type: "setData", value });
+
+  const setValue = (value: T) => {
+    dispatch({ type: "setValue", value } as any);
   };
 
-  return { ...state, setData };
+  return { ...state, setValue };
 }
