@@ -1,3 +1,5 @@
+export * from "./cn";
+
 export function getIdFromSupabaseStorage(url: string): string {
   try {
     let pattern = /public\/aura\/(.*)/;

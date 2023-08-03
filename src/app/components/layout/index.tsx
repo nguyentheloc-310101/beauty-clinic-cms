@@ -24,15 +24,17 @@ export default function Layout({ children }: Props) {
       theme={{ token: { colorPrimary: "#BC2449" } }}
       componentSize="large"
     >
-      <Header />
-      {isSignIn ? (
-        <div className="flex [&>*]:flex-1 [&>*]:overflow-auto">
-          <Aside />
-          <main className="p-4">{children}</main>
+      <div className="flex h-screen">
+        <Aside />
+        <div className="flex-1 flex flex-col">
+          <Header />
+          {isSignIn ? (
+            <main className="p-6 overflow-auto flex-1">{children}</main>
+          ) : (
+            <Auth />
+          )}
         </div>
-      ) : (
-        <Auth />
-      )}
+      </div>
     </ConfigProvider>
   );
 }

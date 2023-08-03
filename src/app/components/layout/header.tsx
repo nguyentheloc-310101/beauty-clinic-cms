@@ -1,22 +1,20 @@
 "use client";
+import { ROUTES } from "@/common/constants";
 import { useUserStore } from "@/common/store";
 import { Button } from "antd";
-import Link from "next/link";
-
-const Logo =
-  "https://ucarecdn.com/a7cf14e7-3e76-4ad9-b713-814cf1d021dc/-/quality/smart/-/format/auto/";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const signOut = useUserStore((state) => state.signOut);
+  const pathname = usePathname();
   return (
-    <header className="flex justify-between py-4 items-center bg-white px-10">
-      <Link
-        href="/"
-        className="flex justify-between items-center py-[1rem] px-[20px] "
-      >
-        <img src={Logo} alt="logo" className="h-[3rem] w-auto" />
-      </Link>
-      <h1 className="flex-1 text-center">Admin dash board</h1>
+    <header className="flex justify-between p-4 items-center bg-white">
+      <h4 className="flex-1 font-semibold">
+        Điều chỉnh {/* TODO show header for subTitle */}
+        {ROUTES.filter(
+          (route) => route.url == pathname
+        )?.[0].title.toLowerCase()}
+      </h4>
       <Button onClick={signOut}>Đăng suất</Button>
     </header>
   );
