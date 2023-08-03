@@ -1,8 +1,8 @@
-"use client";
-import { useRouter } from "next/navigation";
-import React from "react";
-import Title, { Subtitle } from "./title";
-import { ROUTES } from "@/common/constants";
+'use client';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import Title, { Subtitle } from './title';
+import { ROUTES } from '@/common/constants';
 
 export default function Aside() {
   const router = useRouter();
@@ -19,10 +19,11 @@ export default function Aside() {
           onClick={() => category.url && router.push(category.url)}
           Icon={category.Icon}
           title={category.title}
-          url={category.url}
-        >
+          url={category.url}>
           {category?.subTitle?.map((item, j: number) => (
-            <Subtitle key={j} url={item.url}>
+            <Subtitle
+              key={j}
+              url={item.url}>
               {item.name}
             </Subtitle>
           ))}

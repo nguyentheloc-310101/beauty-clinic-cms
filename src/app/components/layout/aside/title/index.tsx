@@ -1,11 +1,11 @@
-"use client";
-export * from "./subtitle";
+'use client';
+export * from './subtitle';
 
-import { cn } from "@/common/utils";
-import React, { HTMLAttributes } from "react";
-import { UpOutlined, DownOutlined } from "@ant-design/icons";
-import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
+import { cn } from '@/common/utils';
+import React, { HTMLAttributes } from 'react';
+import { UpOutlined, DownOutlined } from '@ant-design/icons';
+import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -34,13 +34,12 @@ export default function Title({
     <>
       <div
         className={cn(
-          "rounded-lg hover:bg-primary-60 px-6 py-2 max-w-[268px] flex text-white",
-          { "": disabled },
-          { "bg-primary-80": isSelected },
+          'rounded-lg hover:bg-primary-60 px-6 py-2 max-w-[268px] flex text-white',
+          { '': disabled },
+          { 'bg-primary-80': isSelected },
           className
         )}
-        onClick={() => (url ? router.push(url) : setIsShown((prev) => !prev))}
-      >
+        onClick={() => (url ? router.push(url) : setIsShown((prev) => !prev))}>
         {Icon}
         <p className="text-subtitle1 ml-[10px] flex-1 mr-4 text-white">
           {title}
