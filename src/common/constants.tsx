@@ -34,9 +34,10 @@ export const ROUTES: TRoute[] = [
     Icon: <SettingOutlined />,
     title: "Cài đặt thông tin",
     subTitle: [
-      { name: "Danh mục dịch vụ", url: "/settings/service-categories" },
+      { name: "Danh mục & dịch vụ", url: "/settings/service-categories" },
       { name: "Dịch vụ", url: "/settings/services" },
-      { name: "Cơ sở", url: "/settings/premises" },
+      { name: "Cơ sở (Clinic)", url: "/settings/clinics" },
+      { name: "Bác sĩ", url: "/settings/doctors" },
     ],
   },
 ];

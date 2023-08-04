@@ -8,12 +8,12 @@ const Header = () => {
   const signOut = useUserStore((state) => state.signOut);
   const pathname = usePathname();
   return (
-    <header className="flex justify-between p-4 items-center bg-white">
+    <header className="flex justify-between p-4 items-center bg-white border-b border-solid border-neutral-n-20">
       <h4 className="flex-1 font-semibold">
         Điều chỉnh {/* TODO show header for subTitle */}
         {ROUTES.filter(
           (route) => route.url == pathname
-        )?.[0].title.toLowerCase()}
+        )?.[0]?.title.toLowerCase()}
       </h4>
       <Button onClick={signOut}>Đăng suất</Button>
     </header>

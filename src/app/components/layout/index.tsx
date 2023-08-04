@@ -5,6 +5,8 @@ import Aside from "./aside";
 import { ConfigProvider } from "antd";
 import { useUserStore } from "@/common/store";
 import Auth from "./auth";
+import HistoryAside from "./history-aside";
+import MessageProvider from "@/common/providers/message";
 
 type Props = {
   children: React.ReactNode;
@@ -24,17 +26,19 @@ export default function Layout({ children }: Props) {
       theme={{ token: { colorPrimary: "#BC2449" } }}
       componentSize="large"
     >
-      <div className="flex h-screen">
-        <Aside />
-        <div className="flex-1 flex flex-col">
-          <Header />
-          {isSignIn ? (
-            <main className="p-6 overflow-auto flex-1">{children}</main>
-          ) : (
-            <Auth />
-          )}
+      <MessageProvider>
+        <div className="flex h-screen">
+          <Aside />
+          <div className="flex-1 flex flex-col h-full">
+            <Header />
+            {isSignIn ? (
+              <main className="flex-1 bg-[#F5F5F5]">{children}</main>
+            ) : (
+              <Auth />
+            )}
+          </div>
         </div>
-      </div>
+      </MessageProvider>
     </ConfigProvider>
   );
 }

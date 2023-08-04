@@ -7,6 +7,8 @@
 :root {
   --neutral-black-n-80: #36383a;
 
+  --neutral-n-20: #e9ebed;
+
   --primary-br-60: #d8315b;
   --primary-br-70-main-color: #bc2449;
   --primary-br-80: #9a1d3d;
@@ -15,6 +17,12 @@
 * {
   padding: 0px;
   margin: 0px;
+  box-sizing: border-box;
+  border: 0px;
+}
+main {
+  padding: 0px !important;
+  margin: 0px !important;
 }
 ::-webkit-scrollbar {
   width: 10px;
@@ -25,7 +33,8 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--primary-br-70-main-color);
+  border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -110,4 +119,16 @@ p {
 
 a {
   text-decoration: none;
+}
+
+.ant-form-item {
+  margin-bottom: 0px;
+}
+
+.ant-form-large .ant-form-item .ant-form-item-label > label {
+  height: 20px;
+}
+
+.ant-form-vertical .ant-form-item-label {
+  padding-bottom: 4px;
 }

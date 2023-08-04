@@ -11,7 +11,7 @@ type UserState = {
 export const useUserStore = create<UserState>()(
   persist<UserState>(
     (set) => ({
-      isSignedIn: false,
+      isSignedIn: true,
 
       signIn: () => set(() => ({ isSignedIn: true })),
       signOut: () => set(() => ({ isSignedIn: false })),
