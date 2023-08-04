@@ -17,6 +17,9 @@ const DetailServiceCard = (props: DetailServiceCard) => {
           alt="service-img"
         />
       </div>
+      <div>
+        
+      </div>
     </div>
   );
 };
