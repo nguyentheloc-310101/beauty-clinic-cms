@@ -1,23 +1,14 @@
 "use client";
 import { IDoctor } from "@/common/types";
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Tooltip,
-  Upload,
-  UploadFile,
-  message,
-} from "antd";
+import { Button, Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
-import { LeftOutlined } from "@ant-design/icons";
 import querystring from "query-string";
-import { v4 as uuidv4 } from "uuid";
-import { supabase } from "@/services";
-import { getIdFromSupabaseStorage } from "@/common/utils";
+import Section from "@components/section";
+import FormUploadImage from "@/app/components/form-upload-image";
+import HelperText from "@/app/components/helper-text";
+import Steps from "./steps";
 
 interface IFormDoctor extends IDoctor {
   imageFile: any[];
@@ -30,120 +21,66 @@ export default function Create() {
   let initialDoctor = {} as IFormDoctor;
   try {
     initialDoctor = JSON.parse(data as string) as IFormDoctor;
-    initialDoctor.imageFile = [
-      {
-        uid: "-1",
-        name: initialDoctor.name,
-        status: "done",
-        url: initialDoctor.image,
-      } as UploadFile,
-    ];
   } catch (error) {
     console.log(error);
   }
 
   const router = useRouter();
 
-  const [messageApi, contextHolder] = message.useMessage();
-
   const onFinish = async (doctor: IFormDoctor) => {
-    messageApi.open({
-      type: "loading",
-      content: "Đang " + (isEdited ? "lưu thay đổi..." : "thêm mới..."),
-    });
-    let image;
-    if (doctor.imageFile?.[0]?.originFileObj) {
-      const imageKey = "doctors/" + uuidv4() + ".png";
-      await supabase.storage
-        .from("aura")
-        .upload(imageKey, doctor.imageFile[0].originFileObj);
-      image = supabase.storage.from("aura").getPublicUrl(imageKey)
-        .data.publicUrl;
-    }
-
-    const DTO = {
-      name: doctor.name,
-      experience_year: doctor.experience_year,
-      image: image ?? doctor.image,
-      major: doctor.major,
-      desc_doctor: doctor.desc_doctor,
-    };
-
-    if (isEdited) {
-      const { error } = await supabase.storage
-        .from("aura")
-        .remove([getIdFromSupabaseStorage(initialDoctor.image)]);
-      if (error) console.log(error);
-      const { error: error1 } = await supabase
-        .from("doctors")
-        .update(DTO)
-        .eq("id", initialDoctor.id);
-      if (error1) console.log("if", error1);
-    } else {
-      await supabase.from("doctors").insert(DTO);
-    }
-
     router.push("/services");
-    messageApi.destroy();
-    message.success("Thành công!");
   };
   return (
-    <>
-      {contextHolder}
-      <header className="flex p-2 gap-4">
-        <Tooltip title="Trở về">
-          <Button
-            shape="circle"
-            type="text"
-            icon={<LeftOutlined />}
-            onClick={router.back}
-          />
-        </Tooltip>
-        <h2>
-          {isEdited
-            ? "Chỉnh sửa thông tin bác sĩ"
-            : "Thêm mới thông tin bác sĩ"}
-        </h2>
-      </header>
+    <div className="flex flex-col justify-between h-full">
       <Form
-        labelCol={{ span: 6 }}
-        //wrapperCol={{ span: 14 }}
-        layout="horizontal"
+        layout="vertical"
         initialValues={initialDoctor}
         onFinish={onFinish}
-        style={{ maxWidth: 600 }}
+        className="overflow-auto p-6 flex flex-col gap-9"
       >
-        <Form.Item
-          label="Avatar"
-          valuePropName="fileList"
-          name="imageFile"
-          getValueFromEvent={(e) => e.fileList}
-        >
-          <Upload
-            listType="picture-card"
-            maxCount={1}
-            accept="image/*"
-            fileList={[{ url: initialDoctor.image }] as any}
-          >
-            Tải lên
-          </Upload>
-        </Form.Item>
-        <Form.Item label="Họ tên:" name="name">
-          <Input />
-        </Form.Item>
-        <Form.Item label="Chuyên ngành:" name="major">
-          <Input />
-        </Form.Item>
-        <Form.Item label="Số năm kinh nghiệm:" name="experience_year">
-          <InputNumber />
-        </Form.Item>
-        <Form.Item label="Thông tin bác sĩ:" name="desc_doctor">
-          <TextArea rows={4} />
-        </Form.Item>
-        <Button type="primary" htmlType="submit" className="block ml-auto">
-          {isEdited ? "Lưu thay đổi" : "Tạo mới"}
-        </Button>
+        <Section title="Giới thiệu dịch vụ" className="grid grid-cols-2 gap-3">
+          <div className="flex flex-col gap-3">
+            <FormUploadImage name={"image"} />
+            <Form.Item name={"name"} label="Tên dịch vụ">
+              <Input placeholder="Nhập tên dịch vụ" />
+              <HelperText>Tên dịch vụ sẽ là title của bài viết</HelperText>
+            </Form.Item>
+            <Form.Item name={"price"} label="Giá chỉ từ">
+              <Input placeholder="Chỉ nhập số" />
+              <HelperText>Có thể bỏ qua mục này</HelperText>
+            </Form.Item>
+          </div>
+          <Form.Item label="Nội dung giới thiệu dịch vụ">
+            <TextArea placeholder=" Typing" rows={13} />
+          </Form.Item>
+        </Section>
+        <Section optional title="Đội ngũ bác sĩ">
+          <Form.Item>
+            <Input placeholder="Chọn bác sĩ muốn hiển thị" />
+          </Form.Item>
+          <HelperText>
+            Mục này sẽ hiển thị tại <br />
+            “Đội ngũ Y Bác sĩ uy tín”
+          </HelperText>
+        </Section>
+        <Section title="Các bước điều trị">
+          <Steps name="steps" />
+        </Section>
+        <Section title="Giới thiệu dịch vụ khác" className="w-1/2">
+          <Form.Item>
+            <Input placeholder="Chọn dịch vụ muốn link" />
+          </Form.Item>
+          <HelperText>
+            Mục này sẽ hiển thị tại “Dịch vụ khác tại Thẩm mỹ Aura”
+          </HelperText>
+        </Section>
       </Form>
-    </>
+      <footer className="flex p-6 justify-end [&>*]:w-40 gap-[10px] bg-white">
+        <Button>Hoàn tác</Button>
+        <Button type="primary">
+          {isEdited ? "Lưu điều chỉnh" : "Đăng bài"}
+        </Button>
+      </footer>
+    </div>
   );
 }

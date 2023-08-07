@@ -17,7 +17,7 @@ export function Subtitle({ className, disabled, children, url }: SubProps) {
     <Link href={url}>
       <p
         className={cn(
-          "rounded-lg hover:bg-primary-60 py-2 pl-[58px] pr-6 text-subtitle1 w-[268px] text-white",
+          "rounded-lg hover:bg-primary-60 py-2 pl-[58px] pr-6 text-subtitle1 w-[268px] text-white cursor-pointer",
           { "": disabled },
           { "bg-primary-80": isSelected },
           className

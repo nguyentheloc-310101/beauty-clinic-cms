@@ -33,7 +33,7 @@ export default function Title({
     <>
       <div
         className={cn(
-          "rounded-lg hover:bg-primary-60 px-6 py-2 w-[268px] flex text-white",
+          "rounded-lg hover:bg-primary-60 px-6 py-2 w-[268px] flex text-white cursor-pointer",
           { "": disabled },
           { "bg-primary-80": isSelected },
           className

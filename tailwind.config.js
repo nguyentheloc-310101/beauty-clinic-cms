@@ -12,7 +12,11 @@ module.exports = {
     extend: {
       colors: {
         neutral: {
-          n: { 20: "var(--neutral-n-20)" },
+          n: {
+            20: "var(--neutral-n-20)",
+            50: "var(--neutral-n-50)",
+            80: "var(--neutral-n-80)",
+          },
         },
         primary: {
           60: "var(--primary-br-60)",
@@ -45,6 +49,14 @@ module.exports = {
           {
             lineHeight: "20px",
             letterSpacing: "0.25px",
+            fontWeight: "400",
+          },
+        ],
+        caption: [
+          "12px",
+          {
+            lineHeight: "18px",
+            letterSpacing: "0.4px",
             fontWeight: "400",
           },
         ],
