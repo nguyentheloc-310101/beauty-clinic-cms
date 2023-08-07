@@ -9,7 +9,7 @@ export default function Aside() {
   return (
     <aside className="px-6 py-12 flex flex-col gap-4  bg-primary">
       <img
-        src="./aura-logo.png"
+        src="/aura-logo.png"
         alt="aura-logo"
         className="h-[80px] mx-auto object-cover mb-12"
       />
