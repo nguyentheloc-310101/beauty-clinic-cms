@@ -1,9 +1,9 @@
-import { Spin } from 'antd';
+import { Spin } from "antd";
 
-import Lottie from 'lottie-react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { ReactNode } from 'react';
-import ButtonDefault from '../common/buttons/ButtonDefault';
+import Lottie from "lottie-react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { ReactNode } from "react";
+import ButtonDefault from "../common/buttons/ButtonDefault";
 
 type PopUpConfirmProps = {
   title: string;
@@ -26,8 +26,8 @@ const PopUpConfirm = ({
   onCancel,
   onOk,
   loading,
-  btnLeftTitle = 'Tiếp tục chỉnh sửa',
-  btnRightTitle = 'Xác nhận',
+  btnLeftTitle = "Tiếp tục chỉnh sửa",
+  btnRightTitle = "Xác nhận",
 }: PopUpConfirmProps) => {
   return (
     <>
@@ -39,7 +39,8 @@ const PopUpConfirm = ({
                 <div className="p-6 flex flex-col relative  overflow-auto bg-white rounded-2xl lg:w-[448px] lg:h-[553px]">
                   <div className="flex items-center justify-center w-full relative">
                     <div
-                      className={`text-center text-[20px] lg:text-[34px] text-[${color}] font-[600] font-['Be Vietnam Pro']`}>
+                      className={`text-center text-[20px] lg:text-[34px] text-[${color}] font-[600] font-['Be Vietnam Pro']`}
+                    >
                       {title}
                     </div>
                     <XMarkIcon
@@ -75,7 +76,7 @@ const PopUpConfirm = ({
                       </div>
                       <div className="block lg:hidden">
                         <ButtonDefault
-                          titleBt={'Trở lại'}
+                          titleBt={"Trở lại"}
                           borderBt={`1px solid ${color}`}
                           bgColor="white"
                           textColor={color}

@@ -1,34 +1,34 @@
-'use client';
-import { ROUTES } from '@/common/constants';
-import { useUserStore } from '@/common/store';
-import { AntDesignOutlined } from '@ant-design/icons';
-import { Avatar, Dropdown, Button } from 'antd';
-import type { MenuProps } from 'antd';
-import { AiOutlineDown } from 'react-icons/ai';
-import { usePathname } from 'next/navigation';
+"use client";
+import { ROUTES } from "@/common/constants";
+import { useUserStore } from "@/common/store";
+import { AntDesignOutlined } from "@ant-design/icons";
+import { Avatar, Dropdown, Button } from "antd";
+import type { MenuProps } from "antd";
+import { AiOutlineDown } from "react-icons/ai";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const signOut = useUserStore((state) => state.signOut);
   const pathname = usePathname();
-  const items: MenuProps['items'] = [
+  const items: MenuProps["items"] = [
     {
       label: <a href="">Thông tin tài khoản</a>,
-      key: '0',
+      key: "0",
     },
     {
       label: <a href="">Cập nhật mật khẩu</a>,
-      key: '1',
+      key: "1",
     },
     {
-      type: 'divider',
+      type: "divider",
     },
     {
       label: <div onClick={signOut}>Đăng xuất</div>,
-      key: '2',
+      key: "2",
     },
   ];
   return (
-    <header className="flex justify-between p-[24px] items-center bg-white">
+    <header className="flex justify-between p-4 items-center bg-white border-b border-solid border-neutral-n-20">
       <h4 className="flex-1 font-semibold">
         Điều chỉnh {/* TODO show header for subTitle */}
         {ROUTES.filter(

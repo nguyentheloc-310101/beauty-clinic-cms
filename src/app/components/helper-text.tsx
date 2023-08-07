@@ -9,8 +9,8 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
 
 export default function HelperText({ children, className }: Props) {
   return (
-    <span className={cn("inline-flex items-center text-[#767A7F]", className)}>
-      <InfoCircleFilled className="mr-1" />
+    <span className={cn("inline-flex text-[#767A7F] mt-1", className)}>
+      <InfoCircleFilled className="mr-1 self-start w-4 h-4" />
       <p className="text-body2 text-[#767A7F]">{children}</p>
     </span>
   );

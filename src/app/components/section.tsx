@@ -20,7 +20,7 @@ export default function Section({
   optional,
 }: Props) {
   return (
-    <section className={cn("", className)}>
+    <section>
       <h6 className="mb-3">
         {optional && (
           <Form.Item name={name}>
@@ -29,7 +29,7 @@ export default function Section({
         )}
         {title} {!optional && <b className="text-primary">*</b>}
       </h6>
-      {children}
+      <div className={cn("", className)}>{children}</div>
     </section>
   );
 }

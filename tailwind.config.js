@@ -11,6 +11,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        neutral: {
+          n: { 20: "var(--neutral-n-20)" },
+        },
         primary: {
           60: "var(--primary-br-60)",
           DEFAULT: "var(--primary-br-70-main-color)",
