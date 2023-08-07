@@ -60,7 +60,7 @@ export const NewCardButton = ({ createUrl, title, ...props }: NewCardProps) => {
   return (
     <div
       {...props}
-      className="rounded-lg h-auto w-[196px] flex justify-center items-center  primary outline-neutral-n-50 outline-dashed outline-1 bg-white cursor-pointer
+      className="rounded-lg h-[288px] w-[196px] flex justify-center items-center  primary outline-neutral-n-50 outline-dashed outline-1 bg-white cursor-pointer
      hover:outline-neutral-n-80 [&_*]:hover:!text-neutral-n-80 [&_*]:!text-neutral-n-50"
     >
       <Link href={createUrl ?? ""}>

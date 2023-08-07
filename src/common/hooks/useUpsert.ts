@@ -1,9 +1,7 @@
-import { supabase, uploadImage } from "@/services";
+import { supabase } from "@/services";
 import { useReducer, useEffect } from "react";
 import { useMessageContext } from "../providers/message";
-var lodashGet = require("lodash.get");
-var lodashSet = require("lodash.set");
-// import get from "lodash.get";
+import { imageProcessing } from "../utils";
 
 const TABLE_NAME = "data";
 const KEY = "key";
@@ -73,34 +71,10 @@ export function useUpsert<T>(
     asyncFunc();
   }, []);
 
-  // NOTE upload all image to UploadCare using lodash
-  const imageProcessing = async (value: T) => {
-    for (const path of imageAttributeNames) {
-      // get nested attribute of value
-      const item = lodashGet(value, path);
-
-      let filePaths: string[] = [];
-      if (Array.isArray(item)) filePaths = item;
-      else filePaths.push(item);
-
-      for (const filePath of filePaths) {
-        if (!filePath.startsWith("blob")) continue;
-
-        // TODO implement delete image when update
-
-        const file = await fetch(filePath).then((r) => r.blob());
-        const url = await uploadImage(file);
-
-        lodashSet(value, path, url);
-        URL.revokeObjectURL(filePath);
-      }
-    }
-  };
   const upsert = async (value: T) => {
     message.loading("Đang upload...");
 
-    imageProcessing(value);
-    console.warn(state.value);
+    imageProcessing(value, imageAttributeNames);
 
     dispatch({ type: "upsert" });
     const { error } = await supabase

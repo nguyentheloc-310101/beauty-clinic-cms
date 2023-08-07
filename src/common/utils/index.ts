@@ -1,4 +1,5 @@
 export * from "./cn";
+export * from "./image-processing";
 
 export function getIdFromSupabaseStorage(url: string): string {
   try {

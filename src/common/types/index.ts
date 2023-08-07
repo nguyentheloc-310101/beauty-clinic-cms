@@ -24,8 +24,10 @@ export interface IServiceStep extends IBase {
 export interface IService extends IBase {
   image: string;
   price: number;
-  content: string;
+  description: string;
   name: string;
+  hasDoctors: boolean;
+  hasSteps: boolean;
   category_id: string;
 }
 

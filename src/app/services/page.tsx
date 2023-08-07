@@ -1,51 +1,53 @@
 "use client";
 
 import { IService } from "@/common/types";
-import { useState } from "react";
 import Card, { NewCardButton } from "../components/card";
-import { SERVICES } from "@/common/dump-data";
 import { Button, Checkbox, Popconfirm } from "antd";
+import { useRemove } from "@/common/hooks";
+import queryString from "query-string";
 
 type Props = {};
 
 interface IDisplayService extends IService {
-  isSelected?: boolean;
+  isSelected: boolean;
 }
 export default function Service({ }: Props) {
-  const [data, setData] = useState<IDisplayService[]>(SERVICES);
-  console.log(data);
+  const { value, remove, select, selectAll } = useRemove<IDisplayService[]>(
+    "services",
+    []
+  );
   return (
     <div className="h-full flex flex-col justify-between ">
       <section className="flex flex-wrap gap-6 p-6">
         <NewCardButton title="THÊM BÀI VIẾT MỚI" createUrl="/services/create" />
-        {data.map((item, i: number) => (
+        {value?.map((item, i: number) => (
           <Card
             key={i}
             image={item.image}
             title={item.name}
-            description={item.content}
-            editUrl={"services/create"}
+            // TODO display category
+            description={item.description}
+            editUrl={
+              "services/create?" +
+              queryString.stringify({
+                isEdited: true,
+                data: JSON.stringify(value[i]),
+              })
+            }
             isSelected={item.isSelected ?? false}
-            onSelectCallBack={(isSelected) => {
-              const tempData = JSON.parse(JSON.stringify(data));
-              tempData[i].isSelected = isSelected;
-              setData(tempData);
-            }}
+            onSelectCallBack={() => select(i)}
           />
         ))}
       </section>
       <footer className="flex justify-between p-6 items-center bg-white">
         <div className="flex gap-3 text-caption items-center">
           <p className="text-caption">
-            {data.filter((item) => item.isSelected).length} bài viết được chọn |
+            {value?.filter((item) => item.isSelected).length} bài viết được chọn
+            |
           </p>
           <Checkbox
-            onChange={(e) => {
-              setData(
-                data.map((item) => ({ ...item, isSelected: e.target.checked }))
-              );
-            }}
-            checked={data.every((item) => item.isSelected)}
+            onChange={(e) => selectAll(e.target.checked)}
+            checked={value?.every((item) => item.isSelected)}
           >
             <p className="!text-caption">Chọn tất cả bài viết</p>
           </Checkbox>
@@ -53,9 +55,7 @@ export default function Service({ }: Props) {
           <Popconfirm
             title="Xóa thông tin"
             description="Nếu đồng ý các thông tin trên sẽ bị xóa vĩnh viễn!"
-            onConfirm={() => {
-              setData([...data.filter((item) => !item.isSelected)]);
-            }}
+            onConfirm={() => remove()}
             okText="Đồng ý"
             cancelText="Hủy"
           >
