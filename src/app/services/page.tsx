@@ -1,145 +1,76 @@
 "use client";
-import { IDoctor } from "@/common/types";
-import { Button, Input, Popconfirm, Table, Tooltip } from "antd";
-import { ColumnsType } from "antd/es/table";
-import {
-  SearchOutlined,
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import queryString from "query-string";
-import { supabase } from "@/services";
-import { getIdFromSupabaseStorage } from "@/common/utils";
+
+import { IService } from "@/common/types";
+import { useState } from "react";
+import Card, { NewCardButton } from "../components/card";
+import { SERVICES } from "@/common/dump-data";
+import { Button, Checkbox, Popconfirm } from "antd";
 
 type Props = {};
-export default function Service({}: Props) {
-  const [doctors, setDoctors] = useState<IDoctor[]>([]);
 
-  useEffect(() => {
-    const asyncFunc = async () => {
-      const { data } = await supabase.from("doctors").select();
-      setDoctors(data as IDoctor[]);
-    };
-    asyncFunc();
-  }, []);
-
-  async function handleDelete(currDoctor: IDoctor): Promise<void> {
-    let { error: error1 } = await supabase
-      .from("doctors")
-      .delete()
-      .eq("id", currDoctor.id);
-    const { error: error2 } = await supabase.storage
-      .from("aura")
-      .remove([getIdFromSupabaseStorage(currDoctor.image)]);
-    if (error1) console.log(error1);
-    if (error2) console.log(error2);
-    else setDoctors(doctors.filter((doctor) => doctor.id != currDoctor.id));
-  }
-  const columns: ColumnsType<IDoctor> = [
-    {
-      key: "action",
-      width: 120,
-      render: (currDoctor) => (
-        <>
-          <Tooltip title="Sửa">
-            <Link
-              href={
-                "/services/create?" +
-                queryString.stringify({
-                  isEdited: true,
-                  data: JSON.stringify(currDoctor),
-                })
-              }
-            >
-              <Button type="primary" shape="circle">
-                <EditOutlined />
-              </Button>
-            </Link>
-          </Tooltip>
-          <Tooltip title="Xóa">
-            <Popconfirm
-              title="Xóa thông tin bác sĩ"
-              description="Nếu đồng ý thông tin bác sĩ sẽ bị xóa vĩnh viễn!"
-              onConfirm={() => handleDelete(currDoctor)}
-              okText="Đồng ý"
-              cancelText="Hủy"
-            >
-              <Button type="text" shape="circle" className="ml-2" danger>
-                <DeleteOutlined />
-              </Button>
-            </Popconfirm>
-          </Tooltip>
-        </>
-      ),
-    },
-    {
-      title: "Avatar",
-      dataIndex: "image",
-      key: "image",
-      render: (src) => (
-        <img
-          src={src}
-          alt={src}
-          className="h-10 w-10 rounded-md object-cover"
-        />
-      ),
-    },
-    {
-      title: "Họ tên",
-      dataIndex: "name",
-      key: "name",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "K.Nghiệm",
-      dataIndex: "experience_year",
-      key: "experience_year",
-      render: (value) => <p className="text-center">{value}</p>,
-    },
-    {
-      title: "Chuyên ngành",
-      dataIndex: "major",
-      key: "major",
-    },
-    {
-      title: "Thông tin bác sĩ",
-      dataIndex: "desc_doctor",
-      render: (desc_doctor) => (
-        <Tooltip title={desc_doctor}>
-          <p className="truncate overflow-hidden max-w-[200px]">
-            {desc_doctor}
-          </p>
-        </Tooltip>
-      ),
-      key: "desc_doctor",
-    },
-  ];
-
-  const [searchText, setSearchText] = useState<string>("");
+interface IDisplayService extends IService {
+  isSelected?: boolean;
+}
+export default function Service({ }: Props) {
+  const [data, setData] = useState<IDisplayService[]>(SERVICES);
+  console.log(data);
   return (
-    <>
-      <header className="flex justify-between gap-4 pb-4 items-center">
-        <h2 className="min-w-fit">Dịch vụ</h2>
-        <Link href="/services/create">
-          <Button type="primary">Thêm mới</Button>
-        </Link>
-        <Input
-          placeholder="Tìm kiếm tên bác sĩ"
-          prefix={<SearchOutlined />}
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-      </header>
-      <Table
-        pagination={false}
-        columns={columns}
-        dataSource={doctors.filter((doctor) =>
-          doctor.name?.toLowerCase().includes(searchText?.toLowerCase() ?? "")
-        )}
-        className="min-w-max"
-      />
-    </>
+    <div className="h-full flex flex-col justify-between ">
+      <section className="flex flex-wrap gap-6 p-6">
+        <NewCardButton title="THÊM BÀI VIẾT MỚI" createUrl="/services/create" />
+        {data.map((item, i: number) => (
+          <Card
+            key={i}
+            image={item.image}
+            title={item.name}
+            description={item.content}
+            editUrl={"services/create"}
+            isSelected={item.isSelected ?? false}
+            onSelectCallBack={(isSelected) => {
+              const tempData = JSON.parse(JSON.stringify(data));
+              tempData[i].isSelected = isSelected;
+              setData(tempData);
+            }}
+          />
+        ))}
+      </section>
+      <footer className="flex justify-between p-6 items-center bg-white">
+        <div className="flex gap-3 text-caption items-center">
+          <p className="text-caption">
+            {data.filter((item) => item.isSelected).length} bài viết được chọn |
+          </p>
+          <Checkbox
+            onChange={(e) => {
+              setData(
+                data.map((item) => ({ ...item, isSelected: e.target.checked }))
+              );
+            }}
+            checked={data.every((item) => item.isSelected)}
+          >
+            <p className="!text-caption">Chọn tất cả bài viết</p>
+          </Checkbox>
+
+          <Popconfirm
+            title="Xóa thông tin"
+            description="Nếu đồng ý các thông tin trên sẽ bị xóa vĩnh viễn!"
+            onConfirm={() => {
+              setData([...data.filter((item) => !item.isSelected)]);
+            }}
+            okText="Đồng ý"
+            cancelText="Hủy"
+          >
+            <Button type="text" danger>
+              Xóa bài viết này
+            </Button>
+          </Popconfirm>
+        </div>
+        <div>
+          <Button className="w-40 mr-[10px]">Hoàn tác</Button>
+          <Button className="w-40" type="primary">
+            Lưu
+          </Button>
+        </div>
+      </footer>
+    </div>
   );
 }

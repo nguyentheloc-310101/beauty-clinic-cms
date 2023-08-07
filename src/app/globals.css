@@ -8,6 +8,8 @@
   --neutral-black-n-80: #36383a;
 
   --neutral-n-20: #e9ebed;
+  --neutral-n-50: #8f9499;
+  --neutral-n-80: #36383a;
 
   --primary-br-60: #d8315b;
   --primary-br-70-main-color: #bc2449;
@@ -25,7 +27,7 @@ main {
   margin: 0px !important;
 }
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {

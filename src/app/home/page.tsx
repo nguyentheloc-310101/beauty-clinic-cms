@@ -103,7 +103,7 @@ export default function Home() {
           <Section title="Báo chí nói gì về Aura">
             <News name="news" />
           </Section>
-          <Section title="Thông tin về Aura">
+          <Section title="Thông tin về Aura" optional>
             <AuraInfo name="auraInfos" />
           </Section>
           {/* <Section title="Reels"> */}

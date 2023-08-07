@@ -21,13 +21,18 @@ export default function Section({
 }: Props) {
   return (
     <section>
-      <h6 className="mb-3">
-        {optional && (
+      <h6 className="mb-3 font-bold">
+        {optional ? (
           <Form.Item name={name}>
-            <Checkbox />
+            <Checkbox>
+              <h6 className="font-bold">{title}</h6>
+            </Checkbox>
           </Form.Item>
+        ) : (
+          <>
+            {title} <b className="text-primary">*</b>
+          </>
         )}
-        {title} {!optional && <b className="text-primary">*</b>}
       </h6>
       <div className={cn("", className)}>{children}</div>
     </section>
