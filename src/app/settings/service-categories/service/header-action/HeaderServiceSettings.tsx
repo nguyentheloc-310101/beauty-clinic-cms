@@ -1,4 +1,5 @@
 import { Button, Select } from "antd";
+import Link from "next/link";
 import React from "react";
 
 const HeaderServiceSettings = () => {
@@ -26,9 +27,11 @@ const HeaderServiceSettings = () => {
             ]}
           />
         </div>
-        <Button className="bg-[#BC2449] h-full w-[70px] px-[24px] py-[12px]  text-white">
-          +
-        </Button>
+        <Link href={"/settings/service-categories/service/create"}>
+          <Button className="bg-[#BC2449] h-full w-[70px] px-[24px] py-[12px]  text-white">
+            +
+          </Button>
+        </Link>
       </div>
     </div>
   );

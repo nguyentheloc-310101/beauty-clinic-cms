@@ -1,4 +1,5 @@
 import { Button, DatePicker } from "antd";
+import Link from "next/link";
 import React from "react";
 
 const HeaderCategorySettings = () => {
@@ -11,9 +12,11 @@ const HeaderCategorySettings = () => {
         <div>
           <DatePicker className="w-[288px]" />
         </div>
-        <Button className="bg-[#BC2449] h-full w-[70px] px-[24px] py-[12px]  text-white">
-          +
-        </Button>
+        <Link href="/settings/service-categories/category/create">
+          <Button className="bg-[#BC2449] h-full w-[70px] px-[24px] py-[12px]  text-white">
+            +
+          </Button>
+        </Link>
       </div>
     </div>
   );

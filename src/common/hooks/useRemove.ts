@@ -18,6 +18,7 @@ type State<T> = {
 
 type Action<T> =
   | { type: "remove"; value: T }
+  | { type: "selectKeys"; value: T }
   | { type: "selectAll"; value: T }
   | { type: "select"; value: T }
   | { type: "start" }
@@ -30,10 +31,10 @@ export function useRemove<T extends Item[]>(
   tableName: string,
   imageAttributeNames: string[]
 ): State<T> & { remove: () => void } & {
-  select: (id: number) => void;
+  select: (id: number, isSelected?: boolean) => void;
 } & {
   selectAll: (isSelected: boolean) => void;
-} {
+} & { selectKeys: (keys: number[]) => void } {
   const initialState: State<T> = {
     loading: false,
     error: null,
@@ -43,6 +44,8 @@ export function useRemove<T extends Item[]>(
 
   const stateReducer = (state: State<T>, action: Action<T>): State<T> => {
     switch (action.type) {
+      case "selectKeys":
+        return { ...state, value: action.value };
       case "selectAll":
         return { ...state, value: action.value };
       case "select":
@@ -70,7 +73,7 @@ export function useRemove<T extends Item[]>(
       if (!error)
         dispatch({
           type: "finish",
-          value: data as T,
+          value: data.map((item, i) => ({ ...item, key: i })) as T,
         });
       else dispatch({ type: "error", error });
     };
@@ -78,20 +81,26 @@ export function useRemove<T extends Item[]>(
   }, []);
 
   const remove = async () => {
-    const removedValue = state.value!.filter((item) => item.isSelected);
-    await supabase
+    const removedValue = state.value?.filter((item) => item.isSelected) ?? [];
+    const { error } = await supabase
       .from(tableName)
       .delete()
       .in("id", [removedValue.map((item) => item.id)]);
-    dispatch({
-      type: "remove",
-      value: removedValue as T,
-    });
+    // TODO make more clear message for user if there reference error
+    if (error) message.error(error.message);
+    else
+      dispatch({
+        type: "remove",
+        value: state.value
+          ?.filter((item) => !item.isSelected)
+          .map((item, i) => ({ ...item, key: i })) as any,
+      });
   };
 
-  const select = (id: number) => {
+  const select = (id: number, isSeleted?: boolean) => {
     const tempData = JSON.parse(JSON.stringify(state.value));
-    tempData[id].isSelected = !tempData[id].isSelected;
+    tempData[id].isSelected =
+      isSeleted != null ? isSeleted : !tempData[id].isSelected;
 
     dispatch({ type: "select", value: tempData });
   };
@@ -105,6 +114,20 @@ export function useRemove<T extends Item[]>(
       })) as T,
     });
   };
+  const selectKeys = (keys: number[]) => {
+    dispatch({
+      type: "selectKeys",
+      value: state.value
+        ?.map((item) => ({
+          ...item,
+          isSelected: false,
+        }))
+        .map((item, i) => ({
+          ...item,
+          isSelected: keys.includes(i),
+        })) as T,
+    });
+  };
 
-  return { ...state, remove, select, selectAll };
+  return { ...state, remove, select, selectAll, selectKeys };
 }

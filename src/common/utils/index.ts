@@ -1,5 +1,6 @@
 export * from "./cn";
 export * from "./image-processing";
+export * from "./format-date";
 
 export function getIdFromSupabaseStorage(url: string): string {
   try {

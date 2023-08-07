@@ -1,15 +1,19 @@
 "use client";
 import React, { useState } from "react";
 import Table, { ColumnsType } from "antd/es/table";
-import { TableRowSelection } from "antd/es/table/interface";
+import { useRemove } from "@/common/hooks";
+import { IServiceCategory } from "@/common/types";
+import { formatDate } from "@/common/utils";
 
-interface DataCategoryType {
-  key: React.Key;
+interface CategoryType extends IServiceCategory {
+  isSelected: boolean;
+  key: number;
+
   name: string;
   quantity: number;
   created_at: string;
 }
-const columns: ColumnsType<DataCategoryType> = [
+const columns: ColumnsType<CategoryType> = [
   {
     title: "STT",
     dataIndex: "key",
@@ -25,31 +29,29 @@ const columns: ColumnsType<DataCategoryType> = [
   {
     title: "Ngày tạo",
     dataIndex: "created_at",
+    render: (e) => <>{formatDate(e)}</>,
   },
 ];
 
-const data: DataCategoryType[] = [];
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    quantity: 32,
-    created_at: `London, Park Lane no. ${i}`,
-  });
-}
 const TableCategory = () => {
+  const { value, selectKeys, loading, remove } = useRemove<CategoryType[]>(
+    "service-categories",
+    []
+  );
+
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [selectedRow, setSelectedRow] = useState<number>(0);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
+    selectKeys(newSelectedRowKeys as number[]);
   };
 
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
+  if (loading) return <></>;
   return (
     <div id="table-antd" className="pt-[24px] h-fit">
       <Table
@@ -60,7 +62,7 @@ const TableCategory = () => {
             setSelectedRow && setSelectedRow((record?.key as number) ?? 0);
           },
         })}
-        dataSource={data}
+        dataSource={value!}
         scroll={{ y: `calc(100vh - 396px)` }}
         rowClassName={(record) => {
           if (selectedRow == record?.key) {
@@ -71,7 +73,10 @@ const TableCategory = () => {
         footer={() => (
           <div className="w-full gap-[24px] flex justify-between pr-[50px] ">
             <div>{selectedRowKeys.length} danh mục được chọn</div>
-            <div className="text-[#DC1F18] text-[14px] cursor-pointer leading-[20px] tracking-[1.25px] font-[700]">
+            <div
+              className="text-[#DC1F18] text-[14px] cursor-pointer leading-[20px] tracking-[1.25px] font-[700]"
+              onClick={() => remove()}
+            >
               Xoá
             </div>
           </div>
