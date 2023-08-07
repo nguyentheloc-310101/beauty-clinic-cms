@@ -8,6 +8,8 @@ type FooterProps = {
   leftAction: boolean;
   onOk: any;
   onCancel: any;
+  textBtnRight: string;
+  textBtnLeft?: string;
 };
 //when leftAction is true, please assign function callbacks for 2 actions
 const FooterCustom = (props: FooterProps) => {
@@ -17,6 +19,8 @@ const FooterCustom = (props: FooterProps) => {
     data,
     leftAction,
     onChangeCheckBox,
+    textBtnRight,
+    textBtnLeft,
     onConFirmDelete,
   } = props;
   return (
@@ -57,7 +61,7 @@ const FooterCustom = (props: FooterProps) => {
           Hoàn tác
         </Button>
         <Button onClick={onOk} className="w-40" type="primary">
-          Lưu
+          {textBtnRight}
         </Button>
       </div>
     </footer>

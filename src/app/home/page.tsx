@@ -114,7 +114,12 @@ export default function Home() {
         </div>
         <HistoryAside />
       </div>
-      <FooterCustom leftAction={false} onOk={undefined} onCancel={undefined} />
+      <FooterCustom
+        leftAction={false}
+        onOk={undefined}
+        onCancel={undefined}
+        textBtnRight={"Lưu"}
+      />
     </Form>
   );
 }

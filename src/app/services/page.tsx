@@ -1,43 +1,41 @@
 "use client";
-import { IService } from "@/common/types";
-import { useState } from "react";
 
-import Card, { NewCardButton } from "@/app/components/card";
-import FooterCustom from "@/app/components/layout/footer/Footer";
-import PopUpConfirm from "@/app/components/popup-confirm/PopupConfirm";
 import { SERVICES } from "@/common/dump-data";
-import lottieMagic from "../../../../public/lottie/star_magic.json";
-
+import { IService } from "@/common/types";
+import { DatePicker } from "antd";
+import { useState } from "react";
+import lottieMagic from "../../../public/lottie/star_magic.json";
+import Card, { NewCardButton } from "../components/card";
+import FooterCustom from "../components/layout/footer/Footer";
+import PopUpConfirm from "../components/popup-confirm/PopupConfirm";
 type Props = {};
 
-interface IDisplayDoctor extends IService {
+interface IDisplayService extends IService {
   isSelected?: boolean;
 }
 export default function Service({}: Props) {
-  const [data, setData] = useState<IDisplayDoctor[]>(SERVICES);
+  const [data, setData] = useState<IDisplayService[]>(SERVICES);
   const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
 
   console.log(data);
   return (
     <div className="h-full flex flex-col justify-between ">
+      <div className="flex items-center justify-end pt-[24px] px-[24px] w-full">
+        <DatePicker placeholder="Chọn thời gian" className="w-[338px]" />
+      </div>
       <section className="flex flex-wrap gap-6 p-6">
-        <NewCardButton
-          title="THÊM BÁC SĨ MỚI"
-          createUrl="/settings/doctors/create"
-        />
+        <NewCardButton title="THÊM BÀI VIẾT MỚI" createUrl="/services/create" />
         {data.map((item, i: number) => (
           <Card
             key={i}
             image={
-              "https://ucarecdn.com/068165eb-301f-447c-ba67-7424cced156c/-/quality/smart/-/format/auto/"
+              "https://ucarecdn.com/f333f6dd-9c74-41f9-859e-ad7f3234b114/-/quality/smart/-/format/auto/"
             }
-            title={"Tên bác sĩ"}
-            major={"Chuyên ngành"}
-            experience={"Năm kinh nghiệm"}
-            // description={item.content}
-            editUrl={"doctors/doctor-settings"}
+            title={item.name}
+            description={item.content}
+            editUrl={"services/create"}
             isSelected={item.isSelected ?? false}
-            onSelectCallBack={(isSelected: boolean) => {
+            onSelectCallBack={(isSelected) => {
               const tempData = JSON.parse(JSON.stringify(data));
               tempData[i].isSelected = isSelected;
               setData(tempData);

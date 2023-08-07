@@ -22,20 +22,18 @@ export default function Service({}: Props) {
     <div className="h-full flex flex-col justify-between ">
       <section className="flex flex-wrap gap-6 p-6">
         <NewCardButton
-          title="THÊM BÁC SĨ MỚI"
-          createUrl="/settings/doctors/create"
+          title="THÊM CƠ SỞ MỚI"
+          createUrl="/settings/clinics/create"
         />
         {data.map((item, i: number) => (
           <Card
             key={i}
             image={
-              "https://ucarecdn.com/068165eb-301f-447c-ba67-7424cced156c/-/quality/smart/-/format/auto/"
+              "https://ucarecdn.com/9aa03e00-e71e-405f-b501-cf15bc1c9e9e/-/quality/smart/-/format/auto/"
             }
-            title={"Tên bác sĩ"}
-            major={"Chuyên ngành"}
-            experience={"Năm kinh nghiệm"}
-            // description={item.content}
-            editUrl={"doctors/doctor-settings"}
+            title={"Tên Cơ Sở"}
+            description={item.content}
+            editUrl={"clinics/clinic-settings"}
             isSelected={item.isSelected ?? false}
             onSelectCallBack={(isSelected: boolean) => {
               const tempData = JSON.parse(JSON.stringify(data));
