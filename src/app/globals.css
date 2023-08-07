@@ -6,9 +6,7 @@
 
 :root {
   --neutral-black-n-80: #36383a;
-
   --neutral-n-20: #e9ebed;
-
   --primary-br-60: #d8315b;
   --primary-br-70-main-color: #bc2449;
   --primary-br-80: #9a1d3d;
@@ -25,7 +23,7 @@ main {
   margin: 0px !important;
 }
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -131,4 +129,50 @@ a {
 
 .ant-form-vertical .ant-form-item-label {
   padding-bottom: 4px;
+}
+
+#table-antd
+  > div
+  > div
+  > div
+  > div
+  > div.ant-table-container
+  > div.ant-table-body
+  > table
+  > tbody
+  > tr.ant-table-row.ant-table-row-level-0.ant-table-row-selected
+  > td.ant-table-cell.ant-table-selection-column
+  > label
+  > span
+  > span {
+  background-color: #bc2449;
+  color: white;
+  border-color: none;
+  border: none;
+}
+
+#table-antd
+  > div
+  > div
+  > div
+  > div
+  > div.ant-table-container
+  > div.ant-table-body
+  > table
+  > tbody
+  > tr.ant-table-row.ant-table-row-level-0.ant-table-row-selected
+  > td {
+  background-color: #bc2449;
+  color: white;
+}
+
+:where(.css-dev-only-do-not-override-19gw05y).ant-checkbox-checked
+  .ant-checkbox-inner {
+  background-color: #d8315b;
+  border: none;
+}
+
+#table-antd * .ant-table-row.ant-table-row-level-0:hover,
+#table-antd * .ant-table-cell-row-hover {
+  background-color: #fceef2;
 }

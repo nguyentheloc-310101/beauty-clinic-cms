@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 interface DetailServiceCard {
   service_name: string;
   service_category: string;
@@ -17,9 +17,7 @@ const DetailServiceCard = (props: DetailServiceCard) => {
           alt="service-img"
         />
       </div>
-      <div>
-        
-      </div>
+      <div></div>
     </div>
   );
 };
