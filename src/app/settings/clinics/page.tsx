@@ -1,41 +1,41 @@
 "use client";
-
-import { SERVICES } from "@/common/dump-data";
 import { IService } from "@/common/types";
-import { DatePicker } from "antd";
 import { useState } from "react";
-import lottieMagic from "../../../public/lottie/star_magic.json";
-import Card, { NewCardButton } from "../components/card";
-import FooterCustom from "../components/layout/footer/Footer";
-import PopUpConfirm from "../components/popup-confirm/PopupConfirm";
+
+import Card, { NewCardButton } from "@/app/components/card";
+import FooterCustom from "@/app/components/layout/footer/Footer";
+import PopUpConfirm from "@/app/components/popup-confirm/PopupConfirm";
+import { SERVICES } from "@/common/dump-data";
+import lottieMagic from "../../../../public/lottie/star_magic.json";
+
 type Props = {};
 
-interface IDisplayService extends IService {
+interface IDisplayDoctor extends IService {
   isSelected?: boolean;
 }
 export default function Service({}: Props) {
-  const [data, setData] = useState<IDisplayService[]>(SERVICES);
+  const [data, setData] = useState<IDisplayDoctor[]>(SERVICES);
   const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
 
   console.log(data);
   return (
     <div className="h-full flex flex-col justify-between ">
-      <div className="flex items-center justify-end pt-[24px] px-[24px] w-full">
-        <DatePicker placeholder="Chọn thời gian" className="w-[338px]" />
-      </div>
       <section className="flex flex-wrap gap-6 p-6">
-        <NewCardButton title="THÊM BÀI VIẾT MỚI" createUrl="/services/create" />
+        <NewCardButton
+          title="THÊM CƠ SỞ MỚI"
+          createUrl="/settings/clinics/create"
+        />
         {data.map((item, i: number) => (
           <Card
             key={i}
             image={
-              "https://ucarecdn.com/f333f6dd-9c74-41f9-859e-ad7f3234b114/-/quality/smart/-/format/auto/"
+              "https://ucarecdn.com/9aa03e00-e71e-405f-b501-cf15bc1c9e9e/-/quality/smart/-/format/auto/"
             }
-            title={item.name}
+            title={"Tên Cơ Sở"}
             description={item.content}
-            editUrl={"services/create"}
+            editUrl={"clinics/clinic-settings"}
             isSelected={item.isSelected ?? false}
-            onSelectCallBack={(isSelected) => {
+            onSelectCallBack={(isSelected: boolean) => {
               const tempData = JSON.parse(JSON.stringify(data));
               tempData[i].isSelected = isSelected;
               setData(tempData);

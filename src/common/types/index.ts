@@ -11,7 +11,6 @@ export interface IDoctor extends IBase {
   experience_year: number;
   desc_doctor: string;
   major: string;
-
   service_id: string;
 }
 

@@ -35,20 +35,20 @@ const PopUpConfirm = ({
           <div className="flex justify-center items-center h-full">
             <div className="flex flex-col relative  overflow-auto bg-white rounded-2xl">
               <Spin spinning={loading}>
-                <div className="p-6 flex flex-col relative  overflow-auto bg-white rounded-2xl lg:w-[448px] lg:h-[553px]">
+                <div className="p-6 flex flex-col relative  overflow-auto bg-white rounded-2xl lg:w-[448px] lg:h-[612px]">
                   <div className="flex items-center justify-center w-full relative">
                     <div
-                      className={`text-center text-[20px] lg:text-[34px] text-[${color}] font-[600] font-['Be Vietnam Pro']`}
+                      className={`text-center text-[20px] lg:text-[34px] lg:text-[#BC2449] font-[600] font-['Be Vietnam Pro']`}
                     >
                       {title}
                     </div>
                     <XMarkIcon
-                      className={`w-6 h-6 absolute right-4 lg:top-2 lg:right-6 text-[${color}] cursor-pointer hover:text-[#464749]`}
+                      className={`w-6 h-6 absolute right-4 lg:top-2 lg:right-6 text-[#BC2449] cursor-pointer hover:text-[#464749]`}
                       onClick={onCancel}
                     />
                   </div>
                   <div className="flex-1">
-                    <div className="flex justify-center items-center">
+                    <div className="flex justify-center items-center lg:my-[48px]">
                       <Lottie
                         animationData={lottie}
                         loop={true}

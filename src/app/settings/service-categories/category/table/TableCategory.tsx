@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import Table, { ColumnsType } from "antd/es/table";
-import { TableRowSelection } from "antd/es/table/interface";
 
 interface DataCategoryType {
   key: React.Key;

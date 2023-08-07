@@ -1,61 +1,56 @@
 "use client";
-import FormUploadImage from "@/app/components/form-upload-image";
-import HelperText from "@/app/components/helper-text";
-import FooterCustom from "@/app/components/layout/footer/Footer";
-import HistoryAside from "@/app/components/layout/history-aside";
-import PopUpConfirm from "@/app/components/popup-confirm/PopupConfirm";
-import Section from "@/app/components/section";
-import { Form, Input } from "antd";
-import TextArea from "antd/es/input/TextArea";
+import { IService } from "@/common/types";
 import { useState } from "react";
+
+import Card, { NewCardButton } from "@/app/components/card";
+import FooterCustom from "@/app/components/layout/footer/Footer";
+import PopUpConfirm from "@/app/components/popup-confirm/PopupConfirm";
+import { SERVICES } from "@/common/dump-data";
 import lottieMagic from "../../../../public/lottie/star_magic.json";
 
-const DoctorSetting = () => {
-  const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
-  return (
-    <>
-      <Form layout="vertical" className="h-full flex flex-col overflow-auto">
-        <div className="flex-1 flex justify-between">
-          <div className="m-[24px] w-full">
-            <Section title="Ảnh bìa">
-              <FormUploadImage name="background" />
-              <HelperText>Chỉ có thể chọn 1 ảnh bìa duy nhất</HelperText>
-            </Section>
-            <div className="mt-[36px]">
-              <Section title="Nội dung hiển thị">
-                <div className="grid grid-cols-2 gap-[12px] h-full">
-                  <div className="flex flex-col gap-[12px]">
-                    <Form.Item label="Tên bác sĩ" name="doctor_name">
-                      <Input placeholder="Nhập tên bác sĩ" />
-                    </Form.Item>
-                    <Form.Item label="Số năm kinh nghiệm" name="experience">
-                      <Input placeholder="Nhập Số năm kinh nghiệm" />
-                    </Form.Item>
-                    <Form.Item label="Chuyên ngành">
-                      <Input placeholder="Nhập Chuyên ngành" />
-                    </Form.Item>
-                  </div>
+type Props = {};
 
-                  <div>
-                    <Form.Item
-                      label="Nội dung giới thiệu dịch vụ"
-                      name="introduction"
-                    >
-                      <TextArea placeholder="Typing" rows={8} />
-                    </Form.Item>
-                  </div>
-                </div>
-              </Section>
-            </div>
-          </div>
-          <HistoryAside />
-        </div>
-        <FooterCustom
-          leftAction={false}
-          onOk={() => setConfirmEdit(true)}
-          onCancel={undefined}
+interface IDisplayDoctor extends IService {
+  isSelected?: boolean;
+}
+export default function Service({}: Props) {
+  const [data, setData] = useState<IDisplayDoctor[]>(SERVICES);
+  const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
+
+  console.log(data);
+  return (
+    <div className="h-full flex flex-col justify-between ">
+      <section className="flex flex-wrap gap-6 p-6">
+        <NewCardButton
+          title="THÊM BÁC SĨ MỚI"
+          createUrl="/settings/doctors/create"
         />
-      </Form>
+        {data.map((item, i: number) => (
+          <Card
+            key={i}
+            image={
+              "https://ucarecdn.com/068165eb-301f-447c-ba67-7424cced156c/-/quality/smart/-/format/auto/"
+            }
+            title={"Tên bác sĩ"}
+            major={"Chuyên ngành"}
+            experience={"Năm kinh nghiệm"}
+            // description={item.content}
+            editUrl={"doctors/doctor-settings"}
+            isSelected={item.isSelected ?? false}
+            onSelectCallBack={(isSelected: boolean) => {
+              const tempData = JSON.parse(JSON.stringify(data));
+              tempData[i].isSelected = isSelected;
+              setData(tempData);
+            }}
+          />
+        ))}
+      </section>
+      <FooterCustom
+        leftAction={false}
+        onOk={() => setConfirmEdit(true)}
+        onCancel={undefined}
+        textBtnRight={"Điều chỉnh"}
+      />
       {confirmEdit && (
         <PopUpConfirm
           loading={false}
@@ -69,8 +64,6 @@ const DoctorSetting = () => {
           onOk={undefined}
         />
       )}
-    </>
+    </div>
   );
-};
-
-export default DoctorSetting;
+}

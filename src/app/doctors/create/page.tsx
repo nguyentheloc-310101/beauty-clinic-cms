@@ -1,35 +1,24 @@
 "use client";
 import { IDoctor, IService } from "@/common/types";
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Select,
-  Tooltip,
-  Upload,
-  UploadFile,
-  message,
-} from "antd";
+import { Form, Input, Select, UploadFile, message } from "antd";
 const { Option } = Select;
 
-import TextArea from "antd/es/input/TextArea";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
-import { LeftOutlined } from "@ant-design/icons";
-import querystring from "query-string";
-import { v4 as uuidv4 } from "uuid";
-import { supabase } from "@/services";
-import { getIdFromSupabaseStorage } from "@/common/utils";
-import { useFetch } from "@/common/hooks";
-import PopUpConfirm from "@/app/components/popup-confirm/PopupConfirm";
-import FooterCustom from "@/app/components/layout/footer/Footer";
-import HistoryAside from "@/app/components/layout/history-aside";
-import Section from "@/app/components/section";
 import FormUploadImage from "@/app/components/form-upload-image";
 import HelperText from "@/app/components/helper-text";
+import FooterCustom from "@/app/components/layout/footer/Footer";
+import HistoryAside from "@/app/components/layout/history-aside";
+import PopUpConfirm from "@/app/components/popup-confirm/PopupConfirm";
+import Section from "@/app/components/section";
+import { useFetch } from "@/common/hooks";
+import { getIdFromSupabaseStorage } from "@/common/utils";
+import { supabase } from "@/services";
+import TextArea from "antd/es/input/TextArea";
+import { useRouter, useSearchParams } from "next/navigation";
+import querystring from "query-string";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-import lottieStar from "../../../../public/lottie/star_magic.json";
+import lottieAddNew from "../../../../public/lottie/add_new.json";
 
 interface IFormDoctor extends IDoctor {
   imageFile: any[];
@@ -131,6 +120,7 @@ export default function Create() {
           leftAction={false}
           onOk={() => setConfirmEdit(true)}
           onCancel={undefined}
+          textBtnRight={"Thêm mới"}
         />
       </Form>
       {confirmEdit && (
@@ -138,10 +128,10 @@ export default function Create() {
           loading={false}
           title={"Điều chỉnh"}
           description={
-            "Khi bấm “Xác nhận” thì thông tin mới sẽ được cập nhật và không thể khôi phục thông tin cũ."
+            "Khi bấm “Xác nhận” thì thông tin mới sẽ được cập nhật và có thể điều chỉnh thông tin lại sau."
           }
           color={"#BC2449"}
-          lottie={lottieStar}
+          lottie={lottieAddNew}
           onCancel={() => setConfirmEdit(false)}
           onOk={undefined}
         />

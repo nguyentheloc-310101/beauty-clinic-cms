@@ -7,10 +7,11 @@ type Props = {
   image: string;
   title: string;
   subtitle?: string;
-  description: string;
+  description?: string;
   editUrl: string;
   isSelected?: boolean;
-
+  experience?: string;
+  major?: string;
   onSelectCallBack: (isSelected: boolean) => void;
 };
 
@@ -21,6 +22,8 @@ export default function Card({
   description,
   editUrl,
   isSelected,
+  experience,
+  major,
   onSelectCallBack,
 }: Props) {
   // useEffect(() => {
@@ -28,7 +31,7 @@ export default function Card({
   // }, [isSelected]);
   return (
     <section
-      className="rounded-lg overflow-hidden relative outline-primary hover:outline outline-1 bg-white"
+      className="rounded-lg overflow-hidden relative outline-primary hover:outline outline-1 bg-white hover:bg-[#FCEEF2]"
       onClick={() => onSelectCallBack(!isSelected)}
     >
       <img
@@ -41,9 +44,11 @@ export default function Card({
           <p className="text-subtitle2 font-bold">{title}</p>
           {subtitle && <p className="text-caption my-[6px]">{subtitle}</p>}
           <p className="text-caption ">{description}</p>
+          <p className="text-caption ">{experience}</p>
+          <p className="text-caption ">{major}</p>
         </div>
         <Link href={editUrl} className="self-end">
-          <EditOutlined />
+          <EditOutlined className="text-[#8F9499] " />
         </Link>
       </div>
       <Radio className="top-3 right-3 absolute" checked={isSelected} />
@@ -61,7 +66,7 @@ export const NewCardButton = ({ createUrl, title, ...props }: NewCardProps) => {
     <div
       {...props}
       className="rounded-lg h-auto w-[196px] flex justify-center items-center  primary outline-neutral-n-50 outline-dashed outline-1 bg-white cursor-pointer
-     hover:outline-neutral-n-80 [&_*]:hover:!text-neutral-n-80 [&_*]:!text-neutral-n-50"
+     hover:outline-[#BC2449] [&_*]:hover:!text-[#BC2449] [&_*]:!text-neutral-n-50 hover:bg-[#FCEEF2]"
     >
       <Link href={createUrl ?? ""}>
         <div className="text-center">
