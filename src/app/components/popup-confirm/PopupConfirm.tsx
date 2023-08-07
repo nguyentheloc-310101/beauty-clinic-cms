@@ -4,7 +4,6 @@ import Lottie from "lottie-react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ReactNode } from "react";
 import ButtonDefault from "../common/buttons/ButtonDefault";
-
 type PopUpConfirmProps = {
   title: string;
   description: string | ReactNode;
@@ -44,7 +43,7 @@ const PopUpConfirm = ({
                       {title}
                     </div>
                     <XMarkIcon
-                      className="w-6 h-6 absolute right-6 text-[#8F9499] cursor-pointer hover:text-[#464749]"
+                      className={`w-6 h-6 absolute right-4 lg:top-2 lg:right-6 text-[${color}] cursor-pointer hover:text-[#464749]`}
                       onClick={onCancel}
                     />
                   </div>

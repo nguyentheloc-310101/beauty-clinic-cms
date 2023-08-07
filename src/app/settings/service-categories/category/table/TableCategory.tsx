@@ -15,7 +15,7 @@ const columns: ColumnsType<DataCategoryType> = [
     dataIndex: "key",
   },
   {
-    title: "Name",
+    title: "Danh mục",
     dataIndex: "name",
   },
   {
@@ -51,7 +51,7 @@ const TableCategory = () => {
     onChange: onSelectChange,
   };
   return (
-    <div id="table-antd" className="pt-[24px]">
+    <div id="table-antd" className="pt-[24px] h-fit">
       <Table
         rowSelection={rowSelection}
         columns={columns}
@@ -70,7 +70,7 @@ const TableCategory = () => {
         }}
         footer={() => (
           <div className="w-full gap-[24px] flex justify-between pr-[50px] ">
-            <div>2 danh mục được chọn</div>
+            <div>{selectedRowKeys.length} danh mục được chọn</div>
             <div className="text-[#DC1F18] text-[14px] cursor-pointer leading-[20px] tracking-[1.25px] font-[700]">
               Xoá
             </div>
