@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 type UserState = {
   isSignedIn: boolean;
@@ -17,7 +17,7 @@ export const useUserStore = create<UserState>()(
       signOut: () => set(() => ({ isSignedIn: false })),
     }),
     {
-      name: "login", // name of item in the storage (must be unique)
+      name: 'login', // name of item in the storage (must be unique)
       storage: createJSONStorage(() => sessionStorage), // (optional) by default the 'localStorage' is used
     }
   )

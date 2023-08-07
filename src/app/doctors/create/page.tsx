@@ -15,18 +15,28 @@ const { Option } = Select;
 
 import TextArea from "antd/es/input/TextArea";
 import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { LeftOutlined } from "@ant-design/icons";
 import querystring from "query-string";
 import { v4 as uuidv4 } from "uuid";
 import { supabase } from "@/services";
 import { getIdFromSupabaseStorage } from "@/common/utils";
 import { useFetch } from "@/common/hooks";
+import PopUpConfirm from "@/app/components/popup-confirm/PopupConfirm";
+import FooterCustom from "@/app/components/layout/footer/Footer";
+import HistoryAside from "@/app/components/layout/history-aside";
+import Section from "@/app/components/section";
+import FormUploadImage from "@/app/components/form-upload-image";
+import HelperText from "@/app/components/helper-text";
+
+import lottieStar from "../../../../public/lottie/star_magic.json";
 
 interface IFormDoctor extends IDoctor {
   imageFile: any[];
 }
 export default function Create() {
+  const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
+
   const { value: services } = useFetch<IService[]>(() =>
     supabase.from("services").select()
   );
@@ -70,7 +80,7 @@ export default function Create() {
   };
   return (
     <>
-      {contextHolder}
+      {/* {contextHolder}
       <header className="flex p-2 gap-4">
         <Tooltip title="Trở về">
           <Button
@@ -80,60 +90,62 @@ export default function Create() {
             onClick={router.back}
           />
         </Tooltip>
-        <h2>
-          {isEdited
-            ? "Chỉnh sửa thông tin bác sĩ"
-            : "Thêm mới thông tin bác sĩ"}
-        </h2>
-      </header>
-      <Form
-        labelCol={{ span: 6 }}
-        //wrapperCol={{ span: 14 }}
-        layout="horizontal"
-        initialValues={initialDoctor}
-        onFinish={onFinish}
-        style={{ maxWidth: 600 }}
-      >
-        <Form.Item
-          label="Avatar"
-          valuePropName="fileList"
-          name="imageFile"
-          getValueFromEvent={(e) => e.fileList}
-        >
-          <Upload
-            listType="picture-card"
-            maxCount={1}
-            accept="image/*"
-            fileList={[{ url: initialDoctor.image }] as any}
-          >
-            Tải lên
-          </Upload>
-        </Form.Item>
-        <Form.Item label="Họ tên:" name="name">
-          <Input />
-        </Form.Item>
-        <Form.Item label="Chuyên ngành:" name="major">
-          <Input />
-        </Form.Item>
-        <Form.Item label="Số năm kinh nghiệm:" name="experience_year">
-          <InputNumber min={0} max={50} />
-        </Form.Item>
-        <Form.Item label="Thông tin bác sĩ:" name="desc_doctor">
-          <TextArea rows={4} />
-        </Form.Item>
-        <Form.Item label="Thuộc dịch vụ:" name="service_id">
-          <Select defaultValue={initialDoctor.service_id}>
-            {services?.map((service: IService, i: number) => (
-              <Option value={service.id} key={i}>
-                {service.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Button type="primary" htmlType="submit" className="block ml-auto">
-          {isEdited ? "Lưu thay đổi" : "Tạo mới"}
-        </Button>
+      </header> */}
+      <Form layout="vertical" className="h-full flex flex-col overflow-auto">
+        <div className="flex-1 flex justify-between">
+          <div className="m-[24px] w-full">
+            <Section title="Ảnh bìa">
+              <FormUploadImage name="background" />
+              <HelperText>Chỉ có thể chọn 1 ảnh bìa duy nhất</HelperText>
+            </Section>
+            <div className="mt-[36px]">
+              <Section title="Nội dung hiển thị">
+                <div className="grid grid-cols-2 gap-[12px] h-full">
+                  <div className="flex flex-col gap-[12px]">
+                    <Form.Item label="Tên bác sĩ" name="doctor_name">
+                      <Input placeholder="Nhập tên bác sĩ" />
+                    </Form.Item>
+                    <Form.Item label="Số năm kinh nghiệm" name="experience">
+                      <Input placeholder="Nhập Số năm kinh nghiệm" />
+                    </Form.Item>
+                    <Form.Item label="Chuyên ngành">
+                      <Input placeholder="Nhập Chuyên ngành" />
+                    </Form.Item>
+                  </div>
+
+                  <div>
+                    <Form.Item
+                      label="Nội dung giới thiệu dịch vụ"
+                      name="introduction"
+                    >
+                      <TextArea placeholder="Typing" rows={8} />
+                    </Form.Item>
+                  </div>
+                </div>
+              </Section>
+            </div>
+          </div>
+          <HistoryAside />
+        </div>
+        <FooterCustom
+          leftAction={false}
+          onOk={() => setConfirmEdit(true)}
+          onCancel={undefined}
+        />
       </Form>
+      {confirmEdit && (
+        <PopUpConfirm
+          loading={false}
+          title={"Điều chỉnh"}
+          description={
+            "Khi bấm “Xác nhận” thì thông tin mới sẽ được cập nhật và không thể khôi phục thông tin cũ."
+          }
+          color={"#BC2449"}
+          lottie={lottieStar}
+          onCancel={() => setConfirmEdit(false)}
+          onOk={undefined}
+        />
+      )}
     </>
   );
 }

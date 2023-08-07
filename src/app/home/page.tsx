@@ -14,6 +14,7 @@ import News from "./news";
 import CustomFeedbacks from "./custom-feedbacks";
 import Loading from "@components/loading";
 import HistoryAside from "@components/layout/history-aside";
+import FooterCustom from "../components/layout/footer/Footer";
 
 export default function Home() {
   const {
@@ -113,12 +114,7 @@ export default function Home() {
         </div>
         <HistoryAside />
       </div>
-      <footer className="p-6 bg-white flex justify-end border-t border-solid border-neutral-n-20">
-        <Button className="mr-[10px] w-40"> Hoàn tác</Button>
-        <Button htmlType="submit" type="primary" className="w-40">
-          Lưu điều chỉnh
-        </Button>
-      </footer>
+      <FooterCustom leftAction={false} onOk={undefined} onCancel={undefined} />
     </Form>
   );
 }

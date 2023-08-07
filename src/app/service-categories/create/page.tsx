@@ -1,12 +1,12 @@
-"use client";
-import { IServiceCategory } from "@/common/types";
-import { Button, Form, Input, Tooltip, message } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
-import { LeftOutlined } from "@ant-design/icons";
-import querystring from "query-string";
-import { supabase } from "@/services";
-import slugify from "slugify";
+'use client';
+import { IServiceCategory } from '@/common/types';
+import { Button, Form, Input, Tooltip, message } from 'antd';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
+import { LeftOutlined } from '@ant-design/icons';
+import querystring from 'query-string';
+import { supabase } from '@/services';
+import slugify from 'slugify';
 
 export default function Create() {
   const { data, isEdited = false } = querystring.parse(
@@ -26,22 +26,22 @@ export default function Create() {
 
   const onFinish = async (serviceCategory: IServiceCategory) => {
     messageApi.open({
-      type: "loading",
-      content: "Đang " + (isEdited ? "lưu thay đổi..." : "thêm mới..."),
+      type: 'loading',
+      content: 'Đang ' + (isEdited ? 'lưu thay đổi...' : 'thêm mới...'),
     });
     if (isEdited)
       await supabase
-        .from("service-categories")
+        .from('service-categories')
         .delete()
-        .eq("slug", initialServiceCategory.slug);
+        .eq('slug', initialServiceCategory.slug);
 
-    await supabase.from("service-categories").insert({
+    await supabase.from('service-categories').insert({
       name: serviceCategory.name,
       slug: slugify(serviceCategory.name),
     });
-    message.success("Thành công!");
+    message.success('Thành công!');
     messageApi.destroy();
-    router.push("/service-categories");
+    router.push('/service-categories');
   };
   return (
     <>
@@ -57,8 +57,8 @@ export default function Create() {
         </Tooltip>
         <h2>
           {isEdited
-            ? "Chỉnh sửa thông tin bác sĩ"
-            : "Thêm mới thông tin bác sĩ"}
+            ? 'Chỉnh sửa thông tin bác sĩ'
+            : 'Thêm mới thông tin bác sĩ'}
         </h2>
       </header>
       <Form
@@ -67,13 +67,17 @@ export default function Create() {
         layout="horizontal"
         initialValues={initialServiceCategory}
         onFinish={onFinish}
-        style={{ maxWidth: 600 }}
-      >
-        <Form.Item label="Tên danh mục" name="name">
+        style={{ maxWidth: 600 }}>
+        <Form.Item
+          label="Tên danh mục"
+          name="name">
           <Input />
         </Form.Item>
-        <Button type="primary" htmlType="submit" className="block ml-auto">
-          {isEdited ? "Lưu thay đổi" : "Tạo mới"}
+        <Button
+          type="primary"
+          htmlType="submit"
+          className="block ml-auto">
+          {isEdited ? 'Lưu thay đổi' : 'Tạo mới'}
         </Button>
       </Form>
     </>
