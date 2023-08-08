@@ -9,9 +9,10 @@ const HeaderCategorySettings = () => {
         Danh mục
       </div>
       <div className="flex gap-[10px]">
-        <div>
-          <DatePicker className="w-[288px]" />
-        </div>
+        {/* TODO add date filter */}
+        {/* <div> */}
+        {/*   <DatePicker className="w-[288px]" /> */}
+        {/* </div> */}
         <Link href="/settings/service-categories/category/create">
           <Button className="bg-[#BC2449] h-full w-[70px] px-[24px] py-[12px]  text-white">
             +

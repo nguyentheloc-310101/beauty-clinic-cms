@@ -9,24 +9,25 @@ const HeaderServiceSettings = () => {
         Dịch vụ
       </div>
       <div className="flex gap-[10px]">
-        <div>
-          <Select
-            className="w-[288px]"
-            showSearch
-            placeholder="Chọn danh mục"
-            optionFilterProp="children"
-            options={[
-              {
-                value: "1",
-                label: "Mắt",
-              },
-              {
-                value: "2",
-                label: "Mũi",
-              },
-            ]}
-          />
-        </div>
+        {/* TODO add filter */}
+        {/* <div> */}
+        {/*   <Select */}
+        {/*     className="w-[288px]" */}
+        {/*     showSearch */}
+        {/*     placeholder="Chọn danh mục" */}
+        {/*     optionFilterProp="children" */}
+        {/*     options={[ */}
+        {/*       { */}
+        {/*         value: "1", */}
+        {/*         label: "Mắt", */}
+        {/*       }, */}
+        {/*       { */}
+        {/*         value: "2", */}
+        {/*         label: "Mũi", */}
+        {/*       }, */}
+        {/*     ]} */}
+        {/*   /> */}
+        {/* </div> */}
         <Link href={"/settings/service-categories/service/create"}>
           <Button className="bg-[#BC2449] h-full w-[70px] px-[24px] py-[12px]  text-white">
             +

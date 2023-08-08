@@ -1,67 +1,76 @@
 "use client";
 
-import { SERVICES } from "@/common/dump-data";
 import { IService } from "@/common/types";
-import { DatePicker } from "antd";
-import { useState } from "react";
-import lottieMagic from "../../../public/lottie/star_magic.json";
 import Card, { NewCardButton } from "../components/card";
-import FooterCustom from "../components/layout/footer/Footer";
-import PopUpConfirm from "../components/popup-confirm/PopupConfirm";
+import { Button, Checkbox, Popconfirm } from "antd";
+import { useRemove } from "@/common/hooks";
+import queryString from "query-string";
+
 type Props = {};
 
 interface IDisplayService extends IService {
-  isSelected?: boolean;
+  isSelected: boolean;
 }
-export default function Service({}: Props) {
-  const [data, setData] = useState<IDisplayService[]>(SERVICES);
-  const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
-
-  console.log(data);
+export default function Service({ }: Props) {
+  const { value, remove, select, selectAll } = useRemove<IDisplayService[]>(
+    "services",
+    []
+  );
   return (
     <div className="h-full flex flex-col justify-between ">
-      <div className="flex items-center justify-end pt-[24px] px-[24px] w-full">
-        <DatePicker placeholder="Chọn thời gian" className="w-[338px]" />
-      </div>
       <section className="flex flex-wrap gap-6 p-6">
         <NewCardButton title="THÊM BÀI VIẾT MỚI" createUrl="/services/create" />
-        {data.map((item, i: number) => (
+        {value?.map((item, i: number) => (
           <Card
             key={i}
-            image={
-              "https://ucarecdn.com/f333f6dd-9c74-41f9-859e-ad7f3234b114/-/quality/smart/-/format/auto/"
-            }
+            image={item.image}
             title={item.name}
-            description={item.content}
-            editUrl={"services/create"}
+            // TODO display category
+            description={item.description}
+            editUrl={
+              "services/create?" +
+              queryString.stringify({
+                isEdited: true,
+                data: JSON.stringify(value[i]),
+              })
+            }
             isSelected={item.isSelected ?? false}
-            onSelectCallBack={(isSelected) => {
-              const tempData = JSON.parse(JSON.stringify(data));
-              tempData[i].isSelected = isSelected;
-              setData(tempData);
-            }}
+            onSelectCallBack={() => select(i)}
           />
         ))}
       </section>
-      <FooterCustom
-        leftAction={false}
-        onOk={() => setConfirmEdit(true)}
-        onCancel={undefined}
-        textBtnRight={"Điều chỉnh"}
-      />
-      {confirmEdit && (
-        <PopUpConfirm
-          loading={false}
-          title={"Điều chỉnh"}
-          description={
-            "Khi bấm “Xác nhận” thì thông tin mới sẽ được cập nhật và không thể khôi phục thông tin cũ."
-          }
-          color={"#BC2449"}
-          lottie={lottieMagic}
-          onCancel={() => setConfirmEdit(false)}
-          onOk={undefined}
-        />
-      )}
+      <footer className="flex justify-between p-6 items-center bg-white">
+        <div className="flex gap-3 text-caption items-center">
+          <p className="text-caption">
+            {value?.filter((item) => item.isSelected).length} bài viết được chọn
+            |
+          </p>
+          <Checkbox
+            onChange={(e) => selectAll(e.target.checked)}
+            checked={value?.every((item) => item.isSelected)}
+          >
+            <p className="!text-caption">Chọn tất cả bài viết</p>
+          </Checkbox>
+
+          <Popconfirm
+            title="Xóa thông tin"
+            description="Nếu đồng ý các thông tin trên sẽ bị xóa vĩnh viễn!"
+            onConfirm={() => remove()}
+            okText="Đồng ý"
+            cancelText="Hủy"
+          >
+            <Button type="text" danger>
+              Xóa bài viết này
+            </Button>
+          </Popconfirm>
+        </div>
+        <div>
+          <Button className="w-40 mr-[10px]">Hoàn tác</Button>
+          <Button className="w-40" type="primary">
+            Lưu
+          </Button>
+        </div>
+      </footer>
     </div>
   );
 }

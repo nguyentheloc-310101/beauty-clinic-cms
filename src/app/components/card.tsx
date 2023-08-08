@@ -63,12 +63,12 @@ interface NewCardProps extends HTMLAttributes<HTMLDivElement> {
 export const NewCardButton = ({ createUrl, title, ...props }: NewCardProps) => {
   console.log(createUrl);
   return (
-    <div
-      {...props}
-      className="rounded-lg h-auto w-[196px] flex justify-center items-center  primary outline-neutral-n-50 outline-dashed outline-1 bg-white cursor-pointer
+    <Link href={createUrl ?? ""}>
+      <div
+        {...props}
+        className="rounded-lg h-[288px] w-[196px] flex justify-center items-center  primary outline-neutral-n-50 outline-dashed outline-1 bg-white cursor-pointer
      hover:outline-[#BC2449] [&_*]:hover:!text-[#BC2449] [&_*]:!text-neutral-n-50 hover:bg-[#FCEEF2]"
-    >
-      <Link href={createUrl ?? ""}>
+      >
         <div className="text-center">
           <PlusOutlined />
           <p className="mt-3 text-caption ">{title}</p>
