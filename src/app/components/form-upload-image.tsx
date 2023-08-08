@@ -3,33 +3,39 @@ import { Form, Upload } from "antd";
 import { FileImageOutlined } from "@ant-design/icons";
 import { NamePath } from "antd/es/form/interface";
 import { UploadFile } from "antd/es/upload/interface";
-import React, { useEffect } from "react";
+import React, { useRef } from "react";
 import { cn } from "@/common/utils";
 
 type Props = {
   className?: string;
   name?: NamePath | undefined;
-  url?: string;
 };
 
-function FormUploadImage({ name, url, className, ...props }: Props) {
+function FormUploadImage({ name, className, ...props }: Props) {
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
-  useEffect(() => {
-    if (url) setFileList([{ url, name: "image.png", uid: "-1" }]);
-  }, [url]);
+  const onceRef = useRef(true);
 
   return (
     <Form.Item
       {...props}
       className={cn("w-[224px]", className)}
       name={name}
+      // NOTE set initial value for image url
+      getValueProps={(e) => {
+        if (onceRef.current && e)
+          setFileList([{ url: e, name: "image.png", uid: "-1" }]);
+        onceRef.current = false;
+        return e;
+      }}
       getValueFromEvent={(e) => {
         if (Array.isArray(e)) return e;
         setFileList(e?.fileList);
 
         // NOTE this component will return browser's url
         // please upload to 3th party api
-        return URL.createObjectURL(e.file.originFileObj);
+        return e.file.originFileObj
+          ? URL.createObjectURL(e.file.originFileObj)
+          : "";
       }}
     >
       <Upload

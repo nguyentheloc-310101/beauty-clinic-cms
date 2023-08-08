@@ -31,7 +31,7 @@ export default function Card({
   // }, [isSelected]);
   return (
     <section
-      className="rounded-lg overflow-hidden relative outline-primary hover:outline outline-1 bg-white hover:bg-[#FCEEF2]"
+      className="w-[196px] rounded-lg overflow-hidden relative outline-primary hover:outline outline-1 bg-white hover:bg-[#FCEEF2]"
       onClick={() => onSelectCallBack(!isSelected)}
     >
       <img

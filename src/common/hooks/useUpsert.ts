@@ -23,8 +23,8 @@ type Action<T> =
 // WARN not handled error yet
 export function useUpsert<T>(
   key: string,
-  imageAttributeNames: string[]
-): State<T> & { upsert: (value: T) => void } {
+  imageAttributeNames: (string | string[])[]
+): State<T> & { upsert: (value: T) => Promise<void> } {
   const initialState: State<T> = {
     loading: false,
     error: null,
@@ -72,15 +72,16 @@ export function useUpsert<T>(
   }, []);
 
   const upsert = async (value: T) => {
-    message.loading("Đang upload...");
+    message.loading({ key: "loading", content: "Đang upload..." });
 
-    imageProcessing(value, imageAttributeNames);
+    await imageProcessing(value, imageAttributeNames);
 
     dispatch({ type: "upsert" });
     const { error } = await supabase
       .from(TABLE_NAME)
       .upsert({ [KEY]: key, [DATA]: value });
-    message.destroy();
+
+    message.destroy("loading");
     if (error) message.error("Lỗi xảy ra");
     else message.success("Lưu thành công!");
   };

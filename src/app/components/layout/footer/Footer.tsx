@@ -6,10 +6,11 @@ type FooterProps = {
   onChangeCheckBox?: any;
   onConFirmDelete?: any;
   leftAction: boolean;
-  onOk: any;
-  onCancel: any;
+  onOk?: any;
+  onCancel?: any;
   textBtnRight: string;
   textBtnLeft?: string;
+  isUploading?: boolean;
 };
 //when leftAction is true, please assign function callbacks for 2 actions
 const FooterCustom = (props: FooterProps) => {
@@ -20,14 +21,14 @@ const FooterCustom = (props: FooterProps) => {
     leftAction,
     onChangeCheckBox,
     textBtnRight,
+    isUploading,
     textBtnLeft,
     onConFirmDelete,
   } = props;
   return (
     <footer
-      className={`flex ${
-        leftAction ? "justify-between" : "justify-end"
-      }  p-6 items-center bg-white`}
+      className={`flex ${leftAction ? "justify-between" : "justify-end"
+        }  p-6 items-center bg-white`}
     >
       {leftAction && (
         <div className="flex gap-3 text-caption items-center">
@@ -60,7 +61,13 @@ const FooterCustom = (props: FooterProps) => {
         <Button onClick={onCancel} className="w-40 mr-[10px]">
           Hoàn tác
         </Button>
-        <Button onClick={onOk} className="w-40" type="primary">
+        <Button
+          onClick={onOk}
+          className="w-40"
+          type="primary"
+          htmlType="submit"
+          loading={isUploading}
+        >
           {textBtnRight}
         </Button>
       </div>

@@ -1,6 +1,6 @@
 "use client";
-import { Button, Form, Input } from "antd";
-import React from "react";
+import { Form, Input } from "antd";
+import React, { useState } from "react";
 import { LinkOutlined } from "@ant-design/icons";
 import Section from "@components/section";
 import HelperText from "@components/helper-text";
@@ -17,14 +17,22 @@ import HistoryAside from "@components/layout/history-aside";
 import FooterCustom from "../components/layout/footer/Footer";
 
 export default function Home() {
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   const {
     value: home,
     upsert,
     loading,
-  } = useUpsert<IHome>("home", ["background"]);
+  } = useUpsert<IHome>("home", [
+    "background",
+    "celebFeedback.image",
+    ["services", "image"],
+    ["news", "image"],
+    ["customFeedbacks", "image"],
+  ]);
   async function onSubmit(value: IHome) {
-    console.log(value);
-    upsert(value);
+    setIsUploading(true);
+    await upsert(value);
+    setIsUploading(false);
   }
   if (loading) return <Loading />;
   return (
@@ -37,7 +45,7 @@ export default function Home() {
       <div className="flex-1 flex overflow-hidden ">
         <div className="flex flex-col gap-9 p-6 flex-1 overflow-auto">
           <Section title="Ảnh bìa">
-            <FormUploadImage name="background" url={home?.background} />
+            <FormUploadImage name="background" />
           </Section>
           <Section title="Dịch vụ">
             <Services name="services" />
@@ -57,15 +65,15 @@ export default function Home() {
               </HelperText>
             </Section>
             {/* TODO process clinic */}
-            <Section title="Aura clinic">
-              <Form.Item name="clinic">
-                <Input placeholder="Chọn cơ sở muốn hiển thị" />
-              </Form.Item>
-              <HelperText>
-                Mục này sẽ hiển thị tại <br />
-                “Aura - Phá bỏ giới hạn”
-              </HelperText>
-            </Section>
+            {/* <Section title="Aura clinic"> */}
+            {/*   <Form.Item name="clinic"> */}
+            {/*     <Input placeholder="Chọn cơ sở muốn hiển thị" /> */}
+            {/*   </Form.Item> */}
+            {/*   <HelperText> */}
+            {/*     Mục này sẽ hiển thị tại <br /> */}
+            {/*     “Aura - Phá bỏ giới hạn” */}
+            {/*   </HelperText> */}
+            {/* </Section> */}
           </div>
           <Section
             title="Feedbacks của celeb"
@@ -104,9 +112,10 @@ export default function Home() {
           <Section title="Báo chí nói gì về Aura">
             <News name="news" />
           </Section>
-          <Section title="Thông tin về Aura" optional>
+          <Section title="Thông tin về Aura" optional name="hasAuraInfos">
             <AuraInfo name="auraInfos" />
           </Section>
+          {/* TODO add reals to home page */}
           {/* <Section title="Reels"> */}
           {/*   <Input placeholder="Chọn video muốn hiển thị" /> */}
           {/*   <HelperText>Mục này sẽ hiển thị tại "Reels nổi bật"</HelperText> */}
@@ -119,6 +128,7 @@ export default function Home() {
         onOk={undefined}
         onCancel={undefined}
         textBtnRight={"Lưu"}
+        isUploading={isUploading}
       />
     </Form>
   );

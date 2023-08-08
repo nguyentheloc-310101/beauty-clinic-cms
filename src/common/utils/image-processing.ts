@@ -2,32 +2,33 @@ import { uploadImage } from "@/services";
 var lodashGet = require("lodash.get");
 var lodashSet = require("lodash.set");
 
-// NOTE upload all image to UploadCare using lodash
-// TODO handle delete image
+// for nested value, use this syntax:
+// example: imageAttributeNames = ['image', ['auraInfos','image'], background]
+// inspired by antd nested value form name
+
 export async function imageProcessing(
   value: any,
-  imageAttributeNames: string[]
+  imageAttributeNames: (string | string[])[]
 ) {
-  for (const path of imageAttributeNames) {
-    // get nested attribute of value
-    const item = lodashGet(value, path);
+  for (const attribute of imageAttributeNames) {
+    let paths: string[] = [];
+    if (Array.isArray(attribute)) {
+      const item = lodashGet(value, attribute[0]);
+      item?.forEach((_: any, i: number) =>
+        paths.push(attribute[0] + "[" + i + "]." + attribute[1])
+      );
+    } else paths.push(attribute);
 
-    let filePaths: string[] = [];
-    if (Array.isArray(item)) filePaths = item;
-    else filePaths.push(item);
+    for (const path of paths) {
+      const item = lodashGet(value, path);
+      if (!item || !item.startsWith("blob")) continue;
 
-    for (const filePath of filePaths) {
-      if (!filePath.startsWith("blob")) continue;
-
-      // TODO implement delete image when update
-
-      const file = await fetch(filePath).then((r) => r.blob());
+      const file = await fetch(item).then((r) => r.blob());
       const url = await uploadImage(file);
 
       lodashSet(value, path, url);
-      URL.revokeObjectURL(filePath);
-
-      console.warn(url);
+      URL.revokeObjectURL(item);
     }
+    console.log(value);
   }
 }

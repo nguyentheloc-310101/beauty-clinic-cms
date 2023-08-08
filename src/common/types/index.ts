@@ -27,7 +27,7 @@ export interface IService extends IBase {
   name: string;
   hasDoctors: boolean;
   hasSteps: boolean;
-  category_id: string;
+  service_id: string;
 }
 
 export interface IServiceCategory extends IBase {
