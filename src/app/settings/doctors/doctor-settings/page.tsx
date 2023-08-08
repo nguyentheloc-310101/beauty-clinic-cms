@@ -15,7 +15,7 @@ interface DoctorSettingsProps {
   doctor: IDoctor;
 }
 
-const DoctorSetting = (props: DoctorSettingsProps) => {
+const DoctorSetting = (props: any) => {
   const { doctor } = props;
   const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
   return (

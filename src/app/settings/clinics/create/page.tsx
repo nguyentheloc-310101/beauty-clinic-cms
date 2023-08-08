@@ -8,14 +8,14 @@ import Section from "@/app/components/section";
 import { Form, Input } from "antd";
 import { useState } from "react";
 
-import { IClinic } from "@/common/types/IClinic";
 import lottieMagic from "../../../../../public/lottie/add_new.json";
+import { IClinic } from "@/common/types";
 
-interface SettingClinicProps {
-  clinic: IClinic;
-}
+// interface SettingClinicProps {
+//   clinic: IClinic;
+// }
 
-const ClinicCreate = (props: SettingClinicProps) => {
+const ClinicCreate = (props: any) => {
   const { clinic } = props;
   const [confirmEditClinic, setConfirmEditClinic] = useState<boolean>(false);
   return (

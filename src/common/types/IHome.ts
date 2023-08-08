@@ -1,5 +1,3 @@
-import { IService } from ".";
-
 export interface ICustomFeedback {
   image: string;
   signature: string;
