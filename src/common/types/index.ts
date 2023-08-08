@@ -1,5 +1,4 @@
 export * from "./IHome";
-
 interface IBase {
   id: string; // supabase id
   key: number; // key for react mapping table
@@ -31,4 +30,13 @@ export interface IService extends IBase {
 export interface IServiceCategory extends IBase {
   slug: string;
   name: string;
+}
+
+export interface IClinic extends IBase {
+  location: string;
+  short_address: string;
+  open: string;
+  closed: string;
+  name: string;
+  description: string;
 }

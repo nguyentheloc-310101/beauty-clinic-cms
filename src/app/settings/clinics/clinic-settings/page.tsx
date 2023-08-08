@@ -8,18 +8,17 @@ import Section from "@/app/components/section";
 import { Form, Input } from "antd";
 import { useState } from "react";
 
-import { IClinic } from "@/common/types/IClinic";
 import lottieMagic from "../../../../../public/lottie/star_magic.json";
+import { IClinic } from "@/common/types";
 
-interface SettingClinicProps {
-  clinic: IClinic;
-}
+// type ClinicSettingsPageProps = {
+//   clinic: IClinic;
+// };
 
-const ClinicSetting = (props: SettingClinicProps) => {
-  const { clinic } = props;
+const ClinicSettingPage = ({ clinic }: any) => {
   const [confirmEditClinic, setConfirmEditClinic] = useState<boolean>(false);
   return (
-    <>
+    <div>
       <Form
         layout="vertical"
         className="h-full flex flex-col overflow-auto"
@@ -95,8 +94,8 @@ const ClinicSetting = (props: SettingClinicProps) => {
           onOk={undefined}
         />
       )}
-    </>
+    </div>
   );
 };
 
-export default ClinicSetting;
+export default ClinicSettingPage;
