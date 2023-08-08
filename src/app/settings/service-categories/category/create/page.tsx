@@ -12,7 +12,7 @@ export default function Create() {
     const { error } = await supabase
       .from("service-categories")
       .insert({ name: value.name });
-    if (error) console.log(error);
+    if (error) console.error(error);
     else router.push("/settings/service-categories");
   };
   return (

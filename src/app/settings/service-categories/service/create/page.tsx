@@ -12,11 +12,10 @@ import { IServiceCategory } from "@/common/types";
 export default function Create() {
   const router = useRouter();
   const onSubmit = async (value: any) => {
-    console.log(value);
     const { error } = await supabase
       .from("services")
       .insert({ name: value.name, category_id: value.category_id });
-    if (error) console.log(error);
+    if (error) console.error(error);
     else router.push("/settings/service-categories");
   };
   const { value } = useFetch<IServiceCategory[]>(() =>

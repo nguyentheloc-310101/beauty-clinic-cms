@@ -8,7 +8,7 @@ export function getIdFromSupabaseStorage(url: string): string {
     let match = url?.match(pattern);
     return match?.[1] ?? "";
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return "";
   }
 }

@@ -61,7 +61,6 @@ interface NewCardProps extends HTMLAttributes<HTMLDivElement> {
   createUrl: string;
 }
 export const NewCardButton = ({ createUrl, title, ...props }: NewCardProps) => {
-  console.log(createUrl);
   return (
     <Link href={createUrl ?? ""}>
       <div

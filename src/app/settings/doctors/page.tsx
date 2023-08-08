@@ -13,11 +13,10 @@ type Props = {};
 interface IDisplayDoctor extends IService {
   isSelected?: boolean;
 }
-export default function Service({}: Props) {
+export default function Service({ }: Props) {
   const [data, setData] = useState<IDisplayDoctor[]>(SERVICES);
   const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
 
-  console.log(data);
   return (
     <div className="h-full flex flex-col justify-between ">
       <section className="flex flex-wrap gap-6 p-6">

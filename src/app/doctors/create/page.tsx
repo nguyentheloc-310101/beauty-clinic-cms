@@ -45,7 +45,7 @@ export default function Create() {
       } as UploadFile,
     ];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 
   const router = useRouter();

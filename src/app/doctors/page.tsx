@@ -15,7 +15,7 @@ import { getIdFromSupabaseStorage } from "@/common/utils";
 import { useFetch } from "@/common/hooks";
 
 type Props = {};
-export default function Service({}: Props) {
+export default function Service({ }: Props) {
   const { value: serviceCategories } = useFetch<IServiceCategory[]>(() =>
     supabase.from("services").select()
   );
@@ -31,7 +31,7 @@ export default function Service({}: Props) {
         .remove([getIdFromSupabaseStorage(currDoctor.image)]);
       setDoctors(doctors?.filter((doctor) => doctor.id != currDoctor.id)!);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
   const columns: ColumnsType<IDoctor> = [
