@@ -91,6 +91,7 @@ const DoctorSetting = () => {
         </div>
         <FooterCustom
           leftAction={false}
+          popUpTitle="Thêm mới"
           rightAction={true}
           textBtnRight={isEdited ? "Lưu điều chỉnh" : "Thêm mới"}
           isUploading={isUploading}

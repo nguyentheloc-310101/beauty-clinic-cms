@@ -14,6 +14,7 @@ type FooterProps = {
   onOk?: any;
   textBtnRight?: string;
   isUploading?: boolean;
+  popUpTitle?: string;
 };
 //when leftAction is true, please assign function callbacks for 2 actions
 const FooterCustom = (props: FooterProps) => {
@@ -26,6 +27,7 @@ const FooterCustom = (props: FooterProps) => {
     textBtnRight,
     isUploading,
     onConFirmDelete,
+    popUpTitle,
   } = props;
   const router = useRouter();
   const [confirmEditClinic, setConfirmEditClinic] = useState<boolean>(false);
@@ -77,7 +79,7 @@ const FooterCustom = (props: FooterProps) => {
           {confirmEditClinic && (
             <PopUpConfirm
               loading={isUploading}
-              title={"Thêm mới"}
+              title={popUpTitle ?? "Điều chỉnh"}
               description={
                 "Khi bấm “Xác nhận” thì thông tin mới sẽ được cập nhật và không thể khôi phục thông tin cũ."
               }

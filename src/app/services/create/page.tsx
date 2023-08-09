@@ -159,6 +159,7 @@ export default function Create() {
         </Section>
       </div>
       <FooterCustom
+        popUpTitle="Thêm mới"
         leftAction={false}
         rightAction={true}
         textBtnRight={isEdited ? "Lưu điều chỉnh" : "Đăng bài"}

@@ -25,8 +25,6 @@ module.exports = {
         },
       },
       fontSize: {
-        body1: "0.8rem",
-        body2: "1rem",
         subtitle2: [
           "14px",
           {
