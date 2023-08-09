@@ -20,7 +20,6 @@ function FormUploadImage({ name, className, ...props }: Props) {
       {...props}
       className={cn("w-[224px]", className)}
       name={name}
-      // NOTE set initial value for image url
       getValueProps={(e) => {
         if (onceRef.current && e)
           setFileList([{ url: e, name: "image.png", uid: "-1" }]);
@@ -31,7 +30,7 @@ function FormUploadImage({ name, className, ...props }: Props) {
         if (Array.isArray(e)) return e;
         setFileList(e?.fileList);
 
-        // NOTE this component will return browser's url
+        // this component will return browser's url
         // please upload to 3th party api
         return e.file.originFileObj
           ? URL.createObjectURL(e.file.originFileObj)

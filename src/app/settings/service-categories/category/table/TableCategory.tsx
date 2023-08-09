@@ -22,10 +22,10 @@ const columns: ColumnsType<CategoryType> = [
     title: "Danh mục",
     dataIndex: "name",
   },
-  {
-    title: "SL Dịch vụ",
-    dataIndex: "quantity",
-  },
+  // {
+  //   title: "SL Dịch vụ",
+  //   dataIndex: "quantity",
+  // },
   {
     title: "Ngày tạo",
     dataIndex: "created_at",

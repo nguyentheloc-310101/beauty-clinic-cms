@@ -11,10 +11,14 @@ interface DataServiceType {
 
   key: React.Key;
   name: string;
-  quantity: number;
+
+  category_id: string;
   created_at: string;
 }
-const TableService = () => {
+type Props = {
+  selectedCategoryId: string;
+};
+const TableService = ({ selectedCategoryId }: Props) => {
   const { value: initialCategories } = useFetch<IServiceCategory[]>(() =>
     supabase.from("service-categories").select()
   );
@@ -27,6 +31,7 @@ const TableService = () => {
   const columns: ColumnsType<DataServiceType> = [
     {
       title: "STT",
+      width: 57,
       render: (_e, _a, i) => <>{i + 1}</>,
     },
     {
@@ -70,7 +75,9 @@ const TableService = () => {
           onClick: () =>
             setSelectedRow && setSelectedRow((record?.key as number) ?? 0),
         })}
-        dataSource={value!}
+        dataSource={value?.filter(
+          (item) => item?.category_id?.includes(selectedCategoryId) ?? true
+        )}
         scroll={{ y: `calc(100vh - 396px)` }}
         rowClassName={(record) => {
           if (selectedRow == record?.key) {

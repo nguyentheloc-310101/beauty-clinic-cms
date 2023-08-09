@@ -1,4 +1,4 @@
-import { Button, DatePicker } from "antd";
+import { Button } from "antd";
 import Link from "next/link";
 import React from "react";
 
@@ -9,10 +9,6 @@ const HeaderCategorySettings = () => {
         Danh mục
       </div>
       <div className="flex gap-[10px]">
-        {/* TODO add date filter */}
-        {/* <div> */}
-        {/*   <DatePicker className="w-[288px]" /> */}
-        {/* </div> */}
         <Link href="/settings/service-categories/category/create">
           <Button className="bg-[#BC2449] h-full w-[70px] px-[24px] py-[12px]  text-white">
             +

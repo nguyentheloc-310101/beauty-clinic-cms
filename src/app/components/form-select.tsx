@@ -1,3 +1,4 @@
+import { cn } from "@/common/utils";
 import { Form, Select } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 
@@ -20,6 +21,7 @@ interface SelectItemFormProps {
   allowClear?: boolean;
   readOnly?: boolean;
   onClear?: any;
+  className?: string;
 }
 const { Option } = Select;
 const FormSelect = (props: SelectItemFormProps) => {
@@ -39,10 +41,14 @@ const FormSelect = (props: SelectItemFormProps) => {
     allowClear,
     onClear,
     subLabel,
+    className,
   } = props;
   return (
     <Form.Item
-      className="w-[100%] mb-0 not-italic font-normal text-sm leading-5 text-[] relative"
+      className={cn(
+        "w-[100%] mb-0 not-italic font-normal text-sm leading-5 text-[] relative",
+        className
+      )}
       name={name}
       label={
         label && (

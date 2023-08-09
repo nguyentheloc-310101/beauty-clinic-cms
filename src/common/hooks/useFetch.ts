@@ -13,6 +13,7 @@ type Action<T> =
   | { type: "error"; error: Error };
 
 // WARN chưa handle phần push lỗi
+// NOTE this currently works only with array data
 export function useFetch<T>(
   fn: Function
 ): State<T> & { setValue: (value: T) => void } {

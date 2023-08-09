@@ -37,7 +37,7 @@ export default function Card({
         alt="Ảnh chưa thêm hoặc không tồn tại"
       />
       <div className="flex justify-between m-3 gap-4">
-        <div className="w-full">
+        <div className="basis-auto overflow-hidden">
           <p className="text-subtitle2 font-bold">{title}</p>
           {subtitle && <p className="text-caption my-[6px]">{subtitle}</p>}
           <p className="text-caption truncate w-full">{description}</p>
