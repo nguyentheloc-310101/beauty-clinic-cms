@@ -5,7 +5,6 @@ import Aside from "./aside";
 import { ConfigProvider } from "antd";
 import { useUserStore } from "@/common/store";
 import Auth from "./auth";
-import HistoryAside from "./history-aside";
 import MessageProvider from "@/common/providers/message";
 
 type Props = {
@@ -13,12 +12,13 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
+  const isSignIn = useUserStore((state) => state.isSignedIn);
+
   // NOTE all this code is for fix hydrate problem https://nextjs.org/docs/messages/react-hydration-error
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
-  const isSignIn = useUserStore((state) => state.isSignedIn);
   if (!isClient) return <></>;
 
   return (
