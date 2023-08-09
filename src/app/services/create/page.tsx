@@ -144,7 +144,7 @@ export default function Create() {
             “Đội ngũ Y Bác sĩ uy tín”
           </HelperText>
         </Section>
-        <Section title="Các bước điều trị">
+        <Section title="Các bước điều trị" optional name="hasSteps">
           <Steps name="steps" />
         </Section>
         <Section title="Giới thiệu dịch vụ khác" className="w-1/2">
