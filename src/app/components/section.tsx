@@ -23,7 +23,7 @@ export default function Section({
     <section>
       <h6 className="mb-3 font-bold">
         {optional ? (
-          <Form.Item name={name}>
+          <Form.Item name={name} valuePropName="checked">
             <Checkbox>
               <h6 className="font-bold">{title}</h6>
             </Checkbox>

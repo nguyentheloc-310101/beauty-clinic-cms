@@ -2,6 +2,7 @@ import { Radio } from "antd";
 import Link from "next/link";
 import React, { HTMLAttributes } from "react";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { cn } from "@/common/utils";
 
 type Props = {
   image: string;
@@ -10,8 +11,6 @@ type Props = {
   description?: string;
   editUrl: string;
   isSelected?: boolean;
-  experience?: string;
-  major?: string;
   onSelectCallBack: (isSelected: boolean) => void;
 };
 
@@ -22,16 +21,14 @@ export default function Card({
   description,
   editUrl,
   isSelected,
-  experience,
-  major,
   onSelectCallBack,
 }: Props) {
-  // useEffect(() => {
-  //   setIsSelected(initialIsSelected ?? false);
-  // }, [isSelected]);
   return (
     <section
-      className="w-[196px] rounded-lg overflow-hidden relative outline-primary hover:outline outline-1 bg-white hover:bg-[#FCEEF2]"
+      className={cn(
+        "w-[196px] rounded-lg overflow-hidden relative outline-primary hover:outline outline-1 bg-white hover:bg-[#FCEEF2]",
+        { outline: isSelected }
+      )}
       onClick={() => onSelectCallBack(!isSelected)}
     >
       <img
@@ -44,8 +41,6 @@ export default function Card({
           <p className="text-subtitle2 font-bold">{title}</p>
           {subtitle && <p className="text-caption my-[6px]">{subtitle}</p>}
           <p className="text-caption ">{description}</p>
-          <p className="text-caption ">{experience}</p>
-          <p className="text-caption ">{major}</p>
         </div>
         <Link href={editUrl} className="self-end">
           <EditOutlined className="text-[#8F9499] " />

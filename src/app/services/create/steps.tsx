@@ -28,7 +28,7 @@ export default function Steps({ name }: Props) {
                 <FormUploadImage name={[name, "image"]} {...restField} />
                 <Form.Item
                   label="Chi tiết bước điều trị"
-                  name={[name, "url"]}
+                  name={[name, "description"]}
                   className="flex-1"
                   {...restField}
                 >

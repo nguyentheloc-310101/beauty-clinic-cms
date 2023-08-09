@@ -30,7 +30,7 @@ const PopUpConfirm = ({
 }: PopUpConfirmProps) => {
   return (
     <>
-      <div className="z-[1000] fixed top-0 left-0 w-full h-full bg-black/20 p-8">
+      <div className="z-[1000] fixed top-0 left-0 w-full h-full bg-black/20 p-8 backdrop-blur-sm">
         <div className="overflow-auto h-full">
           <div className="flex justify-center items-center h-full">
             <div className="flex flex-col relative  overflow-auto bg-white rounded-2xl">
@@ -55,10 +55,10 @@ const PopUpConfirm = ({
                         className="lg:w-[400px] lg:h-[300px] h-[250px] object-cover"
                       />
                     </div>
-                    <p className="text-center text-[10px] font-[300] lg:text-[16px]">
+                    <div className="text-center text-body1">
                       {description}
                       <p className={`text-[${color}]`}>{highlight}</p>
-                    </p>
+                    </div>
                   </div>
                   <div className="mt-[10px] lg:mt-[2px]">
                     <div className="grid grid-cols-2 gap-6">
@@ -88,7 +88,7 @@ const PopUpConfirm = ({
                       <ButtonDefault
                         titleBt={btnRightTitle}
                         heightBt="44px"
-                        typeBt="button"
+                        typeBt="submit"
                         onclick={onOk}
                         bgColor={color}
                         isLoading={loading}

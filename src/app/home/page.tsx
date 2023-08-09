@@ -5,8 +5,8 @@ import { LinkOutlined } from "@ant-design/icons";
 import Section from "@components/section";
 import HelperText from "@components/helper-text";
 import FormUploadImage from "@components/form-upload-image";
-import { IHome } from "@types";
-import { useUpsert } from "@/common/hooks";
+import { IClinic, IHome } from "@types";
+import { useFetch, useUpsert } from "@/common/hooks";
 import Services from "./services";
 import TextArea from "antd/es/input/TextArea";
 import AuraInfo from "./aura-info";
@@ -15,6 +15,9 @@ import CustomFeedbacks from "./custom-feedbacks";
 import Loading from "@components/loading";
 import HistoryAside from "@components/layout/history-aside";
 import FooterCustom from "../components/layout/footer/Footer";
+import FormSelect from "@components/form-select";
+import { supabase } from "@/services";
+import FormSelectMultiple from "../components/form-select-multiple";
 
 export default function Home() {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -30,10 +33,21 @@ export default function Home() {
     ["customFeedbacks", "image"],
   ]);
   async function onSubmit(value: IHome) {
+    console.log(value);
     setIsUploading(true);
     await upsert(value);
     setIsUploading(false);
   }
+
+  const { value } = useFetch<IClinic[]>(() =>
+    supabase.from("clinics").select()
+  );
+  const clinics =
+    value?.map((clinic) => ({
+      value: clinic.id,
+      label: clinic.name,
+    })) ?? [];
+
   if (loading) return <Loading />;
   return (
     <Form
@@ -64,16 +78,17 @@ export default function Home() {
                 “Bạn có hẹn cùng Aura”
               </HelperText>
             </Section>
-            {/* TODO process clinic */}
-            {/* <Section title="Aura clinic"> */}
-            {/*   <Form.Item name="clinic"> */}
-            {/*     <Input placeholder="Chọn cơ sở muốn hiển thị" /> */}
-            {/*   </Form.Item> */}
-            {/*   <HelperText> */}
-            {/*     Mục này sẽ hiển thị tại <br /> */}
-            {/*     “Aura - Phá bỏ giới hạn” */}
-            {/*   </HelperText> */}
-            {/* </Section> */}
+            <Section title="Aura clinic">
+              <FormSelectMultiple
+                placeholder={"Chọn cơ sở muốn hiển thị"}
+                name={"clinic_ids"}
+                options={clinics}
+              />
+              <HelperText>
+                Mục này sẽ hiển thị tại <br />
+                “Aura - Phá bỏ giới hạn”
+              </HelperText>
+            </Section>
           </div>
           <Section
             title="Feedbacks của celeb"
@@ -126,7 +141,7 @@ export default function Home() {
       <FooterCustom
         leftAction={false}
         onOk={undefined}
-        onCancel={undefined}
+        rightAction={true}
         textBtnRight={"Lưu"}
         isUploading={isUploading}
       />

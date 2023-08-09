@@ -1,6 +1,6 @@
 "use client";
-import { IService } from "@/common/types";
-import { Button, Form, Input } from "antd";
+import { IDoctor, IService } from "@/common/types";
+import { Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
@@ -11,19 +11,11 @@ import HelperText from "@/app/components/helper-text";
 import Steps from "./steps";
 import { imageProcessing } from "@/common/utils";
 import { supabase } from "@/services";
+import FooterCustom from "@/app/components/layout/footer/Footer";
+import FormSelectMultiple from "@/app/components/form-select-multiple";
 import { useFetch } from "@/common/hooks";
-import FormSelect from "@/app/components/form-select";
 
 export default function Create() {
-  // const { value } = useFetch<IService[]>(() =>
-  //   supabase.from("services").select()
-  // );
-  // const services =
-  //   value?.map((service) => ({
-  //     value: service.id,
-  //     label: service.name,
-  //   })) ?? [];
-
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const { data, isEdited = false } = querystring.parse(
     useSearchParams().toString()
@@ -31,7 +23,14 @@ export default function Create() {
 
   let initialService = {} as IService;
   try {
-    if (data) initialService = JSON.parse(data as string) as IService;
+    if (data) {
+      initialService = JSON.parse(data as string) as IService;
+      initialService = {
+        ...initialService,
+        doctors: initialService.doctors.map((doctor: any) => doctor.id),
+        others: initialService.others.map((other) => other.id) as any,
+      };
+    }
   } catch (error) {
     console.error(error);
   }
@@ -40,13 +39,48 @@ export default function Create() {
     setIsUploading(true);
     try {
       await imageProcessing(service, ["image", ["steps", "image"]]);
+
       if (isEdited) {
+        if (service.doctors) {
+          await supabase.from("service-doctors").upsert(
+            service.doctors.map((doctor_id) => ({
+              service_id: initialService.id,
+              doctor_id,
+            }))
+          );
+        }
+        if (service.others) {
+          await supabase.from("others").upsert(
+            service.others.map((other) => ({
+              id: initialService.id,
+              other,
+            }))
+          );
+        }
         await supabase
           .from("services")
-          .update(service)
+          .update({ ...service, doctors: undefined, others: undefined })
           .eq("id", initialService.id);
       } else {
-        await supabase.from("services").insert(service);
+        const { data } = await supabase
+          .from("services")
+          .insert({ ...service, doctors: undefined, others: undefined })
+          .select();
+
+        if (service.doctors && data) {
+          await supabase.from("service-doctors").insert(
+            service.doctors.map((doctor_id) => ({
+              service_id: data[0].id,
+              doctor_id,
+            }))
+          );
+          await supabase.from("others").insert(
+            service.doctors.map((other) => ({
+              id: data[0].id,
+              other,
+            }))
+          );
+        }
       }
 
       router.push("/services");
@@ -55,6 +89,24 @@ export default function Create() {
     }
     setIsUploading(false);
   };
+
+  const { value } = useFetch<IDoctor[]>(() =>
+    supabase.from("doctors").select()
+  );
+  const doctors =
+    value?.map((doctor) => ({
+      value: doctor.id,
+      label: doctor.name,
+    })) ?? [];
+
+  const { value: value1 } = useFetch<IService[]>(() =>
+    supabase.from("services").select()
+  );
+  const otherServices =
+    value1?.map((service) => ({
+      value: service.id,
+      label: service.name,
+    })) ?? [];
   return (
     <Form
       layout="vertical"
@@ -69,12 +121,6 @@ export default function Create() {
             <Form.Item name={"name"} label="Tên dịch vụ">
               <Input placeholder={"Nhập tên dịch vụ"} />
             </Form.Item>
-            {/* <FormSelect */}
-            {/*   placeholder={"Nhập tên dịch vụ"} */}
-            {/*   label={"Tên dịch vụ"} */}
-            {/*   name={"service_id"} */}
-            {/*   options={services} */}
-            {/* /> */}
             <HelperText className="mt-[-8px]">
               Tên dịch vụ sẽ là title của bài viết
             </HelperText>
@@ -87,35 +133,38 @@ export default function Create() {
             <TextArea placeholder="Typing" rows={13} />
           </Form.Item>
         </Section>
-        {/* TODO  choose doctors*/}
-        {/* <Section optional title="Đội ngũ bác sĩ"> */}
-        {/*   <Form.Item name="hasDoctors"> */}
-        {/*     <Input placeholder="Chọn bác sĩ muốn hiển thị" /> */}
-        {/*   </Form.Item> */}
-        {/*   <HelperText> */}
-        {/*     Mục này sẽ hiển thị tại <br /> */}
-        {/*     “Đội ngũ Y Bác sĩ uy tín” */}
-        {/*   </HelperText> */}
-        {/* </Section> */}
+        <Section optional title="Đội ngũ bác sĩ" name="hasDoctors">
+          <FormSelectMultiple
+            placeholder={"Chọn bác sĩ muốn hiển thị"}
+            name={"doctors"}
+            options={doctors}
+          />
+          <HelperText>
+            Mục này sẽ hiển thị tại <br />
+            “Đội ngũ Y Bác sĩ uy tín”
+          </HelperText>
+        </Section>
         <Section title="Các bước điều trị">
           <Steps name="steps" />
         </Section>
-        {/* TODO  other services*/}
-        {/* <Section title="Giới thiệu dịch vụ khác" className="w-1/2"> */}
-        {/*   <Form.Item> */}
-        {/*     <Input placeholder="Chọn dịch vụ muốn link" /> */}
-        {/*   </Form.Item> */}
-        {/*   <HelperText> */}
-        {/*     Mục này sẽ hiển thị tại “Dịch vụ khác tại Thẩm mỹ Aura” */}
-        {/*   </HelperText> */}
-        {/* </Section> */}
+        {/* TODO  other services */}
+        <Section title="Giới thiệu dịch vụ khác" className="w-1/2">
+          <FormSelectMultiple
+            placeholder={"Chọn dịch vụ muốn link"}
+            name={"others"}
+            options={otherServices}
+          />
+          <HelperText>
+            Mục này sẽ hiển thị tại “Dịch vụ khác tại Thẩm mỹ Aura”
+          </HelperText>
+        </Section>
       </div>
-      <footer className="flex p-6 justify-end [&>*]:w-40 gap-[10px] bg-white">
-        <Button onClick={() => router.back()}>Hoàn tác</Button>
-        <Button type="primary" htmlType="submit" loading={isUploading}>
-          {isEdited ? "Lưu điều chỉnh" : "Đăng bài"}
-        </Button>
-      </footer>
+      <FooterCustom
+        leftAction={false}
+        rightAction={true}
+        textBtnRight={isEdited ? "Lưu điều chỉnh" : "Đăng bài"}
+        isUploading={isUploading}
+      />
     </Form>
   );
 }

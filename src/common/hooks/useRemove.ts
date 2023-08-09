@@ -1,8 +1,6 @@
-import { supabase, uploadImage } from "@/services";
+import { supabase } from "@/services";
 import { useReducer, useEffect } from "react";
 import { useMessageContext } from "../providers/message";
-var lodashGet = require("lodash.get");
-var lodashSet = require("lodash.set");
 
 interface Item {
   isSelected: boolean;
@@ -29,7 +27,8 @@ type Action<T> =
 // TODO handle error
 export function useRemove<T extends Item[]>(
   tableName: string,
-  imageAttributeNames: string[]
+  imageAttributeNames: string[],
+  selectString?: string
 ): State<T> & { remove: () => void } & {
   select: (id: number, isSelected?: boolean) => void;
 } & {
@@ -68,12 +67,14 @@ export function useRemove<T extends Item[]>(
   useEffect(() => {
     const asyncFunc = async () => {
       dispatch({ type: "start" });
-      const { data, error } = await supabase.from(tableName).select();
+      const { data, error } = await supabase
+        .from(tableName)
+        .select(selectString ?? "");
 
       if (!error)
         dispatch({
           type: "finish",
-          value: data.map((item, i) => ({ ...item, key: i })) as T,
+          value: data!.map((item: any, i) => ({ ...item, key: i })) as T,
         });
       else dispatch({ type: "error", error });
     };
@@ -82,6 +83,7 @@ export function useRemove<T extends Item[]>(
 
   const remove = async () => {
     const removedValue = state.value?.filter((item) => item.isSelected) ?? [];
+
     const { error } = await supabase
       .from(tableName)
       .delete()

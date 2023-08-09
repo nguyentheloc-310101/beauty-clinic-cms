@@ -4,18 +4,19 @@ import { useState } from "react";
 
 import Card, { NewCardButton } from "@/app/components/card";
 import FooterCustom from "@/app/components/layout/footer/Footer";
-import PopUpConfirm from "@/app/components/popup-confirm/PopupConfirm";
-import { SERVICES } from "@/common/dump-data";
-import lottieMagic from "../../../../public/lottie/star_magic.json";
+import { useRemove } from "@/common/hooks";
+import queryString from "query-string";
 
 type Props = {};
 
 interface IDisplayDoctor extends IService {
-  isSelected?: boolean;
+  isSelected: boolean;
 }
 export default function Service({ }: Props) {
-  const [data, setData] = useState<IDisplayDoctor[]>(SERVICES);
-  const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
+  const { value, remove, select, selectAll } = useRemove<IDisplayDoctor[]>(
+    "clinics",
+    []
+  );
 
   return (
     <div className="h-full flex flex-col justify-between ">
@@ -24,43 +25,33 @@ export default function Service({ }: Props) {
           title="THÊM CƠ SỞ MỚI"
           createUrl="/settings/clinics/create"
         />
-        {data.map((item, i: number) => (
+        {value?.map((item, i: number) => (
           <Card
             key={i}
             image={
               "https://ucarecdn.com/9aa03e00-e71e-405f-b501-cf15bc1c9e9e/-/quality/smart/-/format/auto/"
             }
-            title={"Tên Cơ Sở"}
-            description={item.content}
-            editUrl={"clinics/clinic-settings"}
+            title={item.name}
+            description={item.description}
+            editUrl={
+              "clinics/create?" +
+              queryString.stringify({
+                isEdited: true,
+                data: JSON.stringify(value[i]),
+              })
+            }
             isSelected={item.isSelected ?? false}
-            onSelectCallBack={(isSelected: boolean) => {
-              const tempData = JSON.parse(JSON.stringify(data));
-              tempData[i].isSelected = isSelected;
-              setData(tempData);
-            }}
+            onSelectCallBack={() => select(i)}
           />
         ))}
       </section>
       <FooterCustom
-        leftAction={false}
-        onOk={() => setConfirmEdit(true)}
-        onCancel={undefined}
-        textBtnRight={"Điều chỉnh"}
+        data={value}
+        onChangeCheckBox={(e) => selectAll(e)}
+        onConFirmDelete={() => remove()}
+        leftAction={true}
+        rightAction={false}
       />
-      {confirmEdit && (
-        <PopUpConfirm
-          loading={false}
-          title={"Điều chỉnh"}
-          description={
-            "Khi bấm “Xác nhận” thì thông tin mới sẽ được cập nhật và không thể khôi phục thông tin cũ."
-          }
-          color={"#BC2449"}
-          lottie={lottieMagic}
-          onCancel={() => setConfirmEdit(false)}
-          onOk={undefined}
-        />
-      )}
     </div>
   );
 }

@@ -31,6 +31,7 @@ export interface IHomeService {
 export interface IHome {
   background: string;
   videoLink: string;
+  clinic_ids: string[];
   services: IHomeService[];
   celebFeedback: ICelebFeedback;
   customFeedbacks: ICustomFeedback[];

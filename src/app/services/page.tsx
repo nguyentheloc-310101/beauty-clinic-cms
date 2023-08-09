@@ -2,9 +2,9 @@
 
 import { IService } from "@/common/types";
 import Card, { NewCardButton } from "../components/card";
-import { Button, Checkbox, Popconfirm } from "antd";
 import { useRemove } from "@/common/hooks";
 import queryString from "query-string";
+import FooterCustom from "@components/layout/footer/Footer";
 
 type Props = {};
 
@@ -14,7 +14,8 @@ interface IDisplayService extends IService {
 export default function Service({ }: Props) {
   const { value, remove, select, selectAll } = useRemove<IDisplayService[]>(
     "services",
-    []
+    [],
+    "*, doctors!service-doctors(id), others!others_other_fkey(id)"
   );
   return (
     <div className="h-full flex flex-col justify-between ">
@@ -39,38 +40,13 @@ export default function Service({ }: Props) {
           />
         ))}
       </section>
-      <footer className="flex justify-between p-6 items-center bg-white">
-        <div className="flex gap-3 text-caption items-center">
-          <p className="text-caption">
-            {value?.filter((item) => item.isSelected).length} bài viết được chọn
-            |
-          </p>
-          <Checkbox
-            onChange={(e) => selectAll(e.target.checked)}
-            checked={value?.every((item) => item.isSelected)}
-          >
-            <p className="!text-caption">Chọn tất cả bài viết</p>
-          </Checkbox>
-
-          <Popconfirm
-            title="Xóa thông tin"
-            description="Nếu đồng ý các thông tin trên sẽ bị xóa vĩnh viễn!"
-            onConfirm={() => remove()}
-            okText="Đồng ý"
-            cancelText="Hủy"
-          >
-            <Button type="text" danger>
-              Xóa bài viết này
-            </Button>
-          </Popconfirm>
-        </div>
-        <div>
-          <Button className="w-40 mr-[10px]">Hoàn tác</Button>
-          <Button className="w-40" type="primary">
-            Lưu
-          </Button>
-        </div>
-      </footer>
+      <FooterCustom
+        data={value}
+        onChangeCheckBox={(e) => selectAll(e)}
+        onConFirmDelete={() => remove()}
+        leftAction={true}
+        rightAction={false}
+      />
     </div>
   );
 }

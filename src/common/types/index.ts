@@ -7,10 +7,9 @@ interface IBase {
 export interface IDoctor extends IBase {
   image: string;
   name: string;
-  experience_year: number;
-  desc_doctor: string;
+  experience: number;
+  description: string;
   major: string;
-  service_id: string;
 }
 
 export interface IServiceStep extends IBase {
@@ -25,8 +24,14 @@ export interface IService extends IBase {
   description: string;
   name: string;
   hasDoctors: boolean;
+  doctors: string[];
   hasSteps: boolean;
+  steps: {
+    image: string;
+    description: string;
+  }[];
   service_id: string;
+  others: IService[];
 }
 
 export interface IServiceCategory extends IBase {
@@ -36,9 +41,11 @@ export interface IServiceCategory extends IBase {
 
 export interface IClinic extends IBase {
   location: string;
+  background: string;
   short_address: string;
   open: string;
   closed: string;
   name: string;
   description: string;
+  address: string;
 }
