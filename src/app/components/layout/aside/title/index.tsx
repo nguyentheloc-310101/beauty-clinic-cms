@@ -1,5 +1,5 @@
-'use client';
-export * from './subtitle';
+"use client";
+export * from "./subtitle";
 
 import { cn } from "@/common/utils";
 import React, { HTMLAttributes } from "react";
@@ -16,7 +16,6 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   url?: string;
 }
 
-// TODO implement disabled Title
 export default function Title({
   className,
   disabled,
@@ -38,7 +37,8 @@ export default function Title({
           { "bg-primary-80": isSelected },
           className
         )}
-        onClick={() => (url ? router.push(url) : setIsShown((prev) => !prev))}>
+        onClick={() => (url ? router.push(url) : setIsShown((prev) => !prev))}
+      >
         {Icon}
         <p className="text-subtitle1 ml-[10px] flex-1 mr-4 text-white">
           {title}

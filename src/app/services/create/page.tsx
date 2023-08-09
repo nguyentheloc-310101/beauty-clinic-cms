@@ -147,7 +147,6 @@ export default function Create() {
         <Section title="Các bước điều trị">
           <Steps name="steps" />
         </Section>
-        {/* TODO  other services */}
         <Section title="Giới thiệu dịch vụ khác" className="w-1/2">
           <FormSelectMultiple
             placeholder={"Chọn dịch vụ muốn link"}

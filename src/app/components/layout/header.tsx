@@ -29,12 +29,7 @@ const Header = () => {
   ];
   return (
     <header className="flex justify-between p-4 items-center bg-white border-b border-solid border-neutral-n-20">
-      <h4 className="flex-1 font-semibold">
-        Điều chỉnh {/* TODO show header for subTitle */}
-        {ROUTES.filter(
-          (route) => route.url == pathname
-        )?.[0]?.title.toLowerCase()}
-      </h4>
+      <h4 className="flex-1 font-semibold">{displayTitle(pathname)}</h4>
       {/* <Button onClick={signOut}>Đăng suất</Button> */}
       <Dropdown menu={{ items }}>
         <div className="flex lg:gap-[12px] lg:h-[40px] w-fit items-center justify-center">
@@ -56,5 +51,18 @@ const Header = () => {
     </header>
   );
 };
+
+function displayTitle(pathname: string): string {
+  const route = ROUTES.find((value) => {
+    if (value.subTitle) return true;
+    else return pathname.startsWith(value.url!);
+  });
+  if (route?.headTitle) return route.headTitle;
+  return (
+    route?.subTitle!.find((title) => {
+      return pathname.startsWith(title.url);
+    })?.head ?? ""
+  );
+}
 
 export default Header;

@@ -11,7 +11,6 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
   optional?: boolean;
 }
 
-// TODO make more nice *
 export default function Section({
   className,
   title,
