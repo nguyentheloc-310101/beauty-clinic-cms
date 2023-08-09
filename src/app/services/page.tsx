@@ -26,7 +26,6 @@ export default function Service({ }: Props) {
             key={i}
             image={item.image}
             title={item.name}
-            // TODO display category
             description={item.description}
             editUrl={
               "services/create?" +

@@ -15,9 +15,9 @@ import CustomFeedbacks from "./custom-feedbacks";
 import Loading from "@components/loading";
 import HistoryAside from "@components/layout/history-aside";
 import FooterCustom from "../components/layout/footer/Footer";
-import FormSelect from "@components/form-select";
 import { supabase } from "@/services";
 import FormSelectMultiple from "../components/form-select-multiple";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -32,11 +32,14 @@ export default function Home() {
     ["news", "image"],
     ["customFeedbacks", "image"],
   ]);
+
+  const router = useRouter();
   async function onSubmit(value: IHome) {
     console.log(value);
     setIsUploading(true);
     await upsert(value);
     setIsUploading(false);
+    router.push("/home");
   }
 
   const { value } = useFetch<IClinic[]>(() =>

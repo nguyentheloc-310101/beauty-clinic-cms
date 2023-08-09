@@ -32,15 +32,15 @@ export default function Card({
       onClick={() => onSelectCallBack(!isSelected)}
     >
       <img
-        className="w-[196px] h-[196px] object-cover"
+        className="w-[196px] h-[196px] min-h-[196px] object-cover text-primary text-center"
         src={image}
-        alt={title}
+        alt="Ảnh chưa thêm hoặc không tồn tại"
       />
       <div className="flex justify-between m-3 gap-4">
-        <div>
+        <div className="w-full">
           <p className="text-subtitle2 font-bold">{title}</p>
           {subtitle && <p className="text-caption my-[6px]">{subtitle}</p>}
-          <p className="text-caption ">{description}</p>
+          <p className="text-caption truncate w-full">{description}</p>
         </div>
         <Link href={editUrl} className="self-end">
           <EditOutlined className="text-[#8F9499] " />

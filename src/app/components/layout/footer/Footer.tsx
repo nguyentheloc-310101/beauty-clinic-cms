@@ -75,7 +75,6 @@ const FooterCustom = (props: FooterProps) => {
             {textBtnRight}
           </Button>
           {confirmEditClinic && (
-            // TODO change popup when add, not confirm
             <PopUpConfirm
               loading={isUploading}
               title={"Thêm mới"}
