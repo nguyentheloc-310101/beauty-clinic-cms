@@ -1,4 +1,4 @@
-import { IDoctor, IService } from "@/common/types";
+import { IDoctor, IServiceDetails } from "@/common/types";
 
 // export const DOCTORS: IDoctor[] = [
 //   {

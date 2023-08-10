@@ -4,6 +4,8 @@ import Table, { ColumnsType } from "antd/es/table";
 import { useRemove } from "@/common/hooks";
 import { IServiceCategory } from "@/common/types";
 import { formatDate } from "@/common/utils";
+import { Popconfirm } from "antd";
+import { useRouter } from "next/navigation";
 
 interface CategoryType extends IServiceCategory {
   isSelected: boolean;
@@ -34,6 +36,7 @@ const columns: ColumnsType<CategoryType> = [
 ];
 
 const TableCategory = () => {
+  const router = useRouter();
   const { value, selectKeys, loading, remove } = useRemove<CategoryType[]>(
     "service-categories",
     []
@@ -73,12 +76,22 @@ const TableCategory = () => {
         footer={() => (
           <div className="w-full gap-[24px] flex justify-between pr-[50px] ">
             <div>{selectedRowKeys.length} danh mục được chọn</div>
-            <div
-              className="text-[#DC1F18] text-[14px] cursor-pointer leading-[20px] tracking-[1.25px] font-[700]"
-              onClick={() => remove()}
+
+            <Popconfirm
+              title="Xóa thông tin"
+              description="Lưu ý: tất cả dịch vụ thuộc danh mục này sẽ bị xóa theo!"
+              onConfirm={() => {
+                remove();
+                // TODO improve reload
+                location.reload();
+              }}
+              okText="Đồng ý"
+              cancelText="Hủy"
             >
-              Xoá
-            </div>
+              <div className="text-[#DC1F18] text-[14px] cursor-pointer leading-[20px] tracking-[1.25px] font-[700]">
+                Xoá
+              </div>
+            </Popconfirm>
           </div>
         )}
       />

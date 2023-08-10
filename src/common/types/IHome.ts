@@ -31,6 +31,7 @@ export interface IHomeService {
 export interface IHome {
   background: string;
   videoLink: string;
+  service_id: string;
   clinic_ids: string[];
   services: IHomeService[];
   celebFeedback: ICelebFeedback;

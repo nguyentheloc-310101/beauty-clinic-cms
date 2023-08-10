@@ -29,6 +29,5 @@ export async function imageProcessing(
       lodashSet(value, path, url);
       URL.revokeObjectURL(item);
     }
-    console.log(value);
   }
 }

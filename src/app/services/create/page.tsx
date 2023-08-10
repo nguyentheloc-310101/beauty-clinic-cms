@@ -1,5 +1,5 @@
 "use client";
-import { IDoctor, IService } from "@/common/types";
+import { IDoctor, IServiceDetails } from "@/common/types";
 import { Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -14,6 +14,7 @@ import { supabase } from "@/services";
 import FooterCustom from "@/app/components/layout/footer/Footer";
 import FormSelectMultiple from "@/app/components/form-select-multiple";
 import { useFetch } from "@/common/hooks";
+import FormSelect from "@/app/components/form-select";
 
 export default function Create() {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -21,10 +22,10 @@ export default function Create() {
     useSearchParams().toString()
   );
 
-  let initialService = {} as IService;
+  let initialService = {} as IServiceDetails;
   try {
     if (data) {
-      initialService = JSON.parse(data as string) as IService;
+      initialService = JSON.parse(data as string) as IServiceDetails;
       initialService = {
         ...initialService,
         doctors: initialService.doctors.map((doctor: any) => doctor.id),
@@ -35,52 +36,36 @@ export default function Create() {
     console.error(error);
   }
   const router = useRouter();
-  const onFinish = async (service: IService) => {
+  const onFinish = async (service: IServiceDetails) => {
     setIsUploading(true);
     try {
       await imageProcessing(service, ["image", ["steps", "image"]]);
-
+      if (service.doctors) {
+        await supabase.from("service-doctors").upsert(
+          service.doctors.map((doctor_id) => ({
+            service_id: service.service_id,
+            doctor_id,
+          }))
+        );
+      }
+      if (service.others) {
+        await supabase.from("others").upsert(
+          service.others.map((other) => ({
+            id: service.service_id,
+            other,
+          }))
+        );
+      }
       if (isEdited) {
-        if (service.doctors) {
-          await supabase.from("service-doctors").upsert(
-            service.doctors.map((doctor_id) => ({
-              service_id: initialService.id,
-              doctor_id,
-            }))
-          );
-        }
-        if (service.others) {
-          await supabase.from("others").upsert(
-            service.others.map((other) => ({
-              id: initialService.id,
-              other,
-            }))
-          );
-        }
         await supabase
-          .from("services")
+          .from("service-details")
           .update({ ...service, doctors: undefined, others: undefined })
           .eq("id", initialService.id);
       } else {
-        const { data } = await supabase
-          .from("services")
+        await supabase
+          .from("service-details")
           .insert({ ...service, doctors: undefined, others: undefined })
           .select();
-
-        if (service.doctors && data) {
-          await supabase.from("service-doctors").insert(
-            service.doctors.map((doctor_id) => ({
-              service_id: data[0].id,
-              doctor_id,
-            }))
-          );
-          await supabase.from("others").insert(
-            service.doctors.map((other) => ({
-              id: data[0].id,
-              other,
-            }))
-          );
-        }
       }
 
       router.push("/services");
@@ -99,11 +84,20 @@ export default function Create() {
       label: doctor.name,
     })) ?? [];
 
-  const { value: value1 } = useFetch<IService[]>(() =>
+  const { value: value1 } = useFetch<IServiceDetails[]>(() =>
     supabase.from("services").select()
   );
   const otherServices =
     value1?.map((service) => ({
+      value: service.id,
+      label: service.name,
+    })) ?? [];
+
+  const { value: value2 } = useFetch<IServiceDetails[]>(() =>
+    supabase.from("services").select()
+  );
+  const services =
+    value2?.map((service) => ({
       value: service.id,
       label: service.name,
     })) ?? [];
@@ -118,9 +112,12 @@ export default function Create() {
         <Section title="Giới thiệu dịch vụ" className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-3">
             <FormUploadImage name={"image"} />
-            <Form.Item name={"name"} label="Tên dịch vụ">
-              <Input placeholder={"Nhập tên dịch vụ"} />
-            </Form.Item>
+            <FormSelect
+              name={"service_id"}
+              options={services}
+              label="Tên dịch vụ"
+              placeholder="Chọn dịch vụ đã tạo"
+            />
             <HelperText className="mt-[-8px]">
               Tên dịch vụ sẽ là title của bài viết
             </HelperText>

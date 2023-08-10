@@ -2,7 +2,7 @@ import { useFetch, useRemove } from "@/common/hooks";
 import { IServiceCategory } from "@/common/types";
 import { formatDate } from "@/common/utils";
 import { supabase } from "@/services";
-import { Table } from "antd";
+import { Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useState } from "react";
 interface DataServiceType {
@@ -91,12 +91,17 @@ const TableService = ({ selectedCategoryId }: Props) => {
               {value?.filter((item) => item.isSelected).length} dịch vụ được
               chọn
             </div>
-            <div
-              className="text-[#DC1F18] text-[14px] cursor-pointer leading-[20px] tracking-[1.25px] font-[700]"
-              onClick={() => remove()}
+            <Popconfirm
+              title="Xóa thông tin"
+              description="Lưu ý: Các thông tin chi tiết của dịch vụ cũng sẽ bị xóa theo!"
+              onConfirm={() => remove()}
+              okText="Đồng ý"
+              cancelText="Hủy"
             >
-              Xoá
-            </div>
+              <div className="text-[#DC1F18] text-[14px] cursor-pointer leading-[20px] tracking-[1.25px] font-[700]">
+                Xoá
+              </div>
+            </Popconfirm>
           </div>
         )}
       />

@@ -1,5 +1,5 @@
 "use client";
-import { IService } from "@/common/types";
+import { IServiceDetails } from "@/common/types";
 import { useState } from "react";
 
 import Card, { NewCardButton } from "@/app/components/card";
@@ -10,7 +10,7 @@ import { Input } from "antd";
 
 type Props = {};
 
-interface IDisplayDoctor extends IService {
+interface IDisplayDoctor extends IServiceDetails {
   isSelected: boolean;
 }
 export default function Service({ }: Props) {
