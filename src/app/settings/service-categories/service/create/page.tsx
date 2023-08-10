@@ -8,13 +8,22 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useFetch } from "@/common/hooks";
 import { IServiceCategory } from "@/common/types";
+import slugify from "slugify";
 
 export default function Create() {
   const router = useRouter();
   const onSubmit = async (value: any) => {
-    const { error } = await supabase
-      .from("services")
-      .insert({ name: value.name, category_id: value.category_id });
+    const { error } = await supabase.from("services").insert({
+      name: value.name,
+      category_id: value.category_id,
+      slug: slugify(
+        categories.find((category) => category.value == value.category_id)
+          ?.label +
+        "--" +
+        value.name,
+        { lower: true }
+      ),
+    });
     if (error) console.error(error);
     else router.push("/settings/service-categories");
   };
