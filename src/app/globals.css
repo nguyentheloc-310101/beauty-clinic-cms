@@ -25,21 +25,25 @@ main {
   margin: 0px !important;
   border: 0px !important;
 }
+
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 9px;
+  height: 9px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--neutral-n-20);
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--primary-br-70-main-color);
   border-radius: 99px;
+  border: 2px var(--neutral-n-20) solid;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--primary-br-80);
 }
 
 main {

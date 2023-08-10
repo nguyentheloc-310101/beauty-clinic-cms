@@ -7,7 +7,12 @@ type Props = {
 
 export default function HistoryAside({ className }: Props) {
   return (
-    <aside className={cn("w-[354px] bg-white", className)}>
+    <aside
+      className={cn(
+        "w-[354px] bg-white border-l border-solid border-neutral-n-20",
+        className
+      )}
+    >
       <header className="border-b-4 border-neutral-n-20 border-solid">
         <h6 className="mx-6 my-5"> Lịch sử</h6>
       </header>
