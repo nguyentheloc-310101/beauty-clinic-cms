@@ -120,7 +120,12 @@ export default function Home() {
                 label="Nội dung truyền tải"
                 name={["celebFeedback", "content"]}
               >
-                <TextArea placeholder="Typing" rows={7} />
+                <TextArea
+                  placeholder="Typing"
+                  rows={7}
+                  showCount
+                  maxLength={256}
+                />
               </Form.Item>
             </div>
           </Section>

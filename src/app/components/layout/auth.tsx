@@ -13,7 +13,7 @@ const Auth = () => {
       email,
       password,
     });
-    if (error) message.warning(error.message);
+    if (error) message.error("Sai thông tin đăng nhập");
     else signIn();
   };
   return (

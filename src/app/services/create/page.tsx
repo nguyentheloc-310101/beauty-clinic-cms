@@ -127,7 +127,12 @@ export default function Create() {
             <HelperText className="mt-[-8px]">Có thể bỏ qua mục này</HelperText>
           </div>
           <Form.Item label="Nội dung giới thiệu dịch vụ" name={"description"}>
-            <TextArea placeholder="Typing" rows={13} />
+            <TextArea
+              placeholder="Typing"
+              rows={13}
+              maxLength={320}
+              showCount
+            />
           </Form.Item>
         </Section>
         <Section optional title="Đội ngũ bác sĩ" name="hasDoctors">

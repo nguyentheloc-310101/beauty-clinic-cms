@@ -27,10 +27,18 @@ export default function Services({ name }: Props) {
                 <FormUploadImage name={[name, "image"]} {...restField} />
                 <div className="flex-1 flex-col flex justify-between pb-2">
                   <Form.Item name={[name, "name"]} {...restField}>
-                    <Input placeholder="Nhập tên dịch vụ" />
+                    <Input
+                      placeholder="Nhập tên dịch vụ"
+                      showCount
+                      maxLength={9}
+                    />
                   </Form.Item>
                   <Form.Item name={[name, "tagline"]} noStyle>
-                    <Input placeholder="Nhập tagline đi kèm" />
+                    <Input
+                      placeholder="Nhập tagline đi kèm"
+                      showCount
+                      maxLength={16}
+                    />
                   </Form.Item>
                 </div>
               </div>

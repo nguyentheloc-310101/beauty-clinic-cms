@@ -54,7 +54,12 @@ export default function CustomFeedbacks({ name }: Props) {
                     {...restField}
                     name={[name, "content"]}
                   >
-                    <TextArea placeholder="Typing" rows={7} />
+                    <TextArea
+                      placeholder="Typing"
+                      rows={7}
+                      showCount
+                      maxLength={200}
+                    />
                   </Form.Item>
                 </div>
               </div>
