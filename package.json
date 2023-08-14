@@ -20,6 +20,7 @@
     "antd": "^5.7.3",
     "autoprefixer": "10.4.14",
     "clsx": "^2.0.0",
+    "encoding": "^0.1.13",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "lottie-react": "^2.4.0",
