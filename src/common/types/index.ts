@@ -57,3 +57,13 @@ export interface IClinic extends IBase {
   description: string;
   address: string;
 }
+
+export interface IHistory extends IBase {
+  user: { email: string };
+  action: {
+    scope: string;
+    name: string;
+    display: string;
+  };
+  created_at?: string;
+}

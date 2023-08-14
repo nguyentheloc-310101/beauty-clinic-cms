@@ -18,23 +18,22 @@ const Header = () => {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
-      console.log(user);
     };
     asyncFunc();
   }, []);
   const pathname = usePathname();
   const items: MenuProps["items"] = [
-    {
-      label: <a href="">Thông tin tài khoản</a>,
-      key: "0",
-    },
-    {
-      label: <a href="">Cập nhật mật khẩu</a>,
-      key: "1",
-    },
-    {
-      type: "divider",
-    },
+    // {
+    //   label: <a href="">Thông tin tài khoản</a>,
+    //   key: "0",
+    // },
+    // {
+    //   label: <a href="">Cập nhật mật khẩu</a>,
+    //   key: "1",
+    // },
+    // {
+    //   type: "divider",
+    // },
     {
       label: <div onClick={signOut}>Đăng xuất</div>,
       key: "2",

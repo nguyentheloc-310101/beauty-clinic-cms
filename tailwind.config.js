@@ -58,6 +58,14 @@ module.exports = {
             fontWeight: "400",
           },
         ],
+        overline: [
+          "10px",
+          {
+            lineHeight: "16px",
+            letterSpacing: "1.5px",
+            fontWeight: "400",
+          },
+        ],
       },
     },
   },

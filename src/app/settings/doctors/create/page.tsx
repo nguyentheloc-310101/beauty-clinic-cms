@@ -2,13 +2,11 @@
 import FormUploadImage from "@/app/components/form-upload-image";
 import HelperText from "@/app/components/helper-text";
 import FooterCustom from "@/app/components/layout/footer/Footer";
-import HistoryAside from "@/app/components/layout/history-aside";
-import PopUpConfirm from "@/app/components/popup-confirm/PopupConfirm";
+import HistoryAside from "@components/history-aside";
 import Section from "@/app/components/section";
 import { Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
-import lottieMagic from "../../../../../public/lottie/add_new.json";
 import { useRouter, useSearchParams } from "next/navigation";
 import querystring from "query-string";
 import { IDoctor } from "@/common/types";

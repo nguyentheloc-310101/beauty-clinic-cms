@@ -1,4 +1,4 @@
-import { IDoctor, IServiceDetails } from "@/common/types";
+import { IHistory } from "@/common/types";
 
 // export const DOCTORS: IDoctor[] = [
 //   {
@@ -26,3 +26,18 @@ import { IDoctor, IServiceDetails } from "@/common/types";
 // };
 
 // export const SERVICES: IService[] = [1, 2, 3, 4, 5, 6, 7, 8].map(() => SERVICE);
+
+export const HISTORY: IHistory = {
+  action: {
+    scope: "Danh sách clinic",
+    display: "chỉnh sửa",
+    name: "edit",
+  },
+  user: {
+    email: "wanbicoi123@mail.com",
+  },
+  created_at: "2023-08-10 08:27:15.040969+00",
+  id: "",
+  key: 1,
+};
+export const HISTORYS = [1, 2, 3, 4].map(() => HISTORY);

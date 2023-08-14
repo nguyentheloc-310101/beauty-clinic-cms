@@ -5,7 +5,7 @@ import { LinkOutlined } from "@ant-design/icons";
 import Section from "@components/section";
 import HelperText from "@components/helper-text";
 import FormUploadImage from "@components/form-upload-image";
-import { IClinic, IHome } from "@types";
+import { IClinic, IHistory, IHome } from "@types";
 import { useFetch, useUpsert } from "@/common/hooks";
 import Services from "./services";
 import TextArea from "antd/es/input/TextArea";
@@ -13,13 +13,20 @@ import AuraInfo from "./aura-info";
 import News from "./news";
 import CustomFeedbacks from "./custom-feedbacks";
 import Loading from "@components/loading";
-import HistoryAside from "@components/layout/history-aside";
-import FooterCustom from "../components/layout/footer/Footer";
 import { supabase } from "@/services";
 import FormSelectMultiple from "../components/form-select-multiple";
-import { useRouter } from "next/navigation";
+import HistoryAside from "@components/history-aside";
+import FooterCustom from "@components/layout/footer/Footer";
 
 export default function Home() {
+  const { value: history, loading: historyLoading } = useFetch<IHistory[]>(() =>
+    supabase
+      .from("history")
+      .select("*, user(*)")
+      .eq("page", "home")
+      .order("created_at", { ascending: false })
+      .limit(20)
+  );
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const {
     value: home,
@@ -31,15 +38,27 @@ export default function Home() {
     ["services", "image"],
     ["news", "image"],
     ["customFeedbacks", "image"],
+    ["auraInfos", "image"],
   ]);
 
-  const router = useRouter();
   async function onSubmit(value: IHome) {
-    console.log(value);
     setIsUploading(true);
     await upsert(value);
+
     setIsUploading(false);
-    router.push("/home");
+
+    const user = (await supabase.auth.getUser()).data.user?.id;
+    const history = {
+      user,
+      action: {
+        scope: "tất cả",
+        name: "edit",
+        display: "chỉnh sửa",
+      },
+      page: "home",
+    };
+    await supabase.from("history").insert(history);
+    window.location.reload();
   }
 
   const { value } = useFetch<IClinic[]>(() =>
@@ -69,10 +88,10 @@ export default function Home() {
           </Section>
 
           <div className="grid grid-cols-2 gap-3">
-            <Section title="Link video">
+            <Section title="Link video (Embed link)">
               <Form.Item name="videoLink">
                 <Input
-                  placeholder="Dẫn đường link video ở đây"
+                  placeholder="Dẫn embed link video ở đây"
                   suffix={<LinkOutlined />}
                 />
               </Form.Item>
@@ -138,13 +157,13 @@ export default function Home() {
           <Section title="Thông tin về Aura" optional name="hasAuraInfos">
             <AuraInfo name="auraInfos" />
           </Section>
-          {/* TODO add reals to home page */}
-          {/* <Section title="Reels"> */}
-          {/*   <Input placeholder="Chọn video muốn hiển thị" /> */}
-          {/*   <HelperText>Mục này sẽ hiển thị tại "Reels nổi bật"</HelperText> */}
-          {/* </Section> */}
+          {/* TODO add reals to home page
+          <Section title="Reels">
+            <Input placeholder="Chọn video muốn hiển thị" />
+            <HelperText>Mục này sẽ hiển thị tại "Reels nổi bật"</HelperText>
+          </Section> */}
         </div>
-        <HistoryAside />
+        {!historyLoading && <HistoryAside history={history!} />}
       </div>
       <FooterCustom
         leftAction={false}
