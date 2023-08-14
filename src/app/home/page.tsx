@@ -13,11 +13,11 @@ import AuraInfo from "./aura-info";
 import News from "./news";
 import CustomFeedbacks from "./custom-feedbacks";
 import Loading from "@components/loading";
-import HistoryAside from "@components/layout/history-aside";
-import FooterCustom from "../components/layout/footer/Footer";
 import { supabase } from "@/services";
 import FormSelectMultiple from "../components/form-select-multiple";
 import { useRouter } from "next/navigation";
+import HistoryAside from "@components/history-aside";
+import FooterCustom from "@components/layout/footer/Footer";
 
 export default function Home() {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -31,6 +31,7 @@ export default function Home() {
     ["services", "image"],
     ["news", "image"],
     ["customFeedbacks", "image"],
+    ["auraInfos", "image"],
   ]);
 
   const router = useRouter();
