@@ -1,9 +1,9 @@
 "use client";
-import FormUploadImage from "@/app/components/form-upload-image";
-import HelperText from "@/app/components/helper-text";
-import FooterCustom from "@/app/components/layout/footer/Footer";
-import HistoryAside from "@/app/components/layout/history-aside";
-import Section from "@/app/components/section";
+import FormUploadImage from "@components/form-upload-image";
+import HelperText from "@components/helper-text";
+import FooterCustom from "@components/layout/footer/Footer";
+import HistoryAside from "@components/history-aside";
+import Section from "@components/section";
 import { Form, Input } from "antd";
 import { useState } from "react";
 import querystring from "query-string";
