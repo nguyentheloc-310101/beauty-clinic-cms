@@ -75,8 +75,8 @@ const TableService = ({ selectedCategoryId }: Props) => {
           onClick: () =>
             setSelectedRow && setSelectedRow((record?.key as number) ?? 0),
         })}
-        dataSource={value?.filter(
-          (item) => item?.category_id?.includes(selectedCategoryId) ?? true
+        dataSource={value?.filter((item) =>
+          selectedCategoryId ? item.category_id == selectedCategoryId : true
         )}
         scroll={{ y: `calc(100vh - 396px)` }}
         rowClassName={(record) => {

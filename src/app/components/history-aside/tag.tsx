@@ -11,7 +11,7 @@ const TYPES = {
     className: "bg-[#FFEBEB] text-[#DC1F18]",
   },
   edit: {
-    display: "Cập nhật mới",
+    display: "Chỉnh sửa",
     className: "bg-[#EBF4FF] text-[#006AF5] ",
   },
 };

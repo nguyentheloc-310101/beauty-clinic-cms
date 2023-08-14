@@ -9,11 +9,20 @@ import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import querystring from "query-string";
-import { IDoctor } from "@/common/types";
+import { IDoctor, IHistory } from "@/common/types";
 import { imageProcessing } from "@/common/utils";
 import { supabase } from "@/services";
+import { useFetch } from "@/common/hooks";
 
 const DoctorSetting = () => {
+  const { value: history, loading: historyLoading } = useFetch<IHistory[]>(() =>
+    supabase
+      .from("history")
+      .select("*, user(*)")
+      .eq("page", "doctors")
+      .order("created_at", { ascending: false })
+      .limit(20)
+  );
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const { data, isEdited = false } = querystring.parse(
     useSearchParams().toString()
@@ -28,6 +37,8 @@ const DoctorSetting = () => {
   const router = useRouter();
   const onSubmit = async (doctor: IDoctor) => {
     setIsUploading(true);
+
+    const user = (await supabase.auth.getUser()).data.user?.id;
     try {
       await imageProcessing(doctor, ["image"]);
       if (isEdited) {
@@ -35,8 +46,29 @@ const DoctorSetting = () => {
           .from("doctors")
           .update(doctor)
           .eq("id", initialDoctor.id);
+
+        const history = {
+          user,
+          action: {
+            // scope: "tất cả",
+            name: "edit",
+            display: "chỉnh sửa",
+          },
+          page: "doctors",
+        };
+        await supabase.from("history").insert(history);
       } else {
         await supabase.from("doctors").insert(doctor);
+        const history = {
+          user,
+          action: {
+            // scope: "tất cả",
+            name: "create",
+            display: "tạo mới",
+          },
+          page: "doctors",
+        };
+        await supabase.from("history").insert(history);
       }
 
       router.push("/settings/doctors");
@@ -85,7 +117,7 @@ const DoctorSetting = () => {
               </Section>
             </div>
           </div>
-          <HistoryAside />
+          {!historyLoading && <HistoryAside history={history!} />}
         </div>
         <FooterCustom
           leftAction={false}

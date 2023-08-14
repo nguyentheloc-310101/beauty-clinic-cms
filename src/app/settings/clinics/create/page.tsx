@@ -7,13 +7,22 @@ import Section from "@components/section";
 import { Form, Input } from "antd";
 import { useState } from "react";
 import querystring from "query-string";
-import { IClinic } from "@/common/types";
+import { IClinic, IHistory } from "@/common/types";
 import { useSearchParams } from "next/navigation";
 import { imageProcessing } from "@/common/utils";
 import { supabase } from "@/services";
 import { useRouter } from "next/navigation";
+import { useFetch } from "@/common/hooks";
 
 const ClinicCreate = () => {
+  const { value: history, loading: historyLoading } = useFetch<IHistory[]>(() =>
+    supabase
+      .from("history")
+      .select("*, user(*)")
+      .eq("page", "clinics")
+      .order("created_at", { ascending: false })
+      .limit(20)
+  );
   const router = useRouter();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const { data, isEdited = false } = querystring.parse(
@@ -28,6 +37,7 @@ const ClinicCreate = () => {
   }
   const onSubmit = async (clinic: IClinic) => {
     setIsUploading(true);
+    const user = (await supabase.auth.getUser()).data.user?.id;
     try {
       await imageProcessing(clinic, ["background"]);
       if (isEdited) {
@@ -35,8 +45,29 @@ const ClinicCreate = () => {
           .from("clinics")
           .update(clinic)
           .eq("id", initialClinic.id);
+
+        const history = {
+          user,
+          action: {
+            // scope: "tất cả",
+            name: "edit",
+            display: "chỉnh sửa",
+          },
+          page: "clinics",
+        };
+        await supabase.from("history").insert(history);
       } else {
         await supabase.from("clinics").insert(clinic);
+        const history = {
+          user,
+          action: {
+            // scope: "tất cả",
+            name: "create",
+            display: "tạo mới",
+          },
+          page: "clinics",
+        };
+        await supabase.from("history").insert(history);
       }
 
       router.push("/settings/clinics");
@@ -93,7 +124,7 @@ const ClinicCreate = () => {
             </Section>
           </div>
         </div>
-        <HistoryAside />
+        {!historyLoading && <HistoryAside history={history!} />}
       </div>
       <FooterCustom
         popUpTitle="Thêm mới"

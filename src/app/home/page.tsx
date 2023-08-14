@@ -51,7 +51,7 @@ export default function Home() {
     const history = {
       user,
       action: {
-        scope: "tất cả",
+        // scope: "tất cả",
         name: "edit",
         display: "chỉnh sửa",
       },
