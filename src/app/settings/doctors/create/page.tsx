@@ -110,7 +110,12 @@ const DoctorSetting = () => {
                       label="Nội dung giới thiệu bác sĩ"
                       name="description"
                     >
-                      <TextArea placeholder="Typing" rows={8} />
+                      <TextArea
+                        placeholder="Typing"
+                        rows={8}
+                        maxLength={250}
+                        showCount
+                      />
                     </Form.Item>
                   </div>
                 </div>
