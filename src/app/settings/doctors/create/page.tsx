@@ -90,7 +90,7 @@ const DoctorSetting = () => {
               </Section>
             </div>
           </div>
-          <HistoryAside />
+          <HistoryAside history={[]} />
         </div>
         <FooterCustom
           leftAction={false}

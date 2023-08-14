@@ -93,7 +93,7 @@ const ClinicCreate = () => {
             </Section>
           </div>
         </div>
-        <HistoryAside />
+        <HistoryAside history={[]} />
       </div>
       <FooterCustom
         popUpTitle="Thêm mới"
