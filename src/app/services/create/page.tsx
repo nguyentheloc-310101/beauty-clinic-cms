@@ -9,7 +9,7 @@ import Section from "@components/section";
 import FormUploadImage from "@/app/components/form-upload-image";
 import HelperText from "@/app/components/helper-text";
 import Steps from "./steps";
-import { imageProcessing } from "@/common/utils";
+import { uploadImages } from "@/common/utils";
 import { supabase } from "@/services";
 import FooterCustom from "@/app/components/layout/footer/Footer";
 import FormSelectMultiple from "@/app/components/form-select-multiple";
@@ -49,7 +49,7 @@ export default function Create() {
     setIsUploading(true);
     const user = (await supabase.auth.getUser()).data.user?.id;
     try {
-      await imageProcessing(service, ["image", ["steps", "image"]]);
+      await uploadImages(service, ["image", ["steps", "image"]]);
       if (service.doctors) {
         await supabase.from("service-doctors").upsert(
           service.doctors.map((doctor_id) => ({

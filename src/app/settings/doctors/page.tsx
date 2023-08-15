@@ -16,7 +16,7 @@ interface IDisplayDoctor extends IDoctor {
 export default function Service({ }: Props) {
   const { value, remove, select, selectAll } = useRemove<IDisplayDoctor[]>(
     "doctors",
-    [""]
+    ["image"]
   );
 
   const [searchText, setSearchText] = useState<string>("");

@@ -1,6 +1,7 @@
 import { supabase } from "@/services";
 import { useReducer, useEffect } from "react";
 import { useMessageContext } from "../providers/message";
+import { removeImages } from "../utils";
 
 interface Item {
   isSelected: boolean;
@@ -27,7 +28,7 @@ type Action<T> =
 // TODO handle error
 export function useRemove<T extends Item[]>(
   tableName: string,
-  imageAttributeNames: string[],
+  imageAttributeNames: (string | string[])[],
   selectString?: string
 ): State<T> & { remove: () => void } & {
   select: (id: number, isSelected?: boolean) => void;
@@ -83,6 +84,9 @@ export function useRemove<T extends Item[]>(
 
   const remove = async () => {
     const removedValue = state.value?.filter((item) => item.isSelected) ?? [];
+
+    for (const value of removedValue)
+      await removeImages(value, imageAttributeNames);
 
     const { error } = await supabase
       .from(tableName)

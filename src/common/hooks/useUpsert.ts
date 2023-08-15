@@ -1,7 +1,7 @@
 import { supabase } from "@/services";
 import { useReducer, useEffect } from "react";
 import { useMessageContext } from "../providers/message";
-import { imageProcessing } from "../utils";
+import { uploadImages } from "../utils";
 
 const TABLE_NAME = "data";
 const KEY = "key";
@@ -74,7 +74,7 @@ export function useUpsert<T>(
   const upsert = async (value: T) => {
     message.loading({ key: "loading", content: "Đang upload..." });
 
-    await imageProcessing(value, imageAttributeNames);
+    await uploadImages(value, imageAttributeNames, state.value);
 
     dispatch({ type: "upsert" });
     const { error } = await supabase

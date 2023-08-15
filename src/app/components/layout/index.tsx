@@ -14,7 +14,7 @@ type Props = {
 export default function Layout({ children }: Props) {
   const isSignIn = useUserStore((state) => state.isSignedIn);
 
-  // NOTE all this code is for fix hydrate problem https://nextjs.org/docs/messages/react-hydration-error
+  // all this code is for fix hydrate problem https://nextjs.org/docs/messages/react-hydration-error
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
