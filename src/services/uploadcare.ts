@@ -17,10 +17,11 @@ export const uploadImage = async (file: File | Blob): Promise<string> => {
     return "";
   }
 };
+
 export const removeImage = async (url: string) => {
   const uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({
     publicKey: process.env.NEXT_PUBLIC_UPLOADCARE ?? "",
-    secretKey: "YOUR_SECRET_KEY",
+    secretKey: process.env.NEXT_PUBLIC_UPLOADCARE_SECRET_KEY ?? "",
   });
 
   const matches = url.match(/https:\/\/ucarecdn\.com\/(.*?)(\/|$)/);

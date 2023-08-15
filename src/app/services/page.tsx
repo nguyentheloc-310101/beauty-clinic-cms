@@ -17,7 +17,7 @@ export default function Service({ }: Props) {
   // NOTE chỗ này khó hiểu nè, hỏi iêm đi
   const { value, remove, select, selectAll } = useRemove<IDisplayService[]>(
     "service-details",
-    [],
+    ["image", ["steps", "image"]],
     "*, service:services(name, doctors(id), others!others_other_fkey(id))"
   );
 
@@ -52,9 +52,9 @@ export default function Service({ }: Props) {
             .map((item, i: number) => (
               <Card
                 key={i}
-                image={item.image}
-                title={item.service.name}
-                description={item.description}
+                image={item?.image}
+                title={item?.service?.name}
+                description={item?.description}
                 editUrl={
                   "services/create?" +
                   queryString.stringify({

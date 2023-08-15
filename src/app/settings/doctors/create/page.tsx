@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import querystring from "query-string";
 import { IDoctor, IHistory } from "@/common/types";
-import { imageProcessing } from "@/common/utils";
+import { uploadImages } from "@/common/utils";
 import { supabase } from "@/services";
 import { useFetch } from "@/common/hooks";
 
@@ -40,7 +40,7 @@ const DoctorSetting = () => {
 
     const user = (await supabase.auth.getUser()).data.user?.id;
     try {
-      await imageProcessing(doctor, ["image"]);
+      await uploadImages(doctor, ["image"]);
       if (isEdited) {
         await supabase
           .from("doctors")

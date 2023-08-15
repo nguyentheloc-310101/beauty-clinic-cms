@@ -9,7 +9,7 @@ import { useState } from "react";
 import querystring from "query-string";
 import { IClinic, IHistory } from "@/common/types";
 import { useSearchParams } from "next/navigation";
-import { imageProcessing } from "@/common/utils";
+import { uploadImages } from "@/common/utils";
 import { supabase } from "@/services";
 import { useRouter } from "next/navigation";
 import { useFetch } from "@/common/hooks";
@@ -39,7 +39,7 @@ const ClinicCreate = () => {
     setIsUploading(true);
     const user = (await supabase.auth.getUser()).data.user?.id;
     try {
-      await imageProcessing(clinic, ["background"]);
+      await uploadImages(clinic, ["background"]);
       if (isEdited) {
         await supabase
           .from("clinics")
