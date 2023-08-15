@@ -1,3 +1,5 @@
+import { TAction } from "@/app/components/history-aside/tag";
+
 export interface ICustomFeedback {
   image: string;
   signature: string;
@@ -38,4 +40,11 @@ export interface IHome {
   customFeedbacks: ICustomFeedback[];
   news: INews[];
   auraInfos: IAuraInfo[];
+  hasAuraInfos: boolean;
+}
+
+export interface IAction {
+  scope: string;
+  name: TAction;
+  display: string;
 }

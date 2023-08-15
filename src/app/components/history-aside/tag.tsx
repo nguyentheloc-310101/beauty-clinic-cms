@@ -7,7 +7,7 @@ const TYPES = {
     className: "bg-[#FEF9E1] text-[#E8BA02]",
   },
   hide: {
-    display: "Ẩn",
+    display: "Ẩn/Hiện",
     className: "bg-[#FFEBEB] text-[#DC1F18]",
   },
   edit: {

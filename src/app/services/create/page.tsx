@@ -9,7 +9,7 @@ import Section from "@components/section";
 import FormUploadImage from "@/app/components/form-upload-image";
 import HelperText from "@/app/components/helper-text";
 import Steps from "./steps";
-import { uploadImages } from "@/common/utils";
+import { Edit, uploadImages } from "@/common/utils";
 import { supabase } from "@/services";
 import FooterCustom from "@/app/components/layout/footer/Footer";
 import FormSelectMultiple from "@/app/components/form-select-multiple";
@@ -18,14 +18,6 @@ import FormSelect from "@/app/components/form-select";
 import HistoryAside from "@/app/components/history-aside";
 
 export default function Create() {
-  const { value: history, loading: historyLoading } = useFetch<IHistory[]>(() =>
-    supabase
-      .from("history")
-      .select("*, user(*)")
-      .eq("page", "services")
-      .order("created_at", { ascending: false })
-      .limit(20)
-  );
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const { data, isEdited = false } = querystring.parse(
     useSearchParams().toString()
@@ -44,6 +36,14 @@ export default function Create() {
   } catch (error) {
     console.error(error);
   }
+  const { value: history, loading: historyLoading } = useFetch<IHistory[]>(() =>
+    supabase
+      .from("history")
+      .select("*, user(*)")
+      .eq("page", "services/" + initialService.id)
+      .order("created_at", { ascending: false })
+      .limit(20)
+  );
   const router = useRouter();
   const onFinish = async (service: IServiceDetails) => {
     setIsUploading(true);
@@ -72,16 +72,12 @@ export default function Create() {
           .update({ ...service, doctors: undefined, others: undefined })
           .eq("id", initialService.id);
 
-        const history = {
+        await addChangeToHistory(
+          initialService!,
+          service,
           user,
-          action: {
-            // scope: "tất cả",
-            name: "edit",
-            display: "chỉnh sửa",
-          },
-          page: "services",
-        };
-        await supabase.from("history").insert(history);
+          initialService.id
+        );
       } else {
         await supabase
           .from("service-details")
@@ -205,4 +201,51 @@ export default function Create() {
       />
     </Form>
   );
+}
+
+async function addChangeToHistory(
+  originalValue: IServiceDetails,
+  value: IServiceDetails,
+  user: string | undefined,
+  id: string
+) {
+  const edit = new Edit(originalValue, value);
+  edit.compare("description", {
+    scope: "Nội dung giới thiệu dịch vụ",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("image", {
+    scope: "Ảnh bìa",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("name", {
+    scope: "Tên dịch vụ",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("others", {
+    scope: "Giới thiệu dịch vụ khác",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("hasSteps", {
+    scope: "Các bước điều trị",
+    name: "hide",
+    display: "ẩn/hiện mục",
+  });
+
+  edit.compare("hasDoctors", {
+    scope: "Thông tin về Aura",
+    name: "hide",
+    display: "ẩn/hiện mục",
+  });
+
+  const history = edit.getActions().map((action) => ({
+    user,
+    action,
+    page: "services/" + id,
+  }));
+  if (history.length != 0) await supabase.from("history").insert(history);
 }
