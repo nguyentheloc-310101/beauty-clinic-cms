@@ -138,12 +138,13 @@ export default function Create() {
             className="grid grid-cols-2 gap-3"
           >
             <div className="flex flex-col gap-3">
-              <FormUploadImage name={"image"} />
+              <FormUploadImage required name={"image"} />
               <FormSelect
                 name={"service_id"}
                 options={services}
                 label="Tên dịch vụ"
                 placeholder="Chọn dịch vụ đã tạo"
+                required
               />
               <HelperText className="mt-[-8px]">
                 Tên dịch vụ sẽ là title của bài viết
@@ -155,7 +156,11 @@ export default function Create() {
                 Có thể bỏ qua mục này
               </HelperText>
             </div>
-            <Form.Item label="Nội dung giới thiệu dịch vụ" name={"description"}>
+            <Form.Item
+              label="Nội dung giới thiệu dịch vụ"
+              name={"description"}
+              required
+            >
               <TextArea placeholder="Typing" rows={13} />
             </Form.Item>
           </Section>

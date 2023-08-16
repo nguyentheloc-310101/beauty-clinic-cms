@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import React from "react";
 import ActionText from "@components/action-text";
 import FormUploadImage, {
@@ -23,7 +23,11 @@ export default function AuraInfo({ name }: Props) {
                 </ActionText>
               </section>
               <div className="flex">
-                <FormUploadImage name={[name, "image"]} {...restField} />
+                <FormUploadImage
+                  name={[name, "image"]}
+                  {...restField}
+                  rules={[{ required: true, message: "Vui lòng chọn ảnh" }]}
+                />
                 <div className="flex-1 flex-col flex justify-between pb-2">
                   <Form.Item name={[name, "mainText"]} {...restField}>
                     <Input placeholder="Nhập text chính" className="mb-2" />

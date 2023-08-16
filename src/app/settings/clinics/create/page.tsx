@@ -76,27 +76,50 @@ const ClinicCreate = () => {
       <div className="flex-1 flex justify-between basis-auto overflow-hidden">
         <div className="p-[24px] w-full h-full overflow-auto">
           <Section title="Ảnh bìa">
-            <FormUploadImage name="background" />
+            <FormUploadImage
+              name="background"
+              rules={[{ required: true, message: "Vui lòng chọn ảnh" }]}
+            />
             <HelperText>Chỉ có thể chọn 1 ảnh cơ sở duy nhất</HelperText>
           </Section>
           <div className="mt-[36px]">
             <Section title="Nội dung hiển thị">
               <div className="grid grid-cols-2 gap-[12px] h-full">
                 <div className="flex flex-col gap-[12px]">
-                  <Form.Item label="Tên cơ sở" name="name">
+                  <Form.Item
+                    label="Tên cơ sở"
+                    name="name"
+                    required
+                  >
                     <Input placeholder="Nhập tên cơ sở" />
                   </Form.Item>
-                  <Form.Item label="Địa chỉ" name="address">
+                  <Form.Item
+                    label="Địa chỉ"
+                    name="address"
+                    required
+                  >
                     <Input placeholder="Nhập Địa chỉ" />
                   </Form.Item>
-                  <Form.Item label="Địa chỉ rút gọn" name="short_address">
+                  <Form.Item
+                    label="Địa chỉ rút gọn"
+                    name="short_address"
+                    required
+                  >
                     <Input placeholder="Nhập địa chỉ rút gọn" />
                   </Form.Item>
                   <div className="flex items-center justify-between gap-3">
-                    <Form.Item label="Giờ mở cửa" name="open">
+                    <Form.Item
+                      label="Giờ mở cửa"
+                      name="open"
+                      required
+                    >
                       <Input placeholder="Giờ mở cửa" />
                     </Form.Item>
-                    <Form.Item label="Giờ đóng cửa" name="closed">
+                    <Form.Item
+                      label="Giờ đóng cửa"
+                      name="closed"
+                      required
+                    >
                       <Input placeholder="Giờ đóng cửa" />
                     </Form.Item>
                   </div>
@@ -106,6 +129,7 @@ const ClinicCreate = () => {
                   <Form.Item
                     label="Nội dung giới thiệu cơ sở"
                     name="description"
+                    required
                   >
                     <Input.TextArea rows={10} />
                   </Form.Item>

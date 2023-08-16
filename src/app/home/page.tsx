@@ -64,7 +64,10 @@ export default function Home() {
       <div className="flex-1 flex overflow-hidden ">
         <div className="flex flex-col gap-9 p-6 flex-1 overflow-auto">
           <Section title="Ảnh bìa">
-            <FormUploadImage name="background" />
+            <FormUploadImage
+              rules={[{ required: true, message: "Vui lòng chọn ảnh!" }]}
+              name={"background"}
+            />
           </Section>
           <Section title="Dịch vụ">
             <Services name="services" />
@@ -72,7 +75,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 gap-3">
             <Section title="Link video (Embed link)">
-              <Form.Item name="videoLink">
+              <Form.Item name="videoLink" required>
                 <Input
                   placeholder="Dẫn embed link video ở đây"
                   suffix={<LinkOutlined />}
@@ -98,25 +101,35 @@ export default function Home() {
             className="grid grid-cols-2 gap-3"
           >
             <div className="flex flex-col gap-3">
-              <FormUploadImage name={["celebFeedback", "image"]} />
-              <Form.Item label="Tên nhân vật" name={["celebFeedback", "name"]}>
+              <FormUploadImage
+                name={["celebFeedback", "image"]}
+                rules={[{ required: true, message: "Vui lòng chọn ảnh" }]}
+              />
+              <Form.Item
+                label="Tên nhân vật"
+                name={["celebFeedback", "name"]}
+                required
+              >
                 <Input placeholder="Nhập tên dịch vụ" />
               </Form.Item>
               <Form.Item
                 label="Công việc của nhân vật"
                 name={["celebFeedback", "job"]}
+                required
               >
                 <Input placeholder="Nhập công việc của nhân vật" />
               </Form.Item>
             </div>
             <div className="flex flex-col gap-3">
               <Form.Item
+                required
                 label="Kết quả làm dịch vụ tại Aura"
                 name={["celebFeedback", "tagline"]}
               >
                 <Input placeholder="Nhập tagline đi kèm" />
               </Form.Item>
               <Form.Item
+                required
                 label="Nội dung truyền tải"
                 name={["celebFeedback", "content"]}
               >

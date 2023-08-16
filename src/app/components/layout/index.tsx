@@ -11,6 +11,10 @@ type Props = {
   children: React.ReactNode;
 };
 
+const validateMessages = {
+  required: "Vui lòng nhập mục này!",
+};
+
 export default function Layout({ children }: Props) {
   const isSignIn = useUserStore((state) => state.isSignedIn);
 
@@ -20,11 +24,11 @@ export default function Layout({ children }: Props) {
     setIsClient(true);
   }, []);
   if (!isClient) return <></>;
-
   return (
     <ConfigProvider
       theme={{ token: { colorPrimary: "#BC2449" } }}
       componentSize="large"
+      form={{ validateMessages }}
     >
       <MessageProvider>
         <div className="flex h-screen">

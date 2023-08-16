@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import React from "react";
 import ActionText from "@components/action-text";
 import FormUploadImage, {
@@ -25,11 +25,17 @@ export default function CustomFeedbacks({ name }: Props) {
               </section>
               <div className="grid-cols-2 grid gap-3">
                 <div className="flex flex-col gap-3">
-                  <FormUploadImage name={[name, "image"]} {...restField} />
+                  <FormUploadImage
+                    name={[name, "image"]}
+                    {...restField}
+                    rules={[{ required: true, message: "Vui lòng chọn ảnh" }]}
+                  />
+
                   <Form.Item
                     label="Tên nhân vật"
                     {...restField}
                     name={[name, "name"]}
+                    required
                   >
                     <Input placeholder="Nhập tên dịch vụ" />
                   </Form.Item>
@@ -37,6 +43,7 @@ export default function CustomFeedbacks({ name }: Props) {
                     label="Cơ sở phụ trách"
                     {...restField}
                     name={[name, "clinic"]}
+                    required
                   >
                     <Input placeholder=" Chọn cơ sở phụ trách" />
                   </Form.Item>
@@ -46,6 +53,7 @@ export default function CustomFeedbacks({ name }: Props) {
                     label="Chữ ký nhân vật"
                     {...restField}
                     name={[name, "signature"]}
+                    required
                   >
                     <Input placeholder="Nhập tagline đi kèm" />
                   </Form.Item>
@@ -53,6 +61,7 @@ export default function CustomFeedbacks({ name }: Props) {
                     label="Nội dung truyền tải"
                     {...restField}
                     name={[name, "content"]}
+                    required
                   >
                     <TextArea
                       placeholder="Typing"

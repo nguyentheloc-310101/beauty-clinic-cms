@@ -78,27 +78,43 @@ const DoctorSetting = () => {
       <div className="flex-1 flex justify-between">
         <div className="m-[24px] w-full">
           <Section title="Ảnh bác sĩ">
-            <FormUploadImage name="image" />
+            <FormUploadImage
+              name="image"
+              rules={[{ required: true, message: "Vui lòng chọn ảnh" }]}
+            />
             <HelperText>Chỉ có thể chọn 1 ảnh bác sĩ duy nhất</HelperText>
           </Section>
           <div className="mt-[36px]">
             <Section title="Nội dung hiển thị">
               <div className="grid grid-cols-2 gap-[12px] h-full">
                 <div className="flex flex-col gap-[12px]">
-                  <Form.Item label="Tên bác sĩ" name="name">
+                  <Form.Item
+                    label="Tên bác sĩ"
+                    name="name"
+                    required
+                  >
                     <Input placeholder="Nhập tên bác sĩ" />
                   </Form.Item>
-                  <Form.Item label="Số năm kinh nghiệm" name="experience">
+                  <Form.Item
+                    label="Số năm kinh nghiệm"
+                    name="experience"
+                    required
+                  >
                     <Input placeholder="Nhập Số năm kinh nghiệm" />
                   </Form.Item>
-                  <Form.Item label="Chuyên ngành" name="major">
+                  <Form.Item
+                    label="Chuyên ngành"
+                    name="major"
+                    required
+                  >
                     <Input placeholder="Nhập Chuyên ngành" />
                   </Form.Item>
                 </div>
                 <div>
                   <Form.Item
                     label="Nội dung giới thiệu bác sĩ"
-                    name="description"
+                    required
+                    name="description "
                   >
                     <TextArea
                       placeholder="Typing"

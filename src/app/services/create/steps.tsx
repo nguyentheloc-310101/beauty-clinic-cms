@@ -25,7 +25,11 @@ export default function Steps({ name }: Props) {
                 </ActionText>
               </section>
               <div className="flex">
-                <FormUploadImage name={[name, "image"]} {...restField} />
+                <FormUploadImage
+                  name={[name, "image"]}
+                  {...restField}
+                  rules={[{ required: true, message: "Vui lòng chọn ảnh" }]}
+                />
                 <Form.Item
                   label="Chi tiết bước điều trị"
                   name={[name, "description"]}

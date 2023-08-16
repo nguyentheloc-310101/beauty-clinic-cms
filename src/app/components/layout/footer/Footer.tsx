@@ -1,5 +1,5 @@
 "use client";
-import { Button, Checkbox, Popconfirm } from "antd";
+import { Button, Checkbox, Form, Popconfirm } from "antd";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import PopUpConfirm from "../../popup-confirm/PopupConfirm";
@@ -31,10 +31,13 @@ const FooterCustom = (props: FooterProps) => {
   } = props;
   const router = useRouter();
   const [confirmEditClinic, setConfirmEditClinic] = useState<boolean>(false);
+
+  const form = Form.useFormInstance();
   return (
     <footer
-      className={`flex ${leftAction ? "justify-between" : "justify-end"
-        }  p-6 items-center bg-white border-neutral-n-20 border-t border-solid`}
+      className={`flex ${
+        leftAction ? "justify-between" : "justify-end"
+      }  p-6 items-center bg-white border-neutral-n-20 border-t border-solid`}
     >
       {leftAction && (
         <div className="flex gap-3 text-caption items-center">
@@ -71,7 +74,12 @@ const FooterCustom = (props: FooterProps) => {
           <Button
             className="w-40"
             type="primary"
-            onClick={() => setConfirmEditClinic(true)}
+            onClick={async () => {
+              try {
+                await form.validateFields();
+                setConfirmEditClinic(true);
+              } catch {}
+            }}
             loading={isUploading}
           >
             {textBtnRight}

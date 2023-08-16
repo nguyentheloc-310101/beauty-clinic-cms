@@ -48,7 +48,11 @@ export default function Create() {
         layout="vertical"
         initialValues={initialCategory}
       >
-        <Form.Item name="name" label="Tên danh mục">
+        <Form.Item
+          name="name"
+          label="Tên danh mục"
+          rules={[{ required: true }]}
+        >
           <Input placeholder=" Nhập tên danh mục" />
         </Form.Item>
         <HelperText>
