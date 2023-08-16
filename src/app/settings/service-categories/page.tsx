@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import HeaderCategorySettings from "./category/header-action/HeaderCategorySettings";
-import TableCategory from "./category/table/TableCategory";
-import HeaderServiceSettings from "./service/header-action/HeaderServiceSettings";
-import TableService from "./service/table/TableService";
+import HeaderServiceSettings from "./service/header-action";
+import TableService from "./service/table";
+import HeaderAction from "./category/header-action";
+import Table from "./category/table";
 
 const ServiceCategory = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
@@ -11,8 +11,8 @@ const ServiceCategory = () => {
     <div className="h-full">
       <div className="grid grid-cols-2 h-[500px] pt-[12px] gap-[24px] px-[24px] ">
         <div className="bg-white rounded-[8px] h-auto flex flex-col w-full p-[24px]">
-          <HeaderCategorySettings />
-          <TableCategory />
+          <HeaderAction />
+          <Table />
         </div>
 
         <div className="bg-white rounded-[8px] w-full p-[24px]">

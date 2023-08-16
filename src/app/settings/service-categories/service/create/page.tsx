@@ -4,26 +4,46 @@ import HelperText from "@components/helper-text";
 import { supabase } from "@/services";
 import Modal from "@components/modal";
 import { Button, Form, Input } from "antd";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { useFetch } from "@/common/hooks";
-import { IServiceCategory } from "@/common/types";
+import { IService, IServiceCategory } from "@/common/types";
 import slugify from "slugify";
+import querystring from "query-string";
 
 export default function Create() {
+  const { data, isEdited = false } = querystring.parse(
+    useSearchParams().toString()
+  );
+
+  let initialService = {} as IService;
+  try {
+    if (data) {
+      initialService = JSON.parse(data as string) as IService;
+    }
+  } catch (error) {
+    console.error(error);
+  }
   const router = useRouter();
-  const onSubmit = async (value: any) => {
-    const { error } = await supabase.from("services").insert({
-      name: value.name,
-      category_id: value.category_id,
+  const onSubmit = async (service: IService) => {
+    const tmp = {
+      name: service.name,
+      category_id: service.category_id,
       slug: slugify(
-        categories.find((category) => category.value == value.category_id)
+        categories.find((category) => category.value == service.category_id)
           ?.label +
-        "--" +
-        value.name,
+          "--" +
+          service.name,
         { lower: true }
       ),
-    });
+    };
+    let error;
+    if (isEdited)
+      error = (
+        await supabase.from("services").update(tmp).eq("id", initialService.id)
+      ).error;
+    else error = (await supabase.from("services").insert(tmp)).error;
+
     if (error) console.error(error);
     else router.push("/settings/service-categories");
   };
@@ -37,9 +57,13 @@ export default function Create() {
     })) ?? [];
 
   return (
-    <Modal title="Tạo danh mục mới" className="w-[448px]">
+    <Modal
+      title={isEdited ? "Chỉnh sửa dịch vụ" : "Tạo danh dịch vụ"}
+      className="w-[448px]"
+    >
       <Form
         onFinish={onSubmit}
+        initialValues={initialService}
         layout="vertical"
         className="flex flex-col gap-6"
       >
@@ -58,7 +82,7 @@ export default function Create() {
         <footer className="grid grid-cols-2 gap-6 ">
           <Button onClick={() => router.back()}>Hoàn tác</Button>
           <Button type="primary" htmlType="submit">
-            Thêm mới
+            {isEdited ? "Chỉnh sửa" : "Thêm mới"}
           </Button>
         </footer>
       </Form>

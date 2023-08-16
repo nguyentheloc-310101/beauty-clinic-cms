@@ -1,10 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import Table, { ColumnsType } from "antd/es/table";
+import AntdTable, { ColumnsType } from "antd/es/table";
 import { useRemove } from "@/common/hooks";
+import { EditOutlined } from "@ant-design/icons";
 import { IServiceCategory } from "@/common/types";
 import { formatDate } from "@/common/utils";
-import { Popconfirm } from "antd";
+import { Button, Popconfirm } from "antd";
+import Link from "next/link";
+import queryString from "query-string";
 
 interface CategoryType extends IServiceCategory {
   isSelected: boolean;
@@ -14,32 +17,47 @@ interface CategoryType extends IServiceCategory {
   quantity: number;
   created_at: string;
 }
-const columns: ColumnsType<CategoryType> = [
-  {
-    title: "STT",
-    dataIndex: "key",
-  },
-  {
-    title: "Danh mục",
-    dataIndex: "name",
-  },
-  // {
-  //   title: "SL Dịch vụ",
-  //   dataIndex: "quantity",
-  // },
-  {
-    title: "Ngày tạo",
-    dataIndex: "created_at",
-    render: (e) => <>{formatDate(e)}</>,
-  },
-];
 
-const TableCategory = () => {
+const Table = () => {
   const { value, selectKeys, loading, remove } = useRemove<CategoryType[]>(
     "service-categories",
     []
   );
 
+  const columns: ColumnsType<CategoryType> = [
+    {
+      title: "STT",
+      dataIndex: "key",
+    },
+    {
+      title: "Danh mục",
+      dataIndex: "name",
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "created_at",
+      render: (e) => <>{formatDate(e)}</>,
+    },
+    {
+      dataIndex: "action",
+      width: 60,
+      render: (_, record) => (
+        <Link
+          href={
+            "service-categories/category/create?" +
+            queryString.stringify({
+              isEdited: true,
+              data: JSON.stringify(record),
+            })
+          }
+        >
+          <Button type="text" shape="circle">
+            <EditOutlined />
+          </Button>
+        </Link>
+      ),
+    },
+  ];
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [selectedRow, setSelectedRow] = useState<number>(0);
 
@@ -55,7 +73,7 @@ const TableCategory = () => {
   if (loading) return <></>;
   return (
     <div id="table-antd" className="pt-[24px] h-fit">
-      <Table
+      <AntdTable
         rowSelection={rowSelection}
         columns={columns}
         onRow={(record) => ({
@@ -96,4 +114,4 @@ const TableCategory = () => {
   );
 };
 
-export default TableCategory;
+export default Table;

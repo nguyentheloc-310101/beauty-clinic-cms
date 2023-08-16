@@ -1,5 +1,5 @@
 "use client";
-import { IDoctor, IHistory, IServiceDetails } from "@/common/types";
+import { IDoctor, IServiceDetails } from "@/common/types";
 import { Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -9,7 +9,7 @@ import Section from "@components/section";
 import FormUploadImage from "@/app/components/form-upload-image";
 import HelperText from "@/app/components/helper-text";
 import Steps from "./steps";
-import { uploadImages } from "@/common/utils";
+import { Edit, uploadImages } from "@/common/utils";
 import { supabase } from "@/services";
 import FooterCustom from "@/app/components/layout/footer/Footer";
 import FormSelectMultiple from "@/app/components/form-select-multiple";
@@ -18,14 +18,6 @@ import FormSelect from "@/app/components/form-select";
 import HistoryAside from "@/app/components/history-aside";
 
 export default function Create() {
-  const { value: history, loading: historyLoading } = useFetch<IHistory[]>(() =>
-    supabase
-      .from("history")
-      .select("*, user(*)")
-      .eq("page", "services")
-      .order("created_at", { ascending: false })
-      .limit(20)
-  );
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const { data, isEdited = false } = querystring.parse(
     useSearchParams().toString()
@@ -72,21 +64,18 @@ export default function Create() {
           .update({ ...service, doctors: undefined, others: undefined })
           .eq("id", initialService.id);
 
-        const history = {
+        await addChangeToHistory(
+          initialService!,
+          service,
           user,
-          action: {
-            // scope: "tất cả",
-            name: "edit",
-            display: "chỉnh sửa",
-          },
-          page: "services",
-        };
-        await supabase.from("history").insert(history);
+          initialService.id
+        );
       } else {
-        await supabase
+        const { data } = await supabase
           .from("service-details")
           .insert({ ...service, doctors: undefined, others: undefined })
-          .select();
+          .select()
+          .single();
 
         const history = {
           user,
@@ -95,7 +84,7 @@ export default function Create() {
             name: "create",
             display: "tạo mới",
           },
-          page: "services",
+          page: "services/" + data?.id,
         };
         await supabase.from("history").insert(history);
       }
@@ -140,7 +129,7 @@ export default function Create() {
       onFinish={onFinish}
       className="flex flex-col justify-between h-full"
     >
-      <div className="flex-1 flex justify-between basis-auto">
+      <div className="flex-1 flex justify-between basis-auto overflow-hidden">
         <div className="overflow-auto p-6 flex flex-col gap-9 flex-1">
           <Section
             title="Giới thiệu dịch vụ"
@@ -194,7 +183,7 @@ export default function Create() {
           </Section>
         </div>
 
-        {!historyLoading && <HistoryAside history={history!} />}
+        <HistoryAside page={"services/" + initialService.id} />
       </div>
       <FooterCustom
         popUpTitle="Thêm mới"
@@ -205,4 +194,51 @@ export default function Create() {
       />
     </Form>
   );
+}
+
+async function addChangeToHistory(
+  originalValue: IServiceDetails,
+  value: IServiceDetails,
+  user: string | undefined,
+  id: string
+) {
+  const edit = new Edit(originalValue, value);
+  edit.compare("description", {
+    scope: "Nội dung giới thiệu dịch vụ",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("image", {
+    scope: "Ảnh bìa",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("name", {
+    scope: "Tên dịch vụ",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("others", {
+    scope: "Giới thiệu dịch vụ khác",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("hasSteps", {
+    scope: "Các bước điều trị",
+    name: "hide",
+    display: "ẩn/hiện mục",
+  });
+
+  edit.compare("hasDoctors", {
+    scope: "Thông tin về Aura",
+    name: "hide",
+    display: "ẩn/hiện mục",
+  });
+
+  const history = edit.getActions().map((action) => ({
+    user,
+    action,
+    page: "services/" + id,
+  }));
+  if (history.length != 0) await supabase.from("history").insert(history);
 }

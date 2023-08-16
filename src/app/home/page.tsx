@@ -5,7 +5,7 @@ import { LinkOutlined } from "@ant-design/icons";
 import Section from "@components/section";
 import HelperText from "@components/helper-text";
 import FormUploadImage from "@components/form-upload-image";
-import { IClinic, IHistory, IHome } from "@types";
+import { IClinic, IHome } from "@types";
 import { useFetch, useUpsert } from "@/common/hooks";
 import Services from "./services";
 import TextArea from "antd/es/input/TextArea";
@@ -17,16 +17,9 @@ import { supabase } from "@/services";
 import FormSelectMultiple from "../components/form-select-multiple";
 import HistoryAside from "@components/history-aside";
 import FooterCustom from "@components/layout/footer/Footer";
+import { Edit } from "@/common/utils";
 
 export default function Home() {
-  const { value: history, loading: historyLoading } = useFetch<IHistory[]>(() =>
-    supabase
-      .from("history")
-      .select("*, user(*)")
-      .eq("page", "home")
-      .order("created_at", { ascending: false })
-      .limit(20)
-  );
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const {
     value: home,
@@ -47,17 +40,7 @@ export default function Home() {
 
     setIsUploading(false);
 
-    const user = (await supabase.auth.getUser()).data.user?.id;
-    const history = {
-      user,
-      action: {
-        // scope: "tất cả",
-        name: "edit",
-        display: "chỉnh sửa",
-      },
-      page: "home",
-    };
-    await supabase.from("history").insert(history);
+    await addToHistory(home!, value);
     window.location.reload();
   }
 
@@ -163,7 +146,7 @@ export default function Home() {
             <HelperText>Mục này sẽ hiển thị tại "Reels nổi bật"</HelperText>
           </Section> */}
         </div>
-        {!historyLoading && <HistoryAside history={history!} />}
+        <HistoryAside page="home" />
       </div>
       <FooterCustom
         leftAction={false}
@@ -174,4 +157,47 @@ export default function Home() {
       />
     </Form>
   );
+}
+
+async function addToHistory(originalValue: IHome, value: IHome) {
+  const edit = new Edit(originalValue, value);
+  edit.compare("news", {
+    scope: "Báo chí nói gì về Aura",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("background", {
+    scope: "Ảnh bìa",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("services", {
+    scope: "Dịch vụ",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("customFeedbacks", {
+    scope: "Feedbacks khách hàng",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("celebFeedback", {
+    scope: "Feedbacks của celeb",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+
+  edit.compare("hasAuraInfos", {
+    scope: "Thông tin về Aura",
+    name: "hide",
+    display: "ẩn/hiện mục",
+  });
+
+  const user = (await supabase.auth.getUser()).data.user?.id;
+  const history = edit.getActions().map((action) => ({
+    user,
+    action,
+    page: "home",
+  }));
+  if (history.length != 0) await supabase.from("history").insert(history);
 }
