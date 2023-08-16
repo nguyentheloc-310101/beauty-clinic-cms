@@ -164,8 +164,7 @@ export default function Create() {
               options={doctors}
             />
             <HelperText>
-              Mục này sẽ hiển thị tại <br />
-              “Đội ngũ Y Bác sĩ uy tín”
+              Mục này sẽ hiển thị tại “Đội ngũ Y Bác sĩ uy tín”
             </HelperText>
           </Section>
           <Section title="Các bước điều trị" optional name="hasSteps">

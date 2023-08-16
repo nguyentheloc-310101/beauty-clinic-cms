@@ -79,8 +79,7 @@ export default function Home() {
                 />
               </Form.Item>
               <HelperText>
-                Mục này sẽ hiển thị tại <br />
-                “Bạn có hẹn cùng Aura”
+                Mục này sẽ hiển thị tại “Bạn có hẹn cùng Aura”
               </HelperText>
             </Section>
             <Section title="Aura clinic">
@@ -90,8 +89,7 @@ export default function Home() {
                 options={clinics}
               />
               <HelperText>
-                Mục này sẽ hiển thị tại <br />
-                “Aura - Phá bỏ giới hạn”
+                Mục này sẽ hiển thị tại “Aura - Phá bỏ giới hạn”
               </HelperText>
             </Section>
           </div>
