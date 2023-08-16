@@ -7,22 +7,13 @@ import Section from "@components/section";
 import { Form, Input } from "antd";
 import { useState } from "react";
 import querystring from "query-string";
-import { IClinic, IHistory } from "@/common/types";
+import { IClinic } from "@/common/types";
 import { useSearchParams } from "next/navigation";
-import { uploadImages } from "@/common/utils";
+import { Edit, uploadImages } from "@/common/utils";
 import { supabase } from "@/services";
 import { useRouter } from "next/navigation";
-import { useFetch } from "@/common/hooks";
 
 const ClinicCreate = () => {
-  const { value: history, loading: historyLoading } = useFetch<IHistory[]>(() =>
-    supabase
-      .from("history")
-      .select("*, user(*)")
-      .eq("page", "clinics")
-      .order("created_at", { ascending: false })
-      .limit(20)
-  );
   const router = useRouter();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const { data, isEdited = false } = querystring.parse(
@@ -46,26 +37,25 @@ const ClinicCreate = () => {
           .update(clinic)
           .eq("id", initialClinic.id);
 
-        const history = {
+        await addChangeToHistory(
+          initialClinic!,
+          clinic,
           user,
-          action: {
-            // scope: "tất cả",
-            name: "edit",
-            display: "chỉnh sửa",
-          },
-          page: "clinics",
-        };
-        await supabase.from("history").insert(history);
+          initialClinic.id
+        );
       } else {
-        await supabase.from("clinics").insert(clinic);
+        const { data } = await supabase
+          .from("clinics")
+          .insert(clinic)
+          .select()
+          .single();
         const history = {
           user,
           action: {
-            // scope: "tất cả",
             name: "create",
             display: "tạo mới",
           },
-          page: "clinics",
+          page: "clinics" + data?.id,
         };
         await supabase.from("history").insert(history);
       }
@@ -79,12 +69,12 @@ const ClinicCreate = () => {
   return (
     <Form
       layout="vertical"
-      className="h-full flex flex-col overflow-auto"
+      className="h-full flex flex-col "
       initialValues={initialClinic}
       onFinish={onSubmit}
     >
-      <div className="flex-1 flex justify-between">
-        <div className="m-[24px] w-full">
+      <div className="flex-1 flex justify-between basis-auto overflow-hidden">
+        <div className="p-[24px] w-full h-full overflow-auto">
           <Section title="Ảnh bìa">
             <FormUploadImage name="background" />
             <HelperText>Chỉ có thể chọn 1 ảnh cơ sở duy nhất</HelperText>
@@ -124,7 +114,7 @@ const ClinicCreate = () => {
             </Section>
           </div>
         </div>
-        {!historyLoading && <HistoryAside history={history!} />}
+        <HistoryAside page={"clinics/" + initialClinic.id} />
       </div>
       <FooterCustom
         popUpTitle="Thêm mới"
@@ -137,4 +127,56 @@ const ClinicCreate = () => {
   );
 };
 
+async function addChangeToHistory(
+  originalValue: IClinic,
+  value: IClinic,
+  user: string | undefined,
+  id: string
+) {
+  const edit = new Edit(originalValue, value);
+  edit.compare("description", {
+    scope: "Nội dung giới thiệu dịch vụ",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("background", {
+    scope: "Ảnh bìa",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("name", {
+    scope: "Tên dịch vụ",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("address", {
+    scope: "Địa chỉ",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+
+  edit.compare("short_address", {
+    scope: "Địa chỉ rút gọn",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+  edit.compare("open", {
+    scope: "Giờ mở cửa",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+
+  edit.compare("closed", {
+    scope: "Giờ đóng cửa",
+    name: "edit",
+    display: "chỉnh sửa mục",
+  });
+
+  const history = edit.getActions().map((action) => ({
+    user,
+    action,
+    page: "services/" + id,
+  }));
+  if (history.length != 0) await supabase.from("history").insert(history);
+}
 export default ClinicCreate;

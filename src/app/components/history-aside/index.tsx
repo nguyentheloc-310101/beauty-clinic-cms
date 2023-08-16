@@ -40,7 +40,7 @@ export default function HistoryAside({ className, page }: Props) {
   return (
     <aside
       className={cn(
-        "w-[354px] bg-white border-l border-solid border-neutral-n-20 flex flex-col",
+        "w-[354px] min-w-[354px] bg-white border-l border-solid border-neutral-n-20 flex flex-col",
         className
       )}
     >

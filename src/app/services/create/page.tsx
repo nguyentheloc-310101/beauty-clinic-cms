@@ -1,5 +1,5 @@
 "use client";
-import { IDoctor, IHistory, IServiceDetails } from "@/common/types";
+import { IDoctor, IServiceDetails } from "@/common/types";
 import { Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -36,14 +36,6 @@ export default function Create() {
   } catch (error) {
     console.error(error);
   }
-  const { value: history, loading: historyLoading } = useFetch<IHistory[]>(() =>
-    supabase
-      .from("history")
-      .select("*, user(*)")
-      .eq("page", "services/" + initialService.id)
-      .order("created_at", { ascending: false })
-      .limit(20)
-  );
   const router = useRouter();
   const onFinish = async (service: IServiceDetails) => {
     setIsUploading(true);
@@ -79,10 +71,11 @@ export default function Create() {
           initialService.id
         );
       } else {
-        await supabase
+        const { data } = await supabase
           .from("service-details")
           .insert({ ...service, doctors: undefined, others: undefined })
-          .select();
+          .select()
+          .single();
 
         const history = {
           user,
@@ -91,7 +84,7 @@ export default function Create() {
             name: "create",
             display: "tạo mới",
           },
-          page: "services",
+          page: "services/" + data?.id,
         };
         await supabase.from("history").insert(history);
       }
@@ -136,7 +129,7 @@ export default function Create() {
       onFinish={onFinish}
       className="flex flex-col justify-between h-full"
     >
-      <div className="flex-1 flex justify-between basis-auto">
+      <div className="flex-1 flex justify-between basis-auto overflow-hidden">
         <div className="overflow-auto p-6 flex flex-col gap-9 flex-1">
           <Section
             title="Giới thiệu dịch vụ"
@@ -190,7 +183,7 @@ export default function Create() {
           </Section>
         </div>
 
-        <HistoryAside page="" />
+        <HistoryAside page={"services/" + initialService.id} />
       </div>
       <FooterCustom
         popUpTitle="Thêm mới"
