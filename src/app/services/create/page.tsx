@@ -115,7 +115,9 @@ export default function Create() {
     })) ?? [];
 
   const { value: value2 } = useFetch<IServiceDetails[]>(() =>
-    supabase.rpc("getserviceselect").select()
+    supabase
+      .rpc("getserviceselect", { curr_id: initialService.service_id })
+      .select()
   );
   const services =
     value2?.map((service) => ({
