@@ -115,7 +115,9 @@ export default function Create() {
     })) ?? [];
 
   const { value: value2 } = useFetch<IServiceDetails[]>(() =>
-    supabase.rpc("getserviceselect").select()
+    supabase
+      .rpc("getserviceselect", { curr_id: initialService.service_id })
+      .select()
   );
   const services =
     value2?.map((service) => ({
@@ -136,12 +138,13 @@ export default function Create() {
             className="grid grid-cols-2 gap-3"
           >
             <div className="flex flex-col gap-3">
-              <FormUploadImage name={"image"} />
+              <FormUploadImage required name={"image"} />
               <FormSelect
                 name={"service_id"}
                 options={services}
                 label="Tên dịch vụ"
                 placeholder="Chọn dịch vụ đã tạo"
+                required
               />
               <HelperText className="mt-[-8px]">
                 Tên dịch vụ sẽ là title của bài viết
@@ -153,7 +156,11 @@ export default function Create() {
                 Có thể bỏ qua mục này
               </HelperText>
             </div>
-            <Form.Item label="Nội dung giới thiệu dịch vụ" name={"description"}>
+            <Form.Item
+              label="Nội dung giới thiệu dịch vụ"
+              name={"description"}
+              required
+            >
               <TextArea placeholder="Typing" rows={13} />
             </Form.Item>
           </Section>
@@ -164,8 +171,7 @@ export default function Create() {
               options={doctors}
             />
             <HelperText>
-              Mục này sẽ hiển thị tại <br />
-              “Đội ngũ Y Bác sĩ uy tín”
+              Mục này sẽ hiển thị tại “Đội ngũ Y Bác sĩ uy tín”
             </HelperText>
           </Section>
           <Section title="Các bước điều trị" optional name="hasSteps">

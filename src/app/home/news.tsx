@@ -24,9 +24,17 @@ export default function News({ name }: Props) {
                 </ActionText>
               </section>
               <div className="flex">
-                <FormUploadImage name={[name, "image"]} {...restField} />
+                <FormUploadImage
+                  name={[name, "image"]}
+                  {...restField}
+                  rules={[{ required: true, message: "Vui lòng chọn ảnh" }]}
+                />
                 <div className="flex-1">
-                  <Form.Item name={[name, "url"]} {...restField}>
+                  <Form.Item
+                    name={[name, "url"]}
+                    {...restField}
+                    required
+                  >
                     <Input
                       placeholder="Nhập đường dẫn"
                       suffix={<LinkOutlined />}

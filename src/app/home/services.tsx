@@ -24,7 +24,11 @@ export default function Services({ name }: Props) {
                 </ActionText>
               </section>
               <div className="flex">
-                <FormUploadImage name={[name, "image"]} {...restField} />
+                <FormUploadImage
+                  name={[name, "image"]}
+                  {...restField}
+                  rules={[{ required: true, message: "Vui lòng chọn ảnh" }]}
+                />
                 <div className="flex-1 flex-col flex justify-between pb-2">
                   <Form.Item name={[name, "name"]} {...restField}>
                     <Input

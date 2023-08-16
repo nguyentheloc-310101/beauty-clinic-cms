@@ -1,15 +1,15 @@
 "use client";
-import { Form, Upload } from "antd";
+import { Form, FormItemProps, Upload } from "antd";
 import { FileImageOutlined } from "@ant-design/icons";
 import { NamePath } from "antd/es/form/interface";
 import { UploadFile } from "antd/es/upload/interface";
 import React, { useRef } from "react";
 import { cn } from "@/common/utils";
 
-type Props = {
+interface Props extends FormItemProps {
   className?: string;
   name?: NamePath | undefined;
-};
+}
 
 function FormUploadImage({ name, className, ...props }: Props) {
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);

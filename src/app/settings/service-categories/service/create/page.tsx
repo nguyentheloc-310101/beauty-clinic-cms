@@ -72,8 +72,9 @@ export default function Create() {
           label={"Danh mục"}
           name={"category_id"}
           options={categories}
+          required
         />
-        <Form.Item name="name" label="Tên dịch vụ">
+        <Form.Item name="name" label="Tên dịch vụ" rules={[{ required: true }]}>
           <Input placeholder="Nhập tên dịch vụ" />
         </Form.Item>
         <HelperText className="mt-[-8px]">
