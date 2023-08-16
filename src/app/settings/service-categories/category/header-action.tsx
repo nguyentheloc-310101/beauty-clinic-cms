@@ -2,7 +2,7 @@ import { Button } from "antd";
 import Link from "next/link";
 import React from "react";
 
-const HeaderCategorySettings = () => {
+const HeaderAction = () => {
   return (
     <div className="flex items-center justify-between h-[46px]">
       <div className="text-[20px] text-[#36383A] font-[700] leading-[30px] tracking-[-.15px]">
@@ -19,4 +19,4 @@ const HeaderCategorySettings = () => {
   );
 };
 
-export default HeaderCategorySettings;
+export default HeaderAction;

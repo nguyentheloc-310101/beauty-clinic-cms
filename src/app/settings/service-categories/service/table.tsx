@@ -2,9 +2,12 @@ import { useFetch, useRemove } from "@/common/hooks";
 import { IServiceCategory } from "@/common/types";
 import { formatDate } from "@/common/utils";
 import { supabase } from "@/services";
-import { Popconfirm, Table } from "antd";
+import { Button, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
+import { EditOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
+import Link from "next/link";
+import queryString from "query-string";
 interface DataServiceType {
   id: string;
   isSelected: boolean;
@@ -19,6 +22,10 @@ type Props = {
   selectedCategoryId: string;
 };
 const TableService = ({ selectedCategoryId }: Props) => {
+  const { value, remove, selectKeys } = useRemove<DataServiceType[]>(
+    "services",
+    []
+  );
   const { value: initialCategories } = useFetch<IServiceCategory[]>(() =>
     supabase.from("service-categories").select()
   );
@@ -48,15 +55,30 @@ const TableService = ({ selectedCategoryId }: Props) => {
       dataIndex: "created_at",
       render: (e) => <>{formatDate(e)}</>,
     },
+    {
+      dataIndex: "action",
+      width: 60,
+      render: (_, __, i) => (
+        <Link
+          href={
+            "service-categories/service/create?" +
+            queryString.stringify({
+              isEdited: true,
+              data: JSON.stringify(value?.[i]),
+            })
+          }
+        >
+          <Button type="text" shape="circle">
+            <EditOutlined />
+          </Button>
+        </Link>
+      ),
+    },
   ];
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [selectedRow, setSelectedRow] = useState<number>(0);
 
-  const { value, remove, selectKeys } = useRemove<DataServiceType[]>(
-    "services",
-    []
-  );
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
     selectKeys(newSelectedRowKeys as number[]);
