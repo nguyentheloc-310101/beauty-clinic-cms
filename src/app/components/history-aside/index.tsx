@@ -1,19 +1,20 @@
 "use client";
 import { IHistory } from "@/common/types";
 import { cn } from "@/common/utils";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Tag, { TAction } from "./tag";
-import { HISTORYS } from "@/common/dump-data";
 
 import {
   EditOutlined,
   PlusOutlined,
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
+import { DatePicker } from "antd";
+import { supabase } from "@/services";
 
 type Props = {
   className?: string;
-  history: IHistory[];
+  page: string;
 };
 const TYPES = {
   create: <PlusOutlined />,
@@ -21,7 +22,21 @@ const TYPES = {
   edit: <EditOutlined />,
 };
 
-export default function HistoryAside({ className, history = HISTORYS }: Props) {
+export default function HistoryAside({ className, page }: Props) {
+  const [history, setHistory] = useState<IHistory[]>([]);
+  useEffect(() => {
+    const asyncFunc = async () => {
+      const { data, error } = await supabase
+        .from("history")
+        .select("*, user(*)")
+        .eq("page", page)
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (error) console.error(error);
+      else setHistory(data!);
+    };
+    asyncFunc();
+  }, []);
   return (
     <aside
       className={cn(
@@ -29,8 +44,22 @@ export default function HistoryAside({ className, history = HISTORYS }: Props) {
         className
       )}
     >
-      <header className="border-b-4 border-neutral-n-20 border-solid">
-        <h6 className="mx-6 my-5"> Lịch sử</h6>
+      <header className="border-b-4 border-neutral-n-20 border-solid flex justify-between items-center px-6 ">
+        <h6 className="my-5 min-w-[90px]"> Lịch sử</h6>
+        <DatePicker.RangePicker
+          onChange={async (_, dateStrings) => {
+            const { data: tmp, error } = await supabase
+              .from("history")
+              .select("*, user(*)")
+              .eq("page", page)
+              .order("created_at", { ascending: false })
+              .gt("created_at", dateStrings[0])
+              .lt("created_at", dateStrings[1]);
+
+            if (error) console.error(error);
+            else setHistory(tmp!);
+          }}
+        />
       </header>
       <div className="flex-1 basis-auto overflow-auto">
         <div className="relative h-full p-6 ">

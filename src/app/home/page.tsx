@@ -5,7 +5,7 @@ import { LinkOutlined } from "@ant-design/icons";
 import Section from "@components/section";
 import HelperText from "@components/helper-text";
 import FormUploadImage from "@components/form-upload-image";
-import { IClinic, IHistory, IHome } from "@types";
+import { IClinic, IHome } from "@types";
 import { useFetch, useUpsert } from "@/common/hooks";
 import Services from "./services";
 import TextArea from "antd/es/input/TextArea";
@@ -20,14 +20,6 @@ import FooterCustom from "@components/layout/footer/Footer";
 import { Edit } from "@/common/utils";
 
 export default function Home() {
-  const { value: history, loading: historyLoading } = useFetch<IHistory[]>(() =>
-    supabase
-      .from("history")
-      .select("*, user(*)")
-      .eq("page", "home")
-      .order("created_at", { ascending: false })
-      .limit(20)
-  );
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const {
     value: home,
@@ -154,7 +146,7 @@ export default function Home() {
             <HelperText>Mục này sẽ hiển thị tại "Reels nổi bật"</HelperText>
           </Section> */}
         </div>
-        {!historyLoading && <HistoryAside history={history!} />}
+        <HistoryAside page="home" />
       </div>
       <FooterCustom
         leftAction={false}

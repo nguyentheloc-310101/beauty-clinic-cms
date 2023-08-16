@@ -190,7 +190,7 @@ export default function Create() {
           </Section>
         </div>
 
-        {!historyLoading && <HistoryAside history={history!} />}
+        <HistoryAside page="" />
       </div>
       <FooterCustom
         popUpTitle="Thêm mới"
