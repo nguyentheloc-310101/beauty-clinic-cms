@@ -21,12 +21,17 @@ export const ROUTES: TRoute[] = [
     headTitle: "Điều chỉnh trang chủ",
     url: "/home",
   },
-
   {
     Icon: <AppstoreOutlined />,
     title: "Chi tiết dịch vụ",
     headTitle: "Chi tiết dịch vụ",
     url: "/services",
+  },
+  {
+    Icon: <ContactsOutlined />,
+    headTitle: "Điều chỉnh liên hệ",
+    title: "Liên hệ",
+    url: "/contact",
   },
   {
     Icon: <ContactsOutlined />,

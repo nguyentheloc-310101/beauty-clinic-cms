@@ -29,7 +29,7 @@ type Action<T> =
 export function useRemove<T extends Item[]>(
   tableName: string,
   imageAttributeNames: (string | string[])[],
-  selectString?: string
+  selectString: string = ""
 ): State<T> & { remove: () => void } & {
   select: (id: number, isSelected?: boolean) => void;
 } & {
@@ -70,7 +70,7 @@ export function useRemove<T extends Item[]>(
       dispatch({ type: "start" });
       const { data, error } = await supabase
         .from(tableName)
-        .select(selectString ?? "");
+        .select(selectString);
 
       if (!error)
         dispatch({

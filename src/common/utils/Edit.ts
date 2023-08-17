@@ -12,7 +12,7 @@ export class Edit<T extends { [key: string]: any }> {
   }
 
   public compare(attribute: keyof T, action: IAction): void {
-    const originalValue = JSON.stringify(this.originalValue[attribute]);
+    const originalValue = JSON.stringify(this.originalValue?.[attribute]);
     const value = JSON.stringify(this.value[attribute]);
     if (originalValue != value) this.actions.push(action);
   }
