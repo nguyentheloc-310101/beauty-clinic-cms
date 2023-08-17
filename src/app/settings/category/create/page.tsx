@@ -41,7 +41,7 @@ export default function Create() {
   const router = useRouter();
   const onSubmit = async (category: IServiceCategory) => {
     setIsUploading(true);
-    await uploadImages(category, ["image"]);
+    await uploadImages(category, ["image"], initialCategory);
     let categoryId = initialCategory.id;
     let error;
     const tmp = {
