@@ -1,6 +1,5 @@
-import { Form } from "antd";
+import { Form, FormItemProps } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
-
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Select, Tag } from "antd";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
@@ -9,7 +8,7 @@ export interface OptionsType {
   label: string;
   disabled?: boolean;
 }
-interface SelectItemFormProps {
+interface SelectItemFormProps extends FormItemProps {
   name: string;
   label?: string;
   required?: boolean;
@@ -33,9 +32,10 @@ const FormSelectMultiple = ({
   placeholder,
   disabled,
   subLabel,
-  onChange = () => { },
+  onChange = () => {},
   showSearch = false,
   maxTagPlaceholder,
+  ...props
 }: SelectItemFormProps) => {
   const style = {
     alignLabel: "flex items-end mb-[-8px]",
@@ -76,7 +76,6 @@ const FormSelectMultiple = ({
       labelCol={{ span: 24 }}
       wrapperCol={{ span: 24 }}
       className="w-[100%] mb-0 not-italic font-normal text-sm leading-5 text-gray-900 relative"
-      // style={readOnly ? { pointerEvents: 'none' } : {}}
       label={
         label && (
           <div className="flex items-end mb-[8px]">
@@ -93,6 +92,7 @@ const FormSelectMultiple = ({
           message: message,
         },
       ]}
+      {...props}
     >
       <Select
         placeholder={placeholder}

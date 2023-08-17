@@ -4,6 +4,7 @@ import {
   AppstoreOutlined,
   ContactsOutlined,
   SettingOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 
 type TRoute = {
@@ -21,12 +22,17 @@ export const ROUTES: TRoute[] = [
     headTitle: "Điều chỉnh trang chủ",
     url: "/home",
   },
-
   {
     Icon: <AppstoreOutlined />,
     title: "Chi tiết dịch vụ",
     headTitle: "Chi tiết dịch vụ",
     url: "/services",
+  },
+  {
+    Icon: <UnorderedListOutlined />,
+    headTitle: "Điều chỉnh danh sách danh mục",
+    title: "Danh sách danh mục",
+    url: "/service-page", // NOTE  chả biết đặt tên như lào :>>>
   },
   {
     Icon: <ContactsOutlined />,
