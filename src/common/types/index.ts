@@ -1,5 +1,6 @@
 export * from "./IHome";
 export * from "./IContact";
+export * from "./IServicePage";
 interface IBase {
   id: string; // supabase id
   key: number; // key for react mapping table
