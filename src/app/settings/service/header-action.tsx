@@ -34,9 +34,9 @@ const HeaderServiceSettings = ({ setSelectedCategoryId }: Props) => {
           name={"category_id"}
           options={categories}
         />
-        <Link href={"/settings/service-categories/service/create"}>
-          <Button className="bg-[#BC2449] h-full w-[70px] px-[24px] py-[12px]  text-white">
-            +
+        <Link href={"service/create"}>
+          <Button className="bg-[#BC2449] h-full w-[188px] px-[24px] py-[12px]  text-white">
+            Thêm dịch vụ
           </Button>
         </Link>
       </div>

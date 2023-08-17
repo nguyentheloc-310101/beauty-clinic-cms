@@ -45,7 +45,7 @@ export default function Create() {
     else error = (await supabase.from("services").insert(tmp)).error;
 
     if (error) console.error(error);
-    else router.push("/settings/service-categories");
+    else router.push("/settings/service");
   };
   const { value } = useFetch<IServiceCategory[]>(() =>
     supabase.from("service-categories").select()

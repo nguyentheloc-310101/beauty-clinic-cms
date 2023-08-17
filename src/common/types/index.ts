@@ -39,13 +39,15 @@ export interface IServiceDetails extends IBase {
 export interface IService extends IBase {
   name: string;
   category_id: string;
+  slug: string;
   serviceDetails: IServiceDetails[];
   doctors: IDoctor[];
   others: IService[];
 }
 
 export interface IServiceCategory extends IBase {
-  slug: string;
+  image: string;
+  price: string;
   name: string;
   tags: string[];
 }

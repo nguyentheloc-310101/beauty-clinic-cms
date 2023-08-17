@@ -4,8 +4,8 @@ import AntdTable, { ColumnsType } from "antd/es/table";
 import { useRemove } from "@/common/hooks";
 import { EditOutlined } from "@ant-design/icons";
 import { IServiceCategory } from "@/common/types";
-import { formatDate } from "@/common/utils";
-import { Button, Popconfirm } from "antd";
+import { formatCurrency, formatDate } from "@/common/utils";
+import { Button, Popconfirm, Tooltip } from "antd";
 import Link from "next/link";
 import queryString from "query-string";
 
@@ -21,7 +21,7 @@ interface CategoryType extends IServiceCategory {
 const Table = () => {
   const { value, selectKeys, loading, remove } = useRemove<CategoryType[]>(
     "service-categories",
-    [],
+    ["image"],
     "*, tags(*)"
   );
 
@@ -29,14 +29,45 @@ const Table = () => {
     {
       title: "STT",
       dataIndex: "key",
+      width: 60,
     },
     {
       title: "Danh mục",
       dataIndex: "name",
+      render: (_, record) => (
+        <div className="flex gap-3 items-center">
+          <img
+            src={record.image}
+            alt={record.name}
+            className="object-contain rounded-full w-9 h-9"
+          />
+          <p>{record.name}</p>
+        </div>
+      ),
+    },
+
+    {
+      title: "Giá chỉ từ",
+      dataIndex: "price",
+      width: 110,
+      render: (e) => <>{formatCurrency(e)}</>,
+    },
+    // TODO display tags
+    {
+      title: "Tags",
+      dataIndex: "tags",
+      render: (e) => (
+        <Tooltip title={e?.map((item: any) => item?.name)?.join(", ")}>
+          <p className="truncate">
+            {e?.map((item: any) => item?.name)?.join(", ")},{" "}
+          </p>{" "}
+        </Tooltip>
+      ),
     },
     {
       title: "Ngày tạo",
       dataIndex: "created_at",
+      width: 110,
       render: (e) => <>{formatDate(e)}</>,
     },
     {
@@ -45,7 +76,7 @@ const Table = () => {
       render: (_, record) => (
         <Link
           href={
-            "service-categories/category/create?" +
+            "category/create?" +
             queryString.stringify({
               isEdited: true,
               data: JSON.stringify(record),
@@ -97,9 +128,8 @@ const Table = () => {
             <Popconfirm
               title="Xóa thông tin"
               description="Lưu ý: tất cả dịch vụ thuộc danh mục này sẽ bị xóa theo!"
-              onConfirm={() => {
-                remove();
-                location.reload();
+              onConfirm={async () => {
+                await remove();
               }}
               okText="Đồng ý"
               cancelText="Hủy"

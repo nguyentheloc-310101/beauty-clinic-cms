@@ -61,7 +61,7 @@ const TableService = ({ selectedCategoryId }: Props) => {
       render: (_, __, i) => (
         <Link
           href={
-            "service-categories/service/create?" +
+            "service/create?" +
             queryString.stringify({
               isEdited: true,
               data: JSON.stringify(value?.[i]),
@@ -116,7 +116,7 @@ const TableService = ({ selectedCategoryId }: Props) => {
             <Popconfirm
               title="Xóa thông tin"
               description="Lưu ý: Các thông tin chi tiết của dịch vụ cũng sẽ bị xóa theo!"
-              onConfirm={() => remove()}
+              onConfirm={async () => await remove()}
               okText="Đồng ý"
               cancelText="Hủy"
             >

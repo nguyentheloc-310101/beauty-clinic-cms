@@ -9,9 +9,9 @@ const HeaderAction = () => {
         Danh mục
       </div>
       <div className="flex gap-[10px]">
-        <Link href="/settings/service-categories/category/create">
-          <Button className="bg-[#BC2449] h-full w-[70px] px-[24px] py-[12px]  text-white">
-            +
+        <Link href="category/create">
+          <Button className="bg-[#BC2449] h-full px-[24px] py-[12px]  text-white">
+            Thêm danh mục
           </Button>
         </Link>
       </div>

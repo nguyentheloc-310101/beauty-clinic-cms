@@ -45,9 +45,14 @@ export const ROUTES: TRoute[] = [
     title: "Cài đặt thông tin",
     subTitle: [
       {
-        name: "Danh mục & dịch vụ",
-        url: "/settings/service-categories",
-        head: "Danh mục & dịch vụ",
+        name: "Danh mục",
+        url: "/settings/category",
+        head: "Danh mục",
+      },
+      {
+        name: "Dịch vụ",
+        url: "/settings/service",
+        head: "Dịch vụ",
       },
       {
         name: "Cơ sở (Clinic)",

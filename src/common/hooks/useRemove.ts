@@ -30,7 +30,7 @@ export function useRemove<T extends Item[]>(
   tableName: string,
   imageAttributeNames: (string | string[])[],
   selectString: string = ""
-): State<T> & { remove: () => void } & {
+): State<T> & { remove: () => Promise<void> } & {
   select: (id: number, isSelected?: boolean) => void;
 } & {
   selectAll: (isSelected: boolean) => void;
