@@ -7,7 +7,7 @@ import { ROUTES } from "@/common/constants";
 export default function Aside() {
   const router = useRouter();
   return (
-    <aside className="px-6 py-12 flex flex-col gap-4  bg-primary">
+    <aside className="px-6 py-12 flex flex-col gap-4  bg-primary overflow-y-auto overflow-x-hidden">
       <img
         src="/aura-logo.png"
         alt="aura-logo"
