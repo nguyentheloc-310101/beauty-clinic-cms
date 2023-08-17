@@ -21,7 +21,8 @@ interface CategoryType extends IServiceCategory {
 const Table = () => {
   const { value, selectKeys, loading, remove } = useRemove<CategoryType[]>(
     "service-categories",
-    []
+    [],
+    "*, tags(*)"
   );
 
   const columns: ColumnsType<CategoryType> = [

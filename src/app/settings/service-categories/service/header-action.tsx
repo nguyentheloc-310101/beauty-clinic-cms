@@ -2,7 +2,7 @@ import FormSelect from "@/app/components/form-select";
 import { useFetch } from "@/common/hooks";
 import { IServiceCategory } from "@/common/types";
 import { supabase } from "@/services";
-import { Button, Form, Select } from "antd";
+import { Button } from "antd";
 import Link from "next/link";
 import React from "react";
 
@@ -27,10 +27,9 @@ const HeaderServiceSettings = ({ setSelectedCategoryId }: Props) => {
         Dịch vụ
       </div>
       <div className="flex gap-[10px] items-center">
-        {/* TODO add filter for service */}
         <FormSelect
           onChange={(e: any) => setSelectedCategoryId(e)}
-          className="min-w-[150px]"
+          className="min-w-[150px] mt-2"
           placeholder={"Chọn danh mục"}
           name={"category_id"}
           options={categories}
