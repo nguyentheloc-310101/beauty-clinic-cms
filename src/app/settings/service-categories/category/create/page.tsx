@@ -27,6 +27,10 @@ export default function Create() {
   try {
     if (data) {
       initialCategory = JSON.parse(data as string) as IServiceCategory;
+      initialCategory = {
+        ...initialCategory,
+        tags: initialCategory.tags.map((tag: any) => tag?.id),
+      };
     }
   } catch (error) {
     console.error(error);
