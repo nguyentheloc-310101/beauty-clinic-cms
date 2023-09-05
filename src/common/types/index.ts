@@ -64,7 +64,7 @@ export interface IClinic extends IBase {
 }
 
 export interface IHistory extends IBase {
-  user: { email: string };
+  user: { userName: string };
   action: {
     scope: string;
     name: string;

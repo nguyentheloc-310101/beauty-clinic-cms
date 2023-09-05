@@ -71,7 +71,7 @@ export default function HistoryAside({ className, page }: Props) {
               </div>
               <div className="flex-1">
                 <p>
-                  <b>{item.user?.email}</b> đã {item.action.display}{" "}
+                  <b>{item.user?.userName}</b> đã {item.action.display}{" "}
                   <b>{item.action.scope}</b>
                 </p>
                 <Tag
