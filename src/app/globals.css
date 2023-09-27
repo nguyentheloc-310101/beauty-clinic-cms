@@ -177,6 +177,7 @@ a {
   .ant-checkbox-inner {
   background-color: #d8315b;
   border: none;
+  color: white;
 }
 
 #table-antd * .ant-table-row.ant-table-row-level-0:hover,

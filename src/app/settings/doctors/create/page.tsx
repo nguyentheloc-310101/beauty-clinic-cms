@@ -48,7 +48,7 @@ const DoctorSetting = () => {
         const { data } = await supabase
           .from("doctors")
           .insert(doctor)
-          .select()
+          .select('*')
           .single();
         const history = {
           user,
@@ -114,7 +114,7 @@ const DoctorSetting = () => {
                   <Form.Item
                     label="Nội dung giới thiệu bác sĩ"
                     required
-                    name="description "
+                    name="description"
                   >
                     <TextArea
                       placeholder="Typing"
