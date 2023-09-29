@@ -161,7 +161,7 @@ export default function Create() {
               name={"description"}
               required
             >
-              <TextArea placeholder="Typing" rows={13} />
+              <TextArea placeholder="Typing" rows={13} maxLength={320} />
             </Form.Item>
           </Section>
           <Section optional title="Đội ngũ bác sĩ" name="hasDoctors">
